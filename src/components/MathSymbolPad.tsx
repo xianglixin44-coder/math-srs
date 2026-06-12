@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // ─── Stroke-based handwriting recognition ──────────────────────
 
@@ -145,6 +145,7 @@ interface Props {
 
 export default function MathSymbolPad({ targetRef, visible }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [strokes, setStrokes] = useState<Point[][]>([]);
   const [currentStroke, setCurrentStroke] = useState<Point[]>([]);
   const [guesses, setGuesses] = useState<{ symbol: string; confidence: number }[]>([]);
@@ -152,6 +153,27 @@ export default function MathSymbolPad({ targetRef, visible }: Props) {
   const recognizeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   if (!visible) return null;
+
+  // Resize canvas to match container on mount
+  const initCanvasSize = () => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+    const w = container.clientWidth;
+    const h = 80;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.scale(dpr, dpr);
+  };
+
+  // Initialize canvas on mount
+  useEffect(() => {
+    initCanvasSize();
+  }, []);
 
   const insertSymbol = (symbol: string) => {
     const input = targetRef.current;
@@ -248,15 +270,13 @@ export default function MathSymbolPad({ targetRef, visible }: Props) {
           </button>
         </div>
         <div
+          ref={containerRef}
           className="bg-slate-950 rounded-lg border border-slate-700/30 overflow-hidden"
-          style={{ touchAction: 'none' }}
+          style={{ touchAction: 'none', height: 80 }}
         >
           <canvas
             ref={canvasRef}
-            width={240}
-            height={80}
-            className="w-full block cursor-crosshair"
-            style={{ height: 80 }}
+            className="block cursor-crosshair"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
