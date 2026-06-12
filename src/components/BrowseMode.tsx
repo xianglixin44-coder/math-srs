@@ -56,6 +56,13 @@ function renderContent(text: string): React.ReactNode[] {
     const line = lines[i];
 
     // Section header ###
+    if (line.startsWith('#### ')) {
+      result.push(
+        <h5 key={i} className="text-sm font-semibold text-purple-400 mt-3 mb-1">{line.slice(5)}</h5>
+      );
+      continue;
+    }
+    // Section header ###
     if (line.startsWith('### ')) {
       result.push(
         <h4 key={i} className="text-base font-semibold text-purple-300 mt-4 mb-1">{renderLine(line.slice(4))}</h4>
