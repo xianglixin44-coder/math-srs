@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight, FlaskConical } from 'lucide-react';
+import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight, FlaskConical, ArrowRightLeft } from 'lucide-react';
 import { api } from '../api/client';
 import { renderLine } from '../utils/katex';
 
@@ -23,6 +23,7 @@ const SECTION_ICONS: Record<string, React.FC<{ size?: number }>> = {
   insight: Lightbulb,
   challenge: Network,
   example: FlaskConical,
+  connect: ArrowRightLeft,
 };
 const FALLBACK_ICONS: Record<number, React.FC<{ size?: number }>> = {
   0: BookOpen,
@@ -31,6 +32,7 @@ const FALLBACK_ICONS: Record<number, React.FC<{ size?: number }>> = {
   3: Lightbulb,
   4: Network,
   5: FlaskConical,
+  6: ArrowRightLeft,
 };
 
 const SECTION_COLORS: Record<string, string> = {
@@ -40,6 +42,7 @@ const SECTION_COLORS: Record<string, string> = {
   insight: 'from-violet-500 to-purple-500',
   challenge: 'from-amber-500 to-orange-500',
   example: 'from-emerald-500 to-teal-500',
+  connect: 'from-cyan-500 to-blue-500',
 };
 const FALLBACK_COLORS = [
   'from-purple-500 to-pink-500',
