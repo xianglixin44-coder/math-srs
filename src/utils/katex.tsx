@@ -31,7 +31,7 @@ export function renderLine(line: string): React.ReactElement {
         typeof p === 'string' ? (
           <span key={i}>{p}</span>
         ) : (
-          <span key={i} dangerouslySetInnerHTML={p} />
+          <span key={i} className="katex-inline" dangerouslySetInnerHTML={p} />
         )
       )}
     </>
