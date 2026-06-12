@@ -102,7 +102,6 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
         <MathSymbolPad
           targetRef={{ current: inputRefs.current[focusedIdx] }}
           visible={true}
-          onInsert={() => {}}
         />
       )}
       {submitted && !results.every(Boolean) && (
