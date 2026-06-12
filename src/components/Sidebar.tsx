@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, BookOpen } from 'lucide-react';
 import { api } from '../api/client';
-import type { Card } from '../types/card';
+
+interface BrowseCardSummary {
+  id: string;
+  title: string;
+  category?: string;
+  sectionCount: number;
+}
 
 interface Props {
   activeCardId: string | null;
@@ -9,17 +15,17 @@ interface Props {
 }
 
 export default function Sidebar({ activeCardId, onSelectCard }: Props) {
-  const [cards, setCards] = useState<Card[] | null>(null);
+  const [cards, setCards] = useState<BrowseCardSummary[] | null>(null);
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    api.cards.list().then(setCards).catch(() => setCards([]));
+    api.browse.list().then(setCards).catch(() => setCards([]));
   }, []);
 
   if (cards === null) return null;
 
   // Group by category
-  const groups: Record<string, Card[]> = {};
+  const groups: Record<string, BrowseCardSummary[]> = {};
   for (const card of cards) {
     const cat = card.category || '未分类';
     if (!groups[cat]) groups[cat] = [];
@@ -33,7 +39,7 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
   return (
     <div className="w-56 shrink-0 h-full overflow-y-auto border-r border-slate-700/50 bg-slate-900/30 p-3 space-y-1">
       <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-2 mb-3">
-        📐 目录
+        📐 浏览目录
       </h3>
       {Object.entries(groups).map(([category, catCards]) => {
         const isOpen = !collapsed[category];

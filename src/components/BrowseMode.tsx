@@ -2,100 +2,172 @@ import { useState, useEffect } from 'react';
 import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft } from 'lucide-react';
 import { api } from '../api/client';
 import { renderLine } from '../utils/katex';
-import type { Card } from '../types/card';
-import { DIM_ORDER, DIM_LABELS } from '../types/card';
 
-const GRID_ICONS: Record<string, React.FC<{ size?: number }>> = {
-  formula: BookOpen,
-  derive: Brain,
-  trigger: Lightbulb,
-  geometry: Lightbulb,
-  trap: AlertTriangle,
-  challenge: Brain,
-  transform: Network,
+interface BrowseSection {
+  key: string;
+  label: string;
+  content: string;
+}
+
+interface BrowseCard {
+  id: string;
+  title: string;
+  category?: string;
+  sections: BrowseSection[];
+}
+
+const SECTION_ICONS: Record<string, React.FC<{ size?: number }>> = {
+  concept: BookOpen,
+  method: Brain,
+  pitfall: AlertTriangle,
+  insight: Lightbulb,
+  challenge: Network,
+};
+const FALLBACK_ICONS: Record<number, React.FC<{ size?: number }>> = {
+  0: BookOpen,
+  1: Brain,
+  2: AlertTriangle,
+  3: Lightbulb,
+  4: Network,
 };
 
-const GRID_COLORS: Record<string, string> = {
-  formula: 'from-purple-500 to-pink-500',
-  derive: 'from-blue-500 to-cyan-500',
-  trigger: 'from-emerald-500 to-teal-500',
-  geometry: 'from-amber-500 to-orange-500',
-  trap: 'from-rose-500 to-red-500',
-  challenge: 'from-violet-500 to-purple-500',
-  transform: 'from-cyan-500 to-blue-500',
+const SECTION_COLORS: Record<string, string> = {
+  concept: 'from-purple-500 to-pink-500',
+  method: 'from-blue-500 to-cyan-500',
+  pitfall: 'from-rose-500 to-red-500',
+  insight: 'from-violet-500 to-purple-500',
+  challenge: 'from-amber-500 to-orange-500',
 };
+const FALLBACK_COLORS = [
+  'from-purple-500 to-pink-500',
+  'from-blue-500 to-cyan-500',
+  'from-rose-500 to-red-500',
+  'from-violet-500 to-purple-500',
+  'from-amber-500 to-orange-500',
+  'from-emerald-500 to-teal-500',
+  'from-cyan-500 to-blue-500',
+];
 
 interface Props {
   activeCardId: string | null;
 }
 
-interface DimInfo {
-  key: string;
-  label: string;
-  type: 'cloze' | 'choice';
-}
+/** Simple markdown-like rendering: split on ## headers, render bold etc. */
+function renderContent(text: string): React.ReactNode[] {
+  const lines = text.split('\n');
+  const result: React.ReactNode[] = [];
 
-/** Replace [[N]] placeholders with answer values, rendered as highlighted spans */
-function renderClozeNote(question: string, answer: string[]): React.ReactNode[] {
-  const parts = question.split(/(\[\[\d+\]\])/g);
-  return parts.map((part, i) => {
-    const m = part.match(/\[\[(\d+)\]\]/);
-    if (m) {
-      const idx = parseInt(m[1]) - 1;
-      return (
-        <span key={i} className="inline px-1.5 py-0.5 rounded font-medium text-purple-200 bg-purple-600/20 border border-purple-500/20">
-          {answer[idx] ?? '___'}
-        </span>
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Section header ###
+    if (line.startsWith('### ')) {
+      result.push(
+        <h4 key={i} className="text-sm font-semibold text-purple-300 mt-4 mb-1">{line.slice(4)}</h4>
       );
+      continue;
     }
-    return <span key={i}>{renderLine(part)}</span>;
-  });
-}
+    // Sub header ##
+    if (line.startsWith('## ')) {
+      result.push(
+        <h3 key={i} className="text-base font-bold text-white mt-5 mb-2">{line.slice(3)}</h3>
+      );
+      continue;
+    }
 
-/** Render choice content as a study note: question + highlighted correct answer */
-function renderChoiceNote(question: string, options: string[], answer: number): React.ReactNode {
-  return (
-    <div className="space-y-3">
-      <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-        {renderLine(question)}
-      </div>
-      <div className="p-3 rounded-lg bg-green-600/10 border border-green-500/20">
-        <div className="text-[10px] text-green-400/70 uppercase tracking-wider mb-1">正确答案</div>
-        <div className="text-sm text-green-300 font-medium">
-          {String.fromCharCode(65 + answer)}. {options[answer]}
+    // Horizontal rule / separator
+    if (line === '---') {
+      result.push(<hr key={i} className="border-slate-700/50 my-3" />);
+      continue;
+    }
+
+    // Table
+    if (line.startsWith('|')) {
+      // collect all table lines
+      const tableLines: string[] = [];
+      while (i < lines.length && lines[i].startsWith('|')) {
+        tableLines.push(lines[i]);
+        i++;
+      }
+      i--; // back one since for loop increments
+      result.push(
+        <div key={i} className="overflow-x-auto my-2 text-xs">
+          <table className="w-full border-collapse">
+            <tbody>
+              {tableLines.filter(l => !l.match(/^\|[\s\-:|]+$/)).map((tl, ti) => {
+                const cells = tl.split('|').filter(c => c.trim());
+                const isHeader = ti === 0 && (tableLines.length > 2 || tableLines[1]?.match(/^\|[\s\-:|]+$/));
+                const Cell = isHeader ? 'th' : 'td';
+                return (
+                  <tr key={ti} className={isHeader ? 'border-b border-slate-600' : 'border-b border-slate-800'}>
+                    {cells.map((cell, ci) => (
+                      <Cell key={ci} className={`px-2 py-1 ${isHeader ? 'text-slate-300 font-medium' : 'text-slate-400'}`}>
+                        {renderLine(cell.trim())}
+                      </Cell>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div className="space-y-1 opacity-50">
-        {options.map((opt, i) => i !== answer && (
-          <div key={i} className="text-xs text-slate-500">
-            {String.fromCharCode(65 + i)}. {opt}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+      );
+      continue;
+    }
 
-function buildDims(card: Card): DimInfo[] {
-  const dims: DimInfo[] = [];
-  DIM_ORDER.forEach(dim => {
-    if ((card.dimensions.cloze as any)?.[dim]) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'cloze' });
-    if ((card.dimensions.choice as any)?.[dim]) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'choice' });
-  });
-  return dims;
+    // Quote
+    if (line.startsWith('> ')) {
+      result.push(
+        <blockquote key={i} className="border-l-2 border-purple-500/40 pl-3 my-2 text-slate-400 italic text-xs">
+          {renderLine(line.slice(2))}
+        </blockquote>
+      );
+      continue;
+    }
+
+    // Bold marker **text**
+    // Empty line
+    if (line.trim() === '') {
+      result.push(<div key={i} className="h-2" />);
+      continue;
+    }
+
+    // Regular paragraph with inline bold
+    const segments = line.split(/(\*\*.*?\*\*)/g);
+    result.push(
+      <p key={i} className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+        {segments.map((seg, si) => {
+          if (seg.startsWith('**') && seg.endsWith('**')) {
+            return <strong key={si} className="text-slate-100 font-semibold">{seg.slice(2, -2)}</strong>;
+          }
+          return <span key={si}>{renderLine(seg)}</span>;
+        })}
+      </p>
+    );
+  }
+
+  return result;
 }
 
 export default function BrowseMode({ activeCardId }: Props) {
-  const [cards, setCards] = useState<Card[] | null>(null);
-  const [selectedDim, setSelectedDim] = useState<string | null>(null);
+  const [cards, setCards] = useState<BrowseCard[] | null>(null);
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   useEffect(() => {
-    api.cards.list().then(setCards).catch(() => setCards([]));
+    // Fetch all browse cards for the sidebar context
+    api.browse.list().then(async (summaries) => {
+      if (summaries.length === 0) { setCards([]); return; }
+      // Fetch full content for each card
+      const fullCards = await Promise.all(
+        summaries.map((s: any) => api.browse.get(s.id))
+      );
+      setCards(fullCards);
+    }).catch(() => setCards([]));
   }, []);
 
-  // Reset selected dim when card changes
+  // Reset selected section when card changes
   useEffect(() => {
-    setSelectedDim(null);
+    setSelectedSection(null);
   }, [activeCardId]);
 
   if (cards === null) {
@@ -103,7 +175,7 @@ export default function BrowseMode({ activeCardId }: Props) {
   }
 
   if (cards.length === 0) {
-    return <div className="glass-card p-12 text-center"><p className="text-slate-400">暂无卡片</p></div>;
+    return <div className="glass-card p-12 text-center"><p className="text-slate-400">暂无浏览卡片</p></div>;
   }
 
   const activeCard = cards.find(c => c.id === activeCardId) ?? null;
@@ -112,58 +184,44 @@ export default function BrowseMode({ activeCardId }: Props) {
     return (
       <div className="glass-card p-12 text-center space-y-3">
         <p className="text-slate-400">从左侧目录选择一张卡片查看</p>
-        <p className="text-xs text-slate-500">点击维度方格进入学习笔记</p>
+        <p className="text-xs text-slate-500">点击内容方格进入学习笔记</p>
       </div>
     );
   }
 
-  const dims = buildDims(activeCard);
+  // ── Detail page (single section, full page) ──────────────────
+  if (selectedSection) {
+    const section = activeCard.sections.find(s => s.key === selectedSection);
+    if (!section) { setSelectedSection(null); return null; }
 
-  // ── Detail page (single dimension, full page) ──────────────────
-  if (selectedDim) {
-    const dim = dims.find(d => d.key === selectedDim);
-    if (!dim) { setSelectedDim(null); return null; }
-
-    const isCloze = (activeCard.dimensions.cloze as any)?.[dim.key];
-    const isChoice = (activeCard.dimensions.choice as any)?.[dim.key];
-    const dimData = (activeCard.dimensions as any)[isCloze ? 'cloze' : 'choice']?.[dim.key];
-    if (!dimData) { setSelectedDim(null); return null; }
+    const colorClass = SECTION_COLORS[section.key] ?? FALLBACK_COLORS[activeCard.sections.indexOf(section) % FALLBACK_COLORS.length];
+    const Icon = SECTION_ICONS[section.key] ?? FALLBACK_ICONS[activeCard.sections.indexOf(section) % Object.keys(FALLBACK_ICONS).length];
 
     return (
-      <div className="space-y-6" key={`detail-${activeCard.id}-${dim.key}`}>
-        {/* Back + breadcrumb */}
+      <div className="space-y-6" key={`detail-${activeCard.id}-${section.key}`}>
         <button
-          onClick={() => setSelectedDim(null)}
+          onClick={() => setSelectedSection(null)}
           className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors"
         >
           <ArrowLeft size={16} />
           <span className="text-slate-500">{activeCard.id} {activeCard.title}</span>
         </button>
 
-        {/* Dimension header */}
         <div className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/30">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${GRID_COLORS[dim.key]} flex items-center justify-center`}>
-              {(() => { const Icon = GRID_ICONS[dim.key]; return <span className="text-white"><Icon size={20} /></span>; })()}
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorClass} flex items-center justify-center`}>
+              <span className="text-white"><Icon size={20} /></span>
             </div>
             <div>
-              <div className="text-lg font-bold text-white">{dim.label}</div>
-              <div className="text-xs text-slate-400 mt-0.5">
-                {dim.type === 'cloze' ? '填空笔记' : '选择笔记'} · {activeCard.title}
-              </div>
+              <div className="text-lg font-bold text-white">{section.label}</div>
+              <div className="text-xs text-slate-400 mt-0.5">{activeCard.title}</div>
             </div>
           </div>
         </div>
 
-        {/* Note content */}
         <div className="glass-card p-6">
-          <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-            {isCloze && Array.isArray(dimData.answer)
-              ? renderClozeNote(dimData.question, dimData.answer)
-              : isChoice && dimData.options
-                ? renderChoiceNote(dimData.question, dimData.options, dimData.answer as number)
-                : renderLine(dimData.question)
-            }
+          <div className="prose prose-invert prose-sm max-w-none">
+            {renderContent(section.content)}
           </div>
         </div>
       </div>
@@ -173,28 +231,26 @@ export default function BrowseMode({ activeCardId }: Props) {
   // ── Grid page ──────────────────────────────────────────────
   return (
     <div className="space-y-6">
-      {/* Card header */}
       <div className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-2xl p-5 border border-purple-500/20">
         <div className="text-xs text-purple-300/70">{activeCard.category}</div>
         <h2 className="text-xl font-bold text-white mt-1">{activeCard.title}</h2>
-        <div className="text-xs text-slate-400 mt-1">{activeCard.id}</div>
+        <div className="text-xs text-slate-400 mt-1">{activeCard.id} · {activeCard.sections.length} 个内容块</div>
       </div>
 
-      {/* Dimension grid */}
       <div className="grid grid-cols-3 gap-3">
-        {dims.map(dim => {
-          const Icon = GRID_ICONS[dim.key] || BookOpen;
+        {activeCard.sections.map((section, i) => {
+          const colorClass = SECTION_COLORS[section.key] ?? FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+          const Icon = SECTION_ICONS[section.key] ?? FALLBACK_ICONS[i % Object.keys(FALLBACK_ICONS).length];
           return (
             <button
-              key={dim.key}
-              onClick={() => setSelectedDim(dim.key)}
+              key={section.key}
+              onClick={() => setSelectedSection(section.key)}
               className="relative rounded-xl p-4 text-left border transition-all min-h-[100px] bg-slate-800/40 border-slate-700/30 hover:border-slate-600/50 hover:bg-slate-800/60"
             >
-              <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${GRID_COLORS[dim.key]} flex items-center justify-center mb-2`}>
+              <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${colorClass} flex items-center justify-center mb-2`}>
                 <span className="text-white"><Icon size={14} /></span>
               </div>
-              <div className="text-xs font-medium text-slate-200">{dim.label}</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">{dim.type === 'cloze' ? '填空笔记' : '选择笔记'}</div>
+              <div className="text-xs font-medium text-slate-200">{section.label}</div>
             </button>
           );
         })}

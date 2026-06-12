@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from server.database import init_db
-from server.routers import cards, srs, import_export
+from server.routers import cards, srs, import_export, browse
 
 
 @asynccontextmanager
@@ -28,6 +28,7 @@ app.add_middleware(
 app.include_router(cards.router)
 app.include_router(srs.router)
 app.include_router(import_export.router)
+app.include_router(browse.router)
 
 # Serve static frontend
 static = Path("dist")

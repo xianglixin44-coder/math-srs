@@ -32,6 +32,10 @@ export const api = {
         body: JSON.stringify({ card_id, dimension, score }),
       }),
   },
+  browse: {
+    list: () => request<any[]>('/browse/cards'),
+    get: (id: string) => request<any>(`/browse/cards/${id}`),
+  },
   import: (cards: any[]) =>
     request<{ imported: number }>('/import', {
       method: 'POST',
