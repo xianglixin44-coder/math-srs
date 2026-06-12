@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, BookOpen } from 'lucide-react';
+import { ChevronDown, ChevronRight, BookOpen, BookMarked } from 'lucide-react';
 import { api } from '../api/client';
 
 interface BrowseCardSummary {
@@ -9,64 +9,115 @@ interface BrowseCardSummary {
   sectionCount: number;
 }
 
+interface TextbookSection {
+  id: string;
+  title: string;
+}
+
+interface TextbookChapter {
+  key: string;
+  title: string;
+  sections: TextbookSection[];
+}
+
+interface TextbookVolume {
+  key: string;
+  title: string;
+  chapters: TextbookChapter[];
+}
+
+interface TextbookData {
+  volumes: TextbookVolume[];
+}
+
 interface Props {
   activeCardId: string | null;
   onSelectCard: (id: string) => void;
 }
 
 export default function Sidebar({ activeCardId, onSelectCard }: Props) {
-  const [cards, setCards] = useState<BrowseCardSummary[] | null>(null);
+  const [textbook, setTextbook] = useState<TextbookData | null>(null);
+  const [availableCards, setAvailableCards] = useState<Set<string>>(new Set());
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    api.browse.list().then(setCards).catch(() => setCards([]));
+    // Load textbook structure
+    fetch('/data/browse/textbook.json')
+      .then(r => r.json())
+      .then(setTextbook)
+      .catch(() => setTextbook(null));
+
+    // Load available cards
+    api.browse.list().then((cards: BrowseCardSummary[]) => {
+      setAvailableCards(new Set(cards.map(c => c.id)));
+    }).catch(() => {});
   }, []);
 
-  if (cards === null) return null;
+  if (!textbook) return null;
 
-  // Group by category
-  const groups: Record<string, BrowseCardSummary[]> = {};
-  for (const card of cards) {
-    const cat = card.category || '未分类';
-    if (!groups[cat]) groups[cat] = [];
-    groups[cat].push(card);
-  }
-
-  const toggleCategory = (cat: string) => {
-    setCollapsed(prev => ({ ...prev, [cat]: !prev[cat] }));
+  const toggle = (key: string) => {
+    setCollapsed(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (
-    <div className="w-56 shrink-0 h-full overflow-y-auto border-r border-slate-700/50 bg-slate-900/30 p-3 space-y-1">
+    <div className="w-56 shrink-0 h-full overflow-y-auto border-r border-slate-700/50 bg-slate-900/30 p-3 space-y-0.5">
       <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-2 mb-3">
-        📐 浏览目录
+        📐 课本目录
       </h3>
-      {Object.entries(groups).map(([category, catCards]) => {
-        const isOpen = !collapsed[category];
+
+      {textbook.volumes.map(vol => {
+        const volKey = `vol-${vol.key}`;
+        const isVolOpen = !collapsed[volKey];
         return (
-          <div key={category}>
+          <div key={volKey}>
             <button
-              onClick={() => toggleCategory(category)}
-              className="w-full flex items-center gap-1 px-2 py-1 text-xs text-slate-400 hover:text-slate-200 transition-colors rounded"
+              onClick={() => toggle(volKey)}
+              className="w-full flex items-center gap-1 px-2 py-1.5 text-xs text-slate-300 hover:text-white transition-colors rounded"
             >
-              {isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-              {category}
-              <span className="text-slate-600 ml-auto">{catCards.length}</span>
+              {isVolOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              <BookMarked size={12} className="text-purple-400" />
+              <span className="font-medium">{vol.title}</span>
             </button>
-            {isOpen && catCards.map(card => (
-              <button
-                key={card.id}
-                onClick={() => onSelectCard(card.id)}
-                className={`w-full text-left px-4 py-1.5 text-xs rounded transition-colors flex items-center gap-2 ${
-                  activeCardId === card.id
-                    ? 'bg-purple-600/20 text-purple-200 border border-purple-500/20'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                }`}
-              >
-                <BookOpen size={10} className="shrink-0 opacity-50" />
-                <span className="truncate">{card.id} {card.title}</span>
-              </button>
-            ))}
+
+            {isVolOpen && vol.chapters.map(ch => {
+              const chKey = `ch-${ch.key}`;
+              const isChOpen = !collapsed[chKey];
+              return (
+                <div key={chKey}>
+                  <button
+                    onClick={() => toggle(chKey)}
+                    className="w-full flex items-center gap-1 pl-5 pr-2 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors rounded"
+                  >
+                    {isChOpen ? <ChevronDown size={10} /> : <ChevronRight size={10} />}
+                    <span>{ch.title}</span>
+                    <span className="text-slate-600 ml-auto text-[10px]">
+                      {ch.sections.filter(s => availableCards.has(s.id)).length}/{ch.sections.length}
+                    </span>
+                  </button>
+
+                  {isChOpen && ch.sections.map(sec => {
+                    const hasCard = availableCards.has(sec.id);
+                    return (
+                      <button
+                        key={sec.id}
+                        onClick={() => hasCard && onSelectCard(sec.id)}
+                        disabled={!hasCard}
+                        className={`w-full text-left pl-8 pr-2 py-1 text-xs rounded transition-colors flex items-center gap-1.5 ${
+                          activeCardId === sec.id
+                            ? 'bg-purple-600/20 text-purple-200 border border-purple-500/20'
+                            : hasCard
+                              ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                              : 'text-slate-600 cursor-default'
+                        }`}
+                      >
+                        <BookOpen size={9} className={`shrink-0 ${hasCard ? 'opacity-50' : 'opacity-25'}`} />
+                        <span className="truncate">{sec.id} {sec.title}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
         );
       })}
