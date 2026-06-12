@@ -56,14 +56,14 @@ function renderContent(text: string): React.ReactNode[] {
     // Section header ###
     if (line.startsWith('### ')) {
       result.push(
-        <h4 key={i} className="text-base font-semibold text-purple-300 mt-4 mb-1">{line.slice(4)}</h4>
+        <h4 key={i} className="text-base font-semibold text-purple-300 mt-4 mb-1">{renderLine(line.slice(4))}</h4>
       );
       continue;
     }
     // Sub header ##
     if (line.startsWith('## ')) {
       result.push(
-        <h3 key={i} className="text-lg font-bold text-white mt-5 mb-2">{line.slice(3)}</h3>
+        <h3 key={i} className="text-lg font-bold text-white mt-5 mb-2">{renderLine(line.slice(3))}</h3>
       );
       continue;
     }
@@ -122,6 +122,23 @@ function renderContent(text: string): React.ReactNode[] {
     // Empty line
     if (line.trim() === '') {
       result.push(<div key={i} className="h-2" />);
+      continue;
+    }
+
+    // List item
+    if (line.match(/^[\-\*]\s/)) {
+      const content = line.replace(/^[\-\*]\s/, '');
+      const segments = content.split(/(\*\*.*?\*\*)/g);
+      result.push(
+        <li key={i} className="text-base text-slate-300 leading-relaxed ml-4 list-disc">
+          {segments.map((seg, si) => {
+            if (seg.startsWith('**') && seg.endsWith('**')) {
+              return <strong key={si} className="text-slate-100 font-semibold">{renderLine(seg.slice(2, -2))}</strong>;
+            }
+            return <span key={si}>{renderLine(seg)}</span>;
+          })}
+        </li>
+      );
       continue;
     }
 
