@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api/client';
-
-interface CardItem {
-  id: string;
-  title: string;
-  category: string;
-}
+import type { Card } from '../types/card';
 
 interface SRSItem {
   card_id: string;
@@ -17,7 +12,7 @@ interface SRSItem {
 }
 
 export default function BankMode() {
-  const [cards, setCards] = useState<CardItem[]>([]);
+  const [cards, setCards] = useState<Card[]>([]);
   const [srsState, setSrsState] = useState<Record<string, SRSItem>>({});
   const [loading, setLoading] = useState(true);
 

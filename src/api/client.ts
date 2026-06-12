@@ -9,6 +9,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
+import type { Card } from '../types/card';
+
 export async function checkHealth(): Promise<boolean> {
   try {
     const res = await fetch(`${BASE}/cards`, { method: 'GET', signal: AbortSignal.timeout(3000) });
@@ -40,12 +42,12 @@ export interface BrowseCard {
 
 export const api = {
   cards: {
-    list: () => request<any[]>('/cards'),
-    get: (id: string) => request<any>(`/cards/${id}`),
+    list: () => request<Card[]>('/cards'),
+    get: (id: string) => request<Card>(`/cards/${id}`),
   },
   srs: {
-    state: () => request<any[]>('/srs/state'),
-    next: () => request<any[]>('/srs/next'),
+    state: () => request<{ card_id: string; ease_factor: number; interval: number; due_date: string; reps: number; last_review: string | null }[]>('/srs/state'),
+    next: () => request<Card[]>('/srs/next'),
     review: (card_id: string, dimension: string, score: number) =>
       request('/srs/review', {
         method: 'POST',
