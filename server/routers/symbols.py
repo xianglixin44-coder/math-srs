@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import asyncio
 from fastapi import APIRouter, Request
 from server.symbols import classify, load_training, Strokes
 
@@ -22,7 +23,7 @@ async def recognize_symbol(req: Request):
     raw_strokes: Strokes = [[(p[0], p[1]) for p in s] for s in body.get("strokes", [])]
     if not raw_strokes:
         return []
-    results = classify(raw_strokes, top_k=5)
+    results = await asyncio.to_thread(classify, raw_strokes, 5)
     return [{"symbol": sym, "confidence": round(conf, 3)} for sym, conf in results]
 
 

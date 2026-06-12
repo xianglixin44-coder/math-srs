@@ -127,9 +127,10 @@ def get_due_cards():
     with with_db() as conn:
         now = datetime.now().isoformat()
         rows = conn.execute(
-            "SELECT * FROM cards WHERE enabled=1 AND id IN "
-            "(SELECT card_id FROM srs_state WHERE due_date <= ? OR due_date IS NULL "
-            "UNION SELECT id FROM cards WHERE id NOT IN (SELECT card_id FROM srs_state))",
+            "SELECT c.id, c.title, c.category, c.dimensions, "
+            "s.ease_factor, s.interval, s.due_date, s.reps "
+            "FROM cards c LEFT JOIN srs_state s ON c.id = s.card_id "
+            "WHERE c.enabled=1 AND (s.due_date <= ? OR s.card_id IS NULL)",
             (now,)
         ).fetchall()
 
@@ -137,10 +138,9 @@ def get_due_cards():
         for r in rows:
             c = {"id": r["id"], "title": r["title"], "category": r["category"],
                  "dimensions": json.loads(r["dimensions"])}
-            state = conn.execute("SELECT * FROM srs_state WHERE card_id=?", (r["id"],)).fetchone()
-            if state:
-                c["srs"] = {"ease_factor": state["ease_factor"], "interval": state["interval"],
-                            "due_date": state["due_date"], "reps": state["reps"]}
+            if r["ease_factor"] is not None:
+                c["srs"] = {"ease_factor": r["ease_factor"], "interval": r["interval"],
+                            "due_date": r["due_date"], "reps": r["reps"]}
             else:
                 c["srs"] = None
             cards.append(c)

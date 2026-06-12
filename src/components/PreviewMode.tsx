@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Timer } from 'lucide-react';
 import { renderLine } from '../utils/katex';
 
@@ -12,20 +12,22 @@ interface Props {
 
 export default function PreviewMode({ title, dimensionLabel, question, answer, onComplete }: Props) {
   const [seconds, setSeconds] = useState(40);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     const timer = setInterval(() => {
       setSeconds(s => {
         if (s <= 1) {
           clearInterval(timer);
-          setTimeout(onComplete, 300);
+          setTimeout(() => onCompleteRef.current(), 300);
           return 0;
         }
         return s - 1;
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [onComplete]);
+  }, []);
 
   const pct = (seconds / 40) * 100;
 

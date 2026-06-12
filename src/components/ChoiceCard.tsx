@@ -26,7 +26,7 @@ export default function ChoiceCard({ question, options, answer, onScore }: Props
 
   const { options: shuffled, correct } = useMemo(
     () => shuffleOptions(options, answer),
-    [options.join('|'), answer]
+    [JSON.stringify(options), answer]
   );
 
   const handleSelect = (idx: number) => {

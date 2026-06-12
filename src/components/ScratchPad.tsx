@@ -18,11 +18,16 @@ export default function ScratchPad({ resetKey }: Props) {
     if (!canvas) return;
     const rect = canvas.parentElement?.getBoundingClientRect();
     if (rect) {
-      canvas.width = rect.width;
-      canvas.height = isOpen ? 300 : 0;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = (isOpen ? 300 : 0) * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${isOpen ? 300 : 0}px`;
     }
     const ctx = canvas.getContext('2d');
     if (ctx) {
+      const dpr = window.devicePixelRatio || 1;
+      ctx.scale(dpr, dpr);
       ctx.strokeStyle = '#e2e8f0';
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
