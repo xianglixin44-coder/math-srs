@@ -1,4 +1,4 @@
-const BASE = `${window.location.origin}/api`;
+const BASE = 'http://localhost:3000/api';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
@@ -55,13 +55,6 @@ export const api = {
   browse: {
     list: () => request<BrowseCardSummary[]>('/browse/cards'),
     get: (id: string) => request<BrowseCard>(`/browse/cards/${id}`),
-  },
-  symbols: {
-    recognize: (strokes: number[][][]) =>
-      request<{ symbol: string; confidence: number }[]>('/symbols/recognize', {
-        method: 'POST',
-        body: JSON.stringify({ strokes }),
-      }),
   },
   import: (cards: any[]) =>
     request<{ imported: number }>('/import', {

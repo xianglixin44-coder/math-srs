@@ -152,7 +152,7 @@ export default function BrowseMode({ activeCardId }: Props) {
       if (summaries.length === 0) { setCards([]); return; }
       // Fetch full content for each card
       const fullCards = await Promise.all(
-        summaries.map((s: any) => api.browse.get(s.id))
+        summaries.map((s) => api.browse.get(s.id))
       );
       setCards(fullCards);
     }).catch(() => setCards([]));

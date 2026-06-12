@@ -3,7 +3,11 @@ Detexify-style handwriting symbol recognition.
 Ported from: https://github.com/kirel/detexify-hs-backend
 
 Algorithm: stroke preprocessing → DTW distance → k-NN classification
+
+Training data format (snapshot.json):
+  { "base64(package-encoding-\\command)": [{"strokes": [[{x,y},...], ...]}, ...] }
 """
+import base64
 import json
 import math
 from pathlib import Path
@@ -194,8 +198,85 @@ def stroke_distance(unknown: Strokes, sample: Strokes) -> float:
 _training_data: Optional[dict[str, list[Strokes]]] = None  # {symbol: [samples]}
 _flat_samples: Optional[list[tuple[str, Strokes]]] = None  # [(symbol, preprocessed_sample)]
 
-def load_training(filepath: str = None):
-    """Load training data from snapshot.json."""
+def _parse_detexify_key(key: str) -> str:
+    """Decode base64 key and extract LaTeX command. Returns display symbol."""
+    try:
+        decoded = base64.b64decode(key).decode()
+    except Exception:
+        return key
+    # Format: "package-encoding-\\command" or "package-encoding-command"
+    # Extract the command part (after last '-')
+    parts = decoded.rsplit('-', 2)
+    cmd = parts[-1] if len(parts) >= 2 else decoded
+    # Strip leading backslash or underscore (Detexify uses _ as \ prefix)
+    if cmd.startswith('\\'):
+        cmd = cmd[1:]
+    elif cmd.startswith('_'):
+        cmd = cmd[1:]
+    return cmd
+
+
+def _cmd_to_unicode(cmd: str) -> str:
+    """Map common LaTeX commands to Unicode symbols."""
+    mapping = {
+        'alpha': 'α', 'beta': 'β', 'gamma': 'γ', 'delta': 'δ', 'epsilon': 'ε',
+        'theta': 'θ', 'lambda': 'λ', 'mu': 'μ', 'pi': 'π', 'sigma': 'σ',
+        'phi': 'φ', 'omega': 'ω', 'Gamma': 'Γ', 'Delta': 'Δ', 'Theta': 'Θ',
+        'Lambda': 'Λ', 'Sigma': 'Σ', 'Phi': 'Φ', 'Omega': 'Ω', 'Psi': 'Ψ',
+        'infty': '∞', 'pm': '±', 'times': '×', 'div': '÷',
+        'leq': '≤', 'geq': '≥', 'neq': '≠', 'equiv': '≡', 'approx': '≈',
+        'subset': '⊂', 'supset': '⊃', 'subseteq': '⊆', 'supseteq': '⊇',
+        'in': '∈', 'ni': '∋', 'notin': '∉', 'emptyset': '∅',
+        'cup': '∪', 'cap': '∩', 'vee': '∨', 'wedge': '∧',
+        'forall': '∀', 'exists': '∃', 'neg': '¬',
+        'rightarrow': '→', 'Rightarrow': '⇒', 'leftarrow': '←', 'Leftarrow': '⇐',
+        'leftrightarrow': '↔', 'Leftrightarrow': '⇔',
+        'cdot': '·', 'circ': '∘', 'ast': '∗', 'star': '⋆',
+        'sum': '∑', 'prod': '∏', 'int': '∫', 'oint': '∮',
+        'partial': '∂', 'nabla': '∇', 'sqrt': '√',
+        'angle': '∠', 'triangle': '△', 'square': '□',
+        'aleph': 'ℵ', 'wp': '℘', 'Re': 'ℜ', 'Im': 'ℑ',
+        'sim': '∼', 'simeq': '≃', 'cong': '≅', 'propto': '∝',
+        'perp': '⊥', 'parallel': '∥', 'mid': '∣',
+        'oplus': '⊕', 'otimes': '⊗', 'odot': '⊙',
+        'triangleq': '≜', 'doublebarwedge': '⩞',
+        'mathfrak{H}': 'ℌ', 'mathfrak{C}': 'ℭ',
+        'textcurrency': '¤', 'upvarsigma': 'ς',
+        'subseteqq': '⫅', 'supseteqq': '⫆',
+        'subsetneq': '⊊', 'supsetneq': '⊋',
+        'mapsto': '↦', 'longmapsto': '⟼',
+        'longrightarrow': '⟶', 'Longrightarrow': '⟹',
+        'varepsilon': 'ε', 'varphi': 'φ', 'vartheta': 'ϑ', 'varrho': 'ϱ',
+        'ell': 'ℓ', 'hbar': 'ħ', 'imath': '𝚤', 'jmath': '𝚥',
+    }
+    if cmd in mapping:
+        return mapping[cmd]
+    # If it looks like a single greek/letter, return as-is
+    if len(cmd) <= 3 and cmd.isalpha():
+        return cmd
+    # Return LaTeX command as fallback
+    return '\\' + cmd
+
+
+# Common math commands to prioritize
+_COMMON_COMMANDS = {
+    'in', 'notin', 'subseteq', 'subsetneq', 'subset', 'supset',
+    'emptyset', 'cup', 'cap', 'vee', 'wedge', 'neg',
+    'forall', 'exists', 'rightarrow', 'Rightarrow', 'leftarrow',
+    'infty', 'pm', 'times', 'div', 'leq', 'geq', 'neq',
+    'equiv', 'approx', 'sim', 'propto', 'cdot', 'circ',
+    'alpha', 'beta', 'gamma', 'delta', 'theta', 'lambda', 'mu', 'pi', 'sigma', 'phi', 'omega',
+    'sum', 'prod', 'int', 'sqrt', 'partial', 'nabla',
+    'angle', 'triangle', 'square', 'mid', 'parallel', 'perp',
+    'oplus', 'otimes', 'odot', 'cdot', 'ldots', 'vdots',
+    'mapsto', 'leftrightarrow', 'Leftrightarrow',
+    'Gamma', 'Delta', 'Theta', 'Lambda', 'Sigma', 'Phi', 'Psi', 'Omega',
+}
+
+
+def load_training(filepath: str = None, max_symbols: int = 200):
+    """Load training data from Detexify snapshot.json.
+    Prioritizes common math symbols over obscure ones."""
     global _training_data, _flat_samples
     if filepath is None:
         filepath = Path(__file__).parent.parent.parent / "public" / "data" / "symbols.json"
@@ -203,19 +284,48 @@ def load_training(filepath: str = None):
         raw = json.load(f)
     _training_data = {}
     _flat_samples = []
-    for symbol, samples in raw.items():
+
+    # Convert all keys to (symbol, cmd, samples) for sorting
+    all_items = []
+    for key, samples in raw.items():
+        cmd = _parse_detexify_key(key)
+        symbol = _cmd_to_unicode(cmd)
+        # Skip symbols that couldn't be mapped to Unicode
+        if symbol.startswith('\\'):
+            continue
+        all_items.append((symbol, cmd, samples))
+
+    # Sort: prefer symbols from latex2e (core LaTeX), then shorter names
+    def sort_key(item):
+        sym, cmd, _ = item
+        is_core = cmd in _COMMON_COMMANDS
+        return (not is_core, len(sym), sym)
+
+    all_items.sort(key=sort_key)
+
+    count = 0
+    for symbol, _cmd, samples in all_items:
+        if count >= max_symbols:
+            break
         processed = []
         for sample in samples:
-            # sample is [stroke1, stroke2, ...] where each stroke is [[x,y],...]
-            strokes = [[(p[0], p[1]) for p in s] for s in sample if s]
+            # Detexify format: {"strokes": [[{x,y}, ...], ...]}
+            raw_strokes = sample.get("strokes", [])
+            strokes = [[(p["x"], p["y"]) for p in s] for s in raw_strokes if s]
             if not strokes:
                 continue
-            # Preprocess each stroke
-            preprocessed = [preprocess(s) for s in strokes]
+            # Strokes are already normalized (0-1), skip refit
+            preprocessed = [unduplicate(s) for s in strokes]
+            preprocessed = [smooth(s) for s in preprocessed]
+            preprocessed = [redistribute(s, 32) for s in preprocessed]
+            preprocessed = [dominant(s) for s in preprocessed]
             processed.append(preprocessed)
             _flat_samples.append((symbol, preprocessed))
         if processed:
             _training_data[symbol] = processed
+            count += 1
+            if count >= max_symbols:
+                break
 
 def classify(strokes: Strokes, top_k: int = 5) -> list[tuple[str, float]]:
     """Classify handwritten strokes, returns [(symbol, confidence), ...]."""
@@ -223,7 +333,7 @@ def classify(strokes: Strokes, top_k: int = 5) -> list[tuple[str, float]]:
         load_training()
     if not _flat_samples:
         return []
-    # Preprocess input strokes
+    # Preprocess input strokes (use full pipeline with refit for pixel coords)
     preprocessed = [preprocess(s) for s in strokes if s]
     if not preprocessed:
         return []
