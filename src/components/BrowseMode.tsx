@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, Brain, Lightbulb, AlertTriangle, Network } from 'lucide-react';
 import { api } from '../api/client';
+import { renderLine } from '../utils/katex';
 import type { Card } from '../types/card';
 import { DIM_ORDER, DIM_LABELS } from '../types/card';
 
@@ -26,6 +27,48 @@ const GRID_COLORS: Record<string, string> = {
 
 interface Props {
   activeCardId: string | null;
+}
+
+/** Replace [[N]] placeholders with answer values, rendered as highlighted spans */
+function renderClozeNote(question: string, answer: string[]): React.ReactNode[] {
+  const parts = question.split(/(\[\[\d+\]\])/g);
+  return parts.map((part, i) => {
+    const m = part.match(/\[\[(\d+)\]\]/);
+    if (m) {
+      const idx = parseInt(m[1]) - 1;
+      return (
+        <span key={i} className="inline px-1.5 py-0.5 rounded font-medium text-purple-200 bg-purple-600/20 border border-purple-500/20">
+          {answer[idx] ?? '___'}
+        </span>
+      );
+    }
+    return <span key={i}>{renderLine(part)}</span>;
+  });
+}
+
+/** Render choice content as a study note: question + highlighted correct answer */
+function renderChoiceNote(question: string, options: string[], answer: number): React.ReactNode {
+  return (
+    <div className="space-y-3">
+      <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+        {renderLine(question)}
+      </div>
+      <div className="p-3 rounded-lg bg-green-600/10 border border-green-500/20">
+        <div className="text-[10px] text-green-400/70 uppercase tracking-wider mb-1">正确答案</div>
+        <div className="text-sm text-green-300 font-medium">
+          {String.fromCharCode(65 + answer)}. {options[answer]}
+        </div>
+      </div>
+      {/* Other options dimmed */}
+      <div className="space-y-1 opacity-50">
+        {options.map((opt, i) => i !== answer && (
+          <div key={i} className="text-xs text-slate-500">
+            {String.fromCharCode(65 + i)}. {opt}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default function BrowseMode({ activeCardId }: Props) {
@@ -59,7 +102,7 @@ export default function BrowseMode({ activeCardId }: Props) {
     return (
       <div className="glass-card p-12 text-center space-y-3">
         <p className="text-slate-400">从左侧目录选择一张卡片查看</p>
-        <p className="text-xs text-slate-500">或点击右上角进入复习模式</p>
+        <p className="text-xs text-slate-500">点击维度方格展开学习笔记</p>
       </div>
     );
   }
@@ -92,7 +135,7 @@ export default function BrowseMode({ activeCardId }: Props) {
                 <span className="text-white"><Icon size={14} /></span>
               </div>
               <div className="text-xs font-medium text-slate-200">{dim.label}</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">{dim.type === 'cloze' ? '填空' : '选择'}</div>
+              <div className="text-[10px] text-slate-500 mt-0.5">{dim.type === 'cloze' ? '填空笔记' : '选择笔记'}</div>
               {isActive && (
                 <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-400" />
               )}
@@ -101,7 +144,7 @@ export default function BrowseMode({ activeCardId }: Props) {
         })}
       </div>
 
-      {/* Detail panel */}
+      {/* Detail panel — study note style */}
       {activeDim && (() => {
         const isCloze = (activeCard.dimensions.cloze as any)?.[activeDim];
         const isChoice = (activeCard.dimensions.choice as any)?.[activeDim];
@@ -110,34 +153,24 @@ export default function BrowseMode({ activeCardId }: Props) {
 
         return (
           <div className="glass-card p-6 space-y-4">
-            <div className="flex items-center gap-2">
+            {/* Header */}
+            <div className="flex items-center gap-2 pb-3 border-b border-slate-700/50">
               <div className={`w-6 h-6 rounded bg-gradient-to-br ${GRID_COLORS[activeDim]} flex items-center justify-center`}>
                 {(() => { const Icon = GRID_ICONS[activeDim]; return <span className="text-white"><Icon size={12} /></span>; })()}
               </div>
               <span className="text-sm font-medium text-slate-200">{DIM_LABELS[activeDim]}</span>
-              <span className="text-xs text-slate-500">({isCloze ? '填空' : '选择'})</span>
+              <span className="text-xs text-slate-500 ml-auto">📖 学习笔记</span>
             </div>
+
+            {/* Content */}
             <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-              {dimData.question}
+              {isCloze && Array.isArray(dimData.answer)
+                ? renderClozeNote(dimData.question, dimData.answer)
+                : isChoice && dimData.options
+                  ? renderChoiceNote(dimData.question, dimData.options, dimData.answer as number)
+                  : renderLine(dimData.question)
+              }
             </div>
-            {isChoice && dimData.options && (
-              <div className="space-y-1.5 mt-3">
-                {dimData.options.map((opt: string, i: number) => (
-                  <div key={i} className={`text-xs px-3 py-1.5 rounded ${
-                    i === dimData.answer
-                      ? 'bg-green-600/15 text-green-300 border border-green-600/30'
-                      : 'bg-slate-700/30 text-slate-500 border border-slate-700/20'
-                  }`}>
-                    {String.fromCharCode(65 + i)}. {opt}
-                  </div>
-                ))}
-              </div>
-            )}
-            {isCloze && Array.isArray(dimData.answer) && (
-              <div className="text-xs text-green-400 mt-2 border-t border-slate-700/50 pt-3">
-                答案：{dimData.answer.join(' · ')}
-              </div>
-            )}
           </div>
         );
       })()}
