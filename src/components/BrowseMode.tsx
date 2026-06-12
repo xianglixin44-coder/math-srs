@@ -147,7 +147,34 @@ function renderContent(text: string): React.ReactNode[] {
       continue;
     }
 
-    // Quote
+    // Image — match ![alt](url) with optional surrounding text
+    const imgMatch = line.match(/^!\[(.*)\]\((.+)\)\s*$/);
+    if (imgMatch) {
+      console.log('IMG matched:', imgMatch[2]); // DEBUG
+      result.push(
+        <div key={i} className="my-4 flex justify-center">
+          <img src={imgMatch[2].trim()} alt={imgMatch[1]} className="max-w-full rounded-xl" style={{maxHeight: '320px'}} />
+        </div>
+      );
+      continue;
+    }
+
+    // Inline image inside paragraph
+    if (line.includes('![') && line.includes('](')) {
+      const parts = line.split(/(!\[.*?\]\(.+?\))/g);
+      result.push(
+        <div key={i} className="my-4 flex justify-center">
+          {parts.map((part, pi) => {
+            const im = part.match(/!\[(.*)\]\((.+)\)/);
+            if (im) return <img key={pi} src={im[2].trim()} alt={im[1]} className="max-w-full rounded-xl" style={{maxHeight: '320px'}} />;
+            return null;
+          })}
+        </div>
+      );
+      continue;
+    }
+
+    // Bold marker **text** (handled below in paragraph)
     if (line.startsWith('> ')) {
       result.push(
         <blockquote key={i} className="border-l-2 border-purple-500/40 pl-3 my-2 text-slate-400 italic text-sm">
@@ -187,7 +214,7 @@ function renderContent(text: string): React.ReactNode[] {
       <p key={i} className="text-base text-slate-300 leading-relaxed whitespace-pre-wrap">
         {segments.map((seg, si) => {
           if (seg.startsWith('**') && seg.endsWith('**')) {
-            return <strong key={si} className="text-slate-100 font-semibold">{seg.slice(2, -2)}</strong>;
+            return <strong key={si} className="text-slate-100 font-semibold">{renderLine(seg.slice(2, -2))}</strong>;
           }
           return <span key={si}>{renderLine(seg)}</span>;
         })}
