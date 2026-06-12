@@ -6,6 +6,7 @@ import { DIM_ORDER, DIM_LABELS } from '../types/card';
 import PreviewMode from './PreviewMode';
 import ClozeCard from './ClozeCard';
 import ChoiceCard from './ChoiceCard';
+import ScratchPad from './ScratchPad';
 
 const GRID_ICONS: Record<string, React.FC<{ size?: number }>> = {
   formula: BookOpen,
@@ -261,6 +262,7 @@ export default function ReviewMode({ onActiveCardChange }: Props) {
           })}
         </div>
 
+        <ScratchPad resetKey={`select-${cardIdx}`} />
       </div>
     );
   }
@@ -305,6 +307,7 @@ export default function ReviewMode({ onActiveCardChange }: Props) {
         />
       )}
 
+      <ScratchPad resetKey={`${view.cardIdx}-${dimIdx}-${phase}`} />
     </div>
   );
 }

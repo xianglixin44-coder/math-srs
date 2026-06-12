@@ -1,6 +1,6 @@
-const BASE = `${window.location.origin}/api`;
-
 import type { Card } from '../types/card';
+
+const BASE = `${window.location.origin}/api`;
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
@@ -10,8 +10,6 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }
-
-import type { Card } from '../types/card';
 
 export async function checkHealth(): Promise<boolean> {
   try {
