@@ -3,10 +3,11 @@ import Layout from './components/Layout';
 import BrowseMode from './components/BrowseMode';
 import ReviewMode from './components/ReviewMode';
 import ImportExportPanel from './components/ImportExportPanel';
+import BankMode from './components/BankMode';
 import { checkHealth } from './api/client';
 
 export default function App() {
-  const [mode, setMode] = useState<'browse' | 'review' | 'import'>('browse');
+  const [mode, setMode] = useState<'browse' | 'review' | 'import' | 'bank'>('browse');
   const [online, setOnline] = useState<boolean | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
@@ -39,6 +40,10 @@ export default function App() {
         {mode === 'import' && (online !== false
           ? <ImportExportPanel />
           : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能导入导出</div>
+        )}
+        {mode === 'bank' && (online !== false
+          ? <BankMode />
+          : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能查看题库</div>
         )}
       </Layout>
     </>

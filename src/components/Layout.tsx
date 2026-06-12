@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { BookOpen, Play, Upload, Menu, X } from 'lucide-react';
+import { BookOpen, Play, Upload, Menu, X, Database } from 'lucide-react';
 import Sidebar from './Sidebar';
 
 interface Props {
-  mode: 'browse' | 'review' | 'import';
-  setMode: (m: 'browse' | 'review' | 'import') => void;
+  mode: 'browse' | 'review' | 'import' | 'bank';
+  setMode: (m: 'browse' | 'review' | 'import' | 'bank') => void;
   online: boolean | null;
   activeCardId: string | null;
   onSelectCard: (id: string) => void;
@@ -32,6 +32,7 @@ export default function Layout({ mode, setMode, online, activeCardId, onSelectCa
             ['browse', BookOpen, '浏览', false],
             ['review', Play, '复习', true],
             ['import', Upload, '导入', true],
+            ['bank', Database, '题库', true],
           ] as const).map(([m, Icon, label, needsBackend]) => (
             <button
               key={m}
