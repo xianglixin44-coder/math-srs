@@ -16,8 +16,7 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
 
   const handleSubmit = () => {
     const res = inputs.map((inp, i) => {
-      const norm = inp.trim()
-        .replace(/[Ａ-Ｚａ-ｚ０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+      const norm = inp.trim().normalize('NFKC');
       return norm === (answers[i] || '');
     });
     setResults(res);

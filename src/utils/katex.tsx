@@ -1,30 +1,4 @@
-import { useState, useEffect } from 'react';
 import katex from 'katex';
-
-interface Props {
-  text: string;
-}
-
-export default function KatexText({ text }: Props) {
-  const [html, setHtml] = useState('');
-
-  useEffect(() => {
-    try {
-      setHtml(
-        katex.renderToString(text, {
-          throwOnError: false,
-          displayMode: true,
-          strict: false,
-        })
-      );
-    } catch {
-      setHtml(text);
-    }
-  }, [text]);
-
-  if (!text.includes('\\')) return null;
-  return <span dangerouslySetInnerHTML={{ __html: html }} />;
-}
 
 export function renderMixed(text: string): (string | { __html: string })[] {
   const parts = text.split(/(\$\$.*?\$\$|\$.*?\$)/s);

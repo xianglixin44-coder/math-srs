@@ -102,7 +102,7 @@ def sm2_update(card_id: str, score: int):
             elif reps == 1:
                 interval = 6
             else:
-                interval = round(interval * ef)
+                interval = max(1, int(interval * ef + 0.5))
             reps += 1
         else:
             reps = 0
