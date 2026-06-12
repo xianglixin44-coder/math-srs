@@ -8,12 +8,18 @@ import { checkHealth } from './api/client';
 export default function App() {
   const [mode, setMode] = useState<'browse' | 'review' | 'import'>('browse');
   const [online, setOnline] = useState<boolean | null>(null);
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   useEffect(() => {
     checkHealth().then(setOnline);
     const timer = setInterval(() => checkHealth().then(setOnline), 15000);
     return () => clearInterval(timer);
   }, []);
+
+  const handleSelectCard = (id: string) => {
+    setActiveCardId(id);
+    setMode('browse');
+  };
 
   return (
     <>
@@ -22,10 +28,12 @@ export default function App() {
           ⚠️ 无法连接到后端服务（{window.location.hostname}:3000）— 仅浏览模式可用
         </div>
       )}
-      <Layout mode={mode} setMode={setMode} online={online}>
-        {mode === 'browse' && <BrowseMode />}
+      <Layout mode={mode} setMode={setMode} online={online} activeCardId={activeCardId} onSelectCard={handleSelectCard}>
+        {mode === 'browse' && (
+          <BrowseMode activeCardId={activeCardId} />
+        )}
         {mode === 'review' && (online !== false
-          ? <ReviewMode />
+          ? <ReviewMode onActiveCardChange={setActiveCardId} />
           : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能复习</div>
         )}
         {mode === 'import' && (online !== false

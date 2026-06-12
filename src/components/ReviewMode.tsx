@@ -52,7 +52,11 @@ function buildDims(card: Card): DimInfo[] {
   return dims;
 }
 
-export default function ReviewMode() {
+interface Props {
+  onActiveCardChange: (id: string) => void;
+}
+
+export default function ReviewMode({ onActiveCardChange }: Props) {
   const [cards, setCards] = useState<Card[] | null>(null);
   const [view, setView] = useState<ViewState>({ stage: 'loading' });
 
@@ -71,6 +75,15 @@ export default function ReviewMode() {
       setView({ stage: 'empty' });
     });
   }, []);
+
+  // Notify parent of current card
+  const currentCardId =
+    view.stage === 'select' ? view.card.id :
+    view.stage === 'review' ? view.card.id :
+    null;
+  useEffect(() => {
+    if (currentCardId) onActiveCardChange(currentCardId);
+  }, [currentCardId, onActiveCardChange]);
 
   const handleRestart = () => {
     setCards([]);
