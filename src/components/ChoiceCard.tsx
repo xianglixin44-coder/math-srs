@@ -38,13 +38,10 @@ export default function ChoiceCard({ question, options, answer, onScore }: Props
 
   return (
     <div
-      className="glass-card p-6 space-y-4 select-none"
+      className="glass-card p-6 space-y-4"
       onContextMenu={(e) => e.preventDefault()}
-      onCopy={(e) => e.preventDefault()}
-      onCut={(e) => e.preventDefault()}
-      onPaste={(e) => e.preventDefault()}
     >
-      <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">
+      <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap select-none">
         {renderLine(question)}
       </div>
       <div className="space-y-2">
