@@ -145,6 +145,26 @@ def dominant(stroke: Stroke, angle_threshold: float = math.pi * 0.75) -> Stroke:
     result.append(stroke[-1])
     return result
 
+def aspect_refit(stroke: Stroke) -> Stroke:
+    """Scale to fit 0-1 while preserving aspect ratio (centered)."""
+    if len(stroke) < 2:
+        return stroke[:]
+    bb_min, bb_max = bounding_box(stroke)
+    w = bb_max[0] - bb_min[0]
+    h = bb_max[1] - bb_min[1]
+    if w < 1e-10 and h < 1e-10:
+        return [(0.5, 0.5) for _ in stroke]
+    scale = 1.0 / max(w, h)
+    ox = (1.0 - w * scale) / 2
+    oy = (1.0 - h * scale) / 2
+    result = []
+    for p in stroke:
+        x = ox + (p[0] - bb_min[0]) * scale
+        y = oy + (p[1] - bb_min[1]) * scale
+        result.append((x, y))
+    return result
+
+
 def preprocess(stroke: Stroke) -> Stroke:
     """Full preprocessing pipeline."""
     s = unduplicate(stroke)
@@ -152,7 +172,7 @@ def preprocess(stroke: Stroke) -> Stroke:
         return s
     s = smooth(s)
     s = redistribute(s, 32)
-    s = refit(s)
+    s = aspect_refit(s)  # preserve aspect ratio (matches Detexify training data)
     s = dominant(s)
     return s
 
@@ -279,7 +299,8 @@ def load_training(filepath: str = None, max_symbols: int = 200):
     Prioritizes common math symbols over obscure ones."""
     global _training_data, _flat_samples
     if filepath is None:
-        filepath = Path(__file__).parent.parent.parent / "public" / "data" / "symbols.json"
+        # __file__ = server/symbols.py, .parent = server/, .parent.parent = project root
+        filepath = Path(__file__).resolve().parent.parent / "public" / "data" / "symbols.json"
     with open(filepath) as f:
         raw = json.load(f)
     _training_data = {}

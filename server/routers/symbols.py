@@ -6,7 +6,7 @@ from server.symbols import classify, load_training, Strokes
 router = APIRouter(prefix="/api/symbols", tags=["symbols"])
 
 # Load training data on startup
-TRAINING_FILE = Path(__file__).parent.parent.parent / "public" / "data" / "symbols.json"
+TRAINING_FILE = Path(__file__).resolve().parent.parent / "public" / "data" / "symbols.json"
 if TRAINING_FILE.exists():
     load_training(str(TRAINING_FILE))
 
