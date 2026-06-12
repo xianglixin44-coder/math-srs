@@ -121,7 +121,13 @@ export default function MathSymbolPad({ targetRef, visible }: Props) {
       setRecognizing(true);
       try {
         const results = await api.symbols.recognize(newStrokes);
-        setGuesses(results);
+        if (results.length > 0 && results[0].confidence > 0.5) {
+          // Auto-insert top result
+          insertSymbol(results[0].symbol);
+          clearCanvas();
+        } else {
+          setGuesses(results);
+        }
       } catch {
         // Backend unavailable — silently fail
       }
