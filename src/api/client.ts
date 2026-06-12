@@ -56,6 +56,13 @@ export const api = {
     list: () => request<BrowseCardSummary[]>('/browse/cards'),
     get: (id: string) => request<BrowseCard>(`/browse/cards/${id}`),
   },
+  symbols: {
+    recognize: (strokes: number[][][]) =>
+      request<{ symbol: string; confidence: number }[]>('/symbols/recognize', {
+        method: 'POST',
+        body: JSON.stringify({ strokes }),
+      }),
+  },
   import: (cards: any[]) =>
     request<{ imported: number }>('/import', {
       method: 'POST',
