@@ -156,12 +156,27 @@ review_log (id INTEGER PK AUTOINCREMENT, card_id TEXT, dimension TEXT, score INT
 - card 存在性检查
 - import payload 必填字段校验
 
+### FR-11: SPA 路由 Fallback
+
+- 404 exception handler：非 `/api` 路径的 404 自动返回 `index.html`
+- iPad 上刷新 `/review`、`/browse` 等路径不会白屏
+- `/api/*` 路径正常返回 JSON 404
+
+### FR-12: 手写草稿 (ScratchPad)
+
+- HTML5 Canvas + Pointer Events，支持鼠标/触控笔/Apple Pencil
+- 嵌入复习模式底部，可折叠展开
+- 一键清除按钮
+- 切换题目/维度自动清除画布（resetKey）
+- `touchAction: none` 防止画线时页面滚动
+
 ## 用户场景
 
 1. Mac 启动 FastAPI → iPad 打开浏览器访问
 2. 浏览：侧边栏选节 → 网格选维度 → 阅读笔记 → 上/下一节翻页
-3. 复习：选题 → 预览 40s → 测试 → 评分 → 返回
+3. 复习：选题 → 展开草稿板演算 → 预览 40s → 测试 → 评分 → 返回
 4. 题库：查看全部卡片 SRS 状态
+5. iPad 刷新任意页面不白屏（SPA fallback）
 5. 导入/导出：粘贴 JSON 导入，一键下载导出
 
 ## 成功标准

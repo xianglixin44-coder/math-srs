@@ -26,6 +26,7 @@ src/                  ← React SPA (Vite build → dist/)
 │   ├── BrowseMode.tsx ← 7维网格 + Markdown详情页
 │   ├── ReviewMode.tsx ← 选题→预览→测试→评分流程
 │   ├── PreviewMode.tsx← 40s倒计时预览
+│   ├── ScratchPad.tsx  ← Canvas 手写草稿板
 │   ├── ClozeCard.tsx  ← 填空测试卡片
 │   ├── ChoiceCard.tsx ← 选择测试卡片（含乱序）
 │   ├── BankMode.tsx   ← 题库管理表格

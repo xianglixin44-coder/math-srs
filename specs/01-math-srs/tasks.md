@@ -62,6 +62,8 @@
 - [x] [T040] SM-2 算法精度验证
 - [x] [T041] 输入校验：score range + dimension 白名单 + card 存在性
 - [x] [T042] `__init__.py` 包初始化
+- [x] [T043] SPA fallback: 404 exception handler → 非 /api 路径返回 index.html
+- [x] [T044] ScratchPad Canvas 手写草稿：折叠展开 + 清除 + 自动重置
 
 ## Phase 8: 待完成
 
