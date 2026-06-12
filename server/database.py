@@ -102,13 +102,13 @@ def sm2_update(card_id: str, score: int):
             elif reps == 1:
                 interval = 6
             else:
-                interval = max(1, int(interval * ef + 0.5))
+                interval = round(interval * ef)
             reps += 1
+            ef = max(1.3, ef + 0.1)
         else:
             reps = 0
             interval = 1
-
-        ef = max(1.3, ef + (0.1 - (3 - score) * (0.08 + (3 - score) * 0.02)))
+            ef = max(1.3, ef - 0.2)
         due_date = (now + timedelta(days=interval)).isoformat()
 
         conn.execute("""

@@ -26,8 +26,7 @@ export default function ChoiceCard({ question, options, answer, onScore }: Props
 
   const { options: shuffled, correct } = useMemo(
     () => shuffleOptions(options, answer),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [options.join('|'), answer]
   );
 
   const handleSelect = (idx: number) => {

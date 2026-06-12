@@ -135,9 +135,22 @@ export default function ReviewMode({ onActiveCardChange }: Props) {
     const newScores = { ...view.scores, [key]: score };
     api.srs.review(card.id, view.dim.key, score);
 
-    // Go back to dimension select after scoring
     const dims = buildDims(card);
-    setView({ stage: 'select', card, cardIdx: view.cardIdx, dims, scores: newScores });
+    // Auto-advance to the next unanswered dimension
+    const nextDimIdx = dims.findIndex((d, i) =>
+      i > view.dimIdx && newScores[`${card.id}-${d.key}`] === undefined
+    );
+
+    if (nextDimIdx !== -1) {
+      // Jump directly to the next unanswered dimension (skip preview for speed)
+      setView({
+        stage: 'review', card, dim: dims[nextDimIdx], phase: 'preview',
+        cardIdx: view.cardIdx, dimIdx: nextDimIdx, totalDims: dims.length, scores: newScores,
+      });
+    } else {
+      // All dimensions answered — back to select
+      setView({ stage: 'select', card, cardIdx: view.cardIdx, dims, scores: newScores });
+    }
   };
 
   // Advance to next card
@@ -277,7 +290,6 @@ export default function ReviewMode({ onActiveCardChange }: Props) {
           dimensionLabel={dim.label}
           question={dim.data.question}
           answer={dim.data.answer}
-          options={dim.data.options}
           onComplete={() => setView({ ...view, phase: 'test' })}
         />
       ) : isCloze ? (

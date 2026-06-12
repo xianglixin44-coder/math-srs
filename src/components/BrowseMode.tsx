@@ -1,20 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight, FlaskConical, ArrowRightLeft } from 'lucide-react';
-import { api } from '../api/client';
+import { api, type BrowseCard, type BrowseSection } from '../api/client';
 import { renderLine } from '../utils/katex';
-
-interface BrowseSection {
-  key: string;
-  label: string;
-  content: string;
-}
-
-interface BrowseCard {
-  id: string;
-  title: string;
-  category?: string;
-  sections: BrowseSection[];
-}
 
 const SECTION_ICONS: Record<string, React.FC<{ size?: number }>> = {
   concept: BookOpen,

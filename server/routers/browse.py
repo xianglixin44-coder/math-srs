@@ -7,6 +7,18 @@ router = APIRouter(prefix="/api/browse", tags=["browse"])
 BROWSE_DIR = Path(__file__).parent.parent.parent / "public" / "data" / "browse"
 
 
+TEXTBOOK_FILE = Path(__file__).parent.parent.parent / "public" / "data" / "browse" / "textbook.json"
+
+
+@router.get("/textbook")
+def get_textbook():
+    """Load textbook table of contents."""
+    if not TEXTBOOK_FILE.exists():
+        from fastapi import HTTPException
+        raise HTTPException(404, "Textbook not found")
+    return json.loads(TEXTBOOK_FILE.read_text())
+
+
 @router.get("/cards")
 def list_browse_cards():
     """List all browse cards (summary only, no section content)."""

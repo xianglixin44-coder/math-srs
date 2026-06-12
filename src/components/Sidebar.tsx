@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, BookOpen, BookMarked } from 'lucide-react';
-import { api } from '../api/client';
+import { api, type BrowseCardSummary } from '../api/client';
 
-interface BrowseCardSummary {
+interface TextbookSection {
   id: string;
   title: string;
   category?: string;
@@ -41,14 +41,14 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    // Load textbook structure
-    fetch('/data/browse/textbook.json')
+    // Load textbook structure via API
+    fetch('/api/browse/textbook')
       .then(r => r.json())
       .then(setTextbook)
       .catch(() => setTextbook(null));
 
     // Load available cards
-    api.browse.list().then((cards: BrowseCardSummary[]) => {
+    api.browse.list().then((cards) => {
       setAvailableCards(new Set(cards.map(c => c.id)));
     }).catch(() => {});
   }, []);

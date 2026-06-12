@@ -7,7 +7,6 @@ interface Props {
   dimensionLabel: string;
   question: string;
   answer: string[] | number;
-  options?: string[];
   onComplete: () => void;
 }
 

@@ -18,6 +18,26 @@ export async function checkHealth(): Promise<boolean> {
   }
 }
 
+export interface BrowseCardSummary {
+  id: string;
+  title: string;
+  category?: string;
+  sectionCount: number;
+}
+
+export interface BrowseSection {
+  key: string;
+  label: string;
+  content: string;
+}
+
+export interface BrowseCard {
+  id: string;
+  title: string;
+  category?: string;
+  sections: BrowseSection[];
+}
+
 export const api = {
   cards: {
     list: () => request<any[]>('/cards'),
@@ -33,8 +53,8 @@ export const api = {
       }),
   },
   browse: {
-    list: () => request<any[]>('/browse/cards'),
-    get: (id: string) => request<any>(`/browse/cards/${id}`),
+    list: () => request<BrowseCardSummary[]>('/browse/cards'),
+    get: (id: string) => request<BrowseCard>(`/browse/cards/${id}`),
   },
   import: (cards: any[]) =>
     request<{ imported: number }>('/import', {

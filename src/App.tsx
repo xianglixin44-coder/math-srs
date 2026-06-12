@@ -4,6 +4,7 @@ import BrowseMode from './components/BrowseMode';
 import ReviewMode from './components/ReviewMode';
 import ImportExportPanel from './components/ImportExportPanel';
 import BankMode from './components/BankMode';
+import ErrorBoundary from './components/ErrorBoundary';
 import { checkHealth } from './api/client';
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         </div>
       )}
       <Layout mode={mode} setMode={setMode} online={online} activeCardId={activeCardId} onSelectCard={handleSelectCard}>
+        <ErrorBoundary>
         {mode === 'browse' && (
           <BrowseMode activeCardId={activeCardId} />
         )}
@@ -45,6 +47,7 @@ export default function App() {
           ? <BankMode />
           : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能查看题库</div>
         )}
+      </ErrorBoundary>
       </Layout>
     </>
   );

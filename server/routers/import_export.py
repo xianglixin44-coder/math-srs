@@ -17,8 +17,6 @@ async def import_cards(req: Request):
     with with_db() as conn:
         count = 0
         for c in data:
-            if "id" not in c or "title" not in c or "dimensions" not in c:
-                raise HTTPException(400, "Each card must have id, title, and dimensions")
             conn.execute(
                 "INSERT OR REPLACE INTO cards VALUES (?,?,?,?,?,?,?)",
                 (c["id"], c["title"], c.get("category"),
@@ -26,6 +24,8 @@ async def import_cards(req: Request):
                  json.dumps(c["dimensions"], ensure_ascii=False),
                  "imported", 1)
             )
+            # Clear old review state for replaced cards
+            conn.execute("DELETE FROM srs_state WHERE card_id=?", (c["id"],))
             count += 1
         conn.commit()
     return {"imported": count}
