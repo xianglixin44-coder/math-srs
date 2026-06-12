@@ -11,7 +11,7 @@
     {
       "key": "method",
       "label": "解题策略与方法论",
-      "content": "## 二、解题策略 (SOP)\n\n### 运算执行标准动作\n\n**① 识别集合类型**\n\n| 集合类型 | 方法 | 原因 |\n|----------|------|------|\n| 离散集 | Venn 图法 | 元素可一一列举，图形直观 |\n| 连续集 | 数轴法 | 区间无限，必须借助数轴观察边界 |\n\n**② 执行运算**\n\n- **求并集 $A \\cup B$**：合并两集合元素，重复元素只写一次\n- **求交集 $A \\cap B$**：寻找公共部分，无公共元素结果为 $\\emptyset$\n- **求补集 $\\complement_{U}A$**：在 $U$ 中剔除 $A$，端点开闭反转\n\n### 容斥原理\n\n$$\\text{card}(A \\cup B) = \\text{card}(A) + \\text{card}(B) - \\text{card}(A \\cap B)$$\n\n> 用途：计算两个集合的并集元素个数。先分别统计，再减去重复计算部分。\n\n**三步法**：\n1. 统计 $\\text{card}(A)$ 和 $\\text{card}(B)$\n2. 找出 $A \\cap B$ 并统计元素数\n3. 代入公式计算\n\n### Venn 图示例\n\n集合 A={1,2,3}, B={2,3,4}：\n\n:::venn\nleft=A\nright=B\nleftOnly=1\nrightOnly=4\nintersection=2,3\nhighlight=intersection\n:::"
+      "content": "## 二、解题策略 (SOP)\n\n### 运算执行标准动作\n\n**① 识别集合类型**\n\n| 集合类型 | 方法 | 原因 |\n|----------|------|------|\n| 离散集 | Venn 图法 | 元素可一一列举，图形直观 |\n| 连续集 | 数轴法 | 区间无限，必须借助数轴观察边界 |\n\n**② 执行运算**\n\n- **求并集 $A \\cup B$**：合并两集合元素，重复元素只写一次\n- **求交集 $A \\cap B$**：寻找公共部分，无公共元素结果为 $\\emptyset$\n- **求补集 $\\complement_{U}A$**：在 $U$ 中剔除 $A$，端点开闭反转\n\n### 容斥原理\n\n$$\\text{card}(A \\cup B) = \\text{card}(A) + \\text{card}(B) - \\text{card}(A \\cap B)$$\n\n> 用途：计算两个集合的并集元素个数。先分别统计，再减去重复计算部分。\n\n**三步法**：\n1. 统计 $\\text{card}(A)$ 和 $\\text{card}(B)$\n2. 找出 $A \\cap B$ 并统计元素数\n3. 代入公式计算\n\n### Venn 图示例\n\n集合 A={1,2,3}, B={2,3,4}：\n\n:::venn\nleft=A\nright=B\nleftOnly=1\nrightOnly=4\nintersection=2,3\nhighlight=intersection\n:::\n\n### 数轴示例\n\n区间 [1,4] 和 (2,5)：\n\n:::numberline\n- [1, 4]\n- (2, 5)\n:::"
     },
     {
       "key": "pitfall",
@@ -21,7 +21,7 @@
     {
       "key": "insight",
       "label": "多维原理解码",
-      "content": "## 四、多维原理\n\n### 代数视角\n\n集合运算与逻辑运算完全对应：\n\n| 集合运算 | 逻辑对应 | 符号 |\n|----------|----------|------|\n| 并集 $\\cup$ | 或 | OR |\n| 交集 $\\cap$ | 且 | AND |\n| 补集 $\\complement$ | 非 | NOT |\n\n这一对应关系是后续学习**命题逻辑**和**条件判断**的基础。\n\n### 几何视角\n\n- 并集 $A \\cup B$ → 两个图形区域的**全部范围**\n- 交集 $A \\cap B$ → 两个图形区域的**重叠阴影**\n- 补集 $\\complement_{U}A$ → 全集背景下 $A$ 的**剩余空白**\n\n### 现实视角\n\n- 并集：超市两次进货的总品种\n- 交集：两次进货中相同的品种\n- 补集：货架上不属于某品牌的所有商品\n\n### 数轴示例\n\n区间 $[1,4]$ 和 $(2,5)$ 的并集：\n\n:::numberline\n- [1, 4]\n- (2, 5)\n:::"
+      "content": "## 四、多维原理\n\n### 代数视角\n\n集合运算与逻辑运算完全对应：\n\n| 集合运算 | 逻辑对应 | 符号 |\n|----------|----------|------|\n| 并集 $\\cup$ | 或 | OR |\n| 交集 $\\cap$ | 且 | AND |\n| 补集 $\\complement$ | 非 | NOT |\n\n这一对应关系是后续学习**命题逻辑**和**条件判断**的基础。\n\n### 几何视角\n\n- 并集 $A \\cup B$ → 两个图形区域的**全部范围**\n- 交集 $A \\cap B$ → 两个图形区域的**重叠阴影**\n- 补集 $\\complement_{U}A$ → 全集背景下 $A$ 的**剩余空白**\n\n### 现实视角\n\n- 并集：超市两次进货的总品种\n- 交集：两次进货中相同的品种\n- 补集：货架上不属于某品牌的所有商品\n\n\n\n### Venn 图全集：四种集合关系\n\n**① 子集 $A \\subseteq B$** — A 完全在 B 内部：\n\n:::venn\nleft=A\nright=B\nleftOnly=\nrightOnly=x,y,z\nintersection=\nhighlight=left\n:::\n\n**② 并集 $A \\cup B$** — 两集合全部区域：\n\n:::venn\nleft=A\nright=B\nleftOnly=1,2\nrightOnly=5,6\nintersection=3,4\nhighlight=union\n:::\n\n**③ 交集 $A \\cap B$** — 两集合重叠区域：\n\n:::venn\nleft=A\nright=B\nleftOnly=1,2\nrightOnly=5,6\nintersection=3,4\nhighlight=intersection\n:::\n\n**④ 空集 $\\emptyset$** — 两集合无重叠：\n\n:::venn\nleft=A\nright=B\nleftOnly=1,2,3\nrightOnly=4,5,6\nintersection=\nhighlight=intersection\n:::\n\n**⑤ 补集 $\\complement_U A$** — 全集背景中 A 的空白：下方圆圈为 A，灰色背景为全集 U，白色区域为 $\\complement_U A$。"
     },
     {
       "key": "example",
