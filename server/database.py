@@ -64,6 +64,8 @@ def init_db():
             seed_file = Path(__file__).parent.parent / "public" / "data" / "cards.json"
             if seed_file.exists():
                 cards = json.loads(seed_file.read_text())
+                if isinstance(cards, dict):
+                    cards = [cards]
                 if isinstance(cards, list):
                     for c in cards:
                         conn.execute(
