@@ -11,7 +11,7 @@
     {
       "key": "method",
       "label": "解题策略与方法论",
-      "content": "## 二、解题策略 (SOP)\n\n### 箭头判定法\n\n1. 用 $p \\implies ?$ 检验充分性：命题 $p$ 成立时，$q$ 是否一定成立？\n2. 用 $q \\implies ?$ 检验必要性：命题 $q$ 成立时，$p$ 是否一定成立？\n3. 根据箭头结果判定：\n\n$$\\begin{cases} p \\implies q,\\ q \\nRightarrow p & \\text{充分不必要} \\\\ p \\nRightarrow q,\\ q \\implies p & \\text{必要不充分} \\\\ p \\iff q & \\text{充要} \\\\ p \\nRightarrow q,\\ q \\nRightarrow p & \\text{既不充分也不必要} \\end{cases}$$\n\n### 集合判定法（小集推大集）\n\n设 $A = \\{x \\mid p(x)\\}$，$B = \\{x \\mid q(x)\\}$：\n\n| 集合关系 | 逻辑关系 | 含义 |\n|----------|----------|------|\n| $A \\subseteq B$ | $p \\implies q$ | $p$ 是 $q$ 的充分条件 |\n| $B \\subseteq A$ | $q \\implies p$ | $p$ 是 $q$ 的必要条件 |\n| $A = B$ | $p \\iff q$ | 充要条件 |\n\n> 核心思想：**小集合推出大集合**——在小圈里必然在大圈里。\n\n:::venn\nleft=p(x)\nright=q(x)\nhighlight=left\n:::"
+      "content": "## 二、解题策略 (SOP)\n\n### 箭头判定法\n\n1. 用 $p \\implies ?$ 检验充分性：命题 $p$ 成立时，$q$ 是否一定成立？\n2. 用 $q \\implies ?$ 检验必要性：命题 $q$ 成立时，$p$ 是否一定成立？\n3. 根据箭头结果判定：\n\n$$\\begin{cases} p \\implies q,\\ q \\nRightarrow p & \\text{充分不必要} \\\\ p \\nRightarrow q,\\ q \\implies p & \\text{必要不充分} \\\\ p \\iff q & \\text{充要} \\\\ p \\nRightarrow q,\\ q \\nRightarrow p & \\text{既不充分也不必要} \\end{cases}$$\n\n### 集合判定法（小集推大集）\n\n设 $A = \\{x \\mid p(x)\\}$，$B = \\{x \\mid q(x)\\}$：\n\n| 集合关系 | 逻辑关系 | 含义 |\n|----------|----------|------|\n| $A \\subseteq B$ | $p \\implies q$ | $p$ 是 $q$ 的充分条件 |\n| $B \\subseteq A$ | $q \\implies p$ | $p$ 是 $q$ 的必要条件 |\n| $A = B$ | $p \\iff q$ | 充要条件 |\n\n> 核心思想：**小集合推出大集合**——在小圈里必然在大圈里。\n\n:::venn\ntitle=充分条件: p(x) ⊆ q(x)\ntitle=充分条件: p(x) ⊆ q(x)\nleft=p(x)\nright=q(x)\nhighlight=left\n:::"
     },
     {
       "key": "pitfall",
