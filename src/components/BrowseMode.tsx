@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Brain, Lightbulb, AlertTriangle, Network } from 'lucide-react';
+import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft } from 'lucide-react';
 import { api } from '../api/client';
 import { renderLine } from '../utils/katex';
 import type { Card } from '../types/card';
@@ -27,6 +27,12 @@ const GRID_COLORS: Record<string, string> = {
 
 interface Props {
   activeCardId: string | null;
+}
+
+interface DimInfo {
+  key: string;
+  label: string;
+  type: 'cloze' | 'choice';
 }
 
 /** Replace [[N]] placeholders with answer values, rendered as highlighted spans */
@@ -59,7 +65,6 @@ function renderChoiceNote(question: string, options: string[], answer: number): 
           {String.fromCharCode(65 + answer)}. {options[answer]}
         </div>
       </div>
-      {/* Other options dimmed */}
       <div className="space-y-1 opacity-50">
         {options.map((opt, i) => i !== answer && (
           <div key={i} className="text-xs text-slate-500">
@@ -71,13 +76,27 @@ function renderChoiceNote(question: string, options: string[], answer: number): 
   );
 }
 
+function buildDims(card: Card): DimInfo[] {
+  const dims: DimInfo[] = [];
+  DIM_ORDER.forEach(dim => {
+    if ((card.dimensions.cloze as any)?.[dim]) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'cloze' });
+    if ((card.dimensions.choice as any)?.[dim]) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'choice' });
+  });
+  return dims;
+}
+
 export default function BrowseMode({ activeCardId }: Props) {
   const [cards, setCards] = useState<Card[] | null>(null);
-  const [activeDim, setActiveDim] = useState<string | null>(null);
+  const [selectedDim, setSelectedDim] = useState<string | null>(null);
 
   useEffect(() => {
     api.cards.list().then(setCards).catch(() => setCards([]));
   }, []);
+
+  // Reset selected dim when card changes
+  useEffect(() => {
+    setSelectedDim(null);
+  }, [activeCardId]);
 
   if (cards === null) {
     return <div className="glass-card p-12 text-center"><p className="text-slate-400">加载中...</p></div>;
@@ -89,24 +108,69 @@ export default function BrowseMode({ activeCardId }: Props) {
 
   const activeCard = cards.find(c => c.id === activeCardId) ?? null;
 
-  const buildDims = (card: Card) => {
-    const dims: { key: string; label: string; type: 'cloze' | 'choice' }[] = [];
-    DIM_ORDER.forEach(dim => {
-      if ((card.dimensions.cloze as any)?.[dim]) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'cloze' });
-      if ((card.dimensions.choice as any)?.[dim]) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'choice' });
-    });
-    return dims;
-  };
-
   if (!activeCard) {
     return (
       <div className="glass-card p-12 text-center space-y-3">
         <p className="text-slate-400">从左侧目录选择一张卡片查看</p>
-        <p className="text-xs text-slate-500">点击维度方格展开学习笔记</p>
+        <p className="text-xs text-slate-500">点击维度方格进入学习笔记</p>
       </div>
     );
   }
 
+  const dims = buildDims(activeCard);
+
+  // ── Detail page (single dimension, full page) ──────────────────
+  if (selectedDim) {
+    const dim = dims.find(d => d.key === selectedDim);
+    if (!dim) { setSelectedDim(null); return null; }
+
+    const isCloze = (activeCard.dimensions.cloze as any)?.[dim.key];
+    const isChoice = (activeCard.dimensions.choice as any)?.[dim.key];
+    const dimData = (activeCard.dimensions as any)[isCloze ? 'cloze' : 'choice']?.[dim.key];
+    if (!dimData) { setSelectedDim(null); return null; }
+
+    return (
+      <div className="space-y-6" key={`detail-${activeCard.id}-${dim.key}`}>
+        {/* Back + breadcrumb */}
+        <button
+          onClick={() => setSelectedDim(null)}
+          className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+        >
+          <ArrowLeft size={16} />
+          <span className="text-slate-500">{activeCard.id} {activeCard.title}</span>
+        </button>
+
+        {/* Dimension header */}
+        <div className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/30">
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${GRID_COLORS[dim.key]} flex items-center justify-center`}>
+              {(() => { const Icon = GRID_ICONS[dim.key]; return <span className="text-white"><Icon size={20} /></span>; })()}
+            </div>
+            <div>
+              <div className="text-lg font-bold text-white">{dim.label}</div>
+              <div className="text-xs text-slate-400 mt-0.5">
+                {dim.type === 'cloze' ? '填空笔记' : '选择笔记'} · {activeCard.title}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Note content */}
+        <div className="glass-card p-6">
+          <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+            {isCloze && Array.isArray(dimData.answer)
+              ? renderClozeNote(dimData.question, dimData.answer)
+              : isChoice && dimData.options
+                ? renderChoiceNote(dimData.question, dimData.options, dimData.answer as number)
+                : renderLine(dimData.question)
+            }
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Grid page ──────────────────────────────────────────────
   return (
     <div className="space-y-6">
       {/* Card header */}
@@ -118,62 +182,23 @@ export default function BrowseMode({ activeCardId }: Props) {
 
       {/* Dimension grid */}
       <div className="grid grid-cols-3 gap-3">
-        {buildDims(activeCard).map(dim => {
+        {dims.map(dim => {
           const Icon = GRID_ICONS[dim.key] || BookOpen;
-          const isActive = activeDim === dim.key;
           return (
             <button
               key={dim.key}
-              onClick={() => setActiveDim(isActive ? null : dim.key)}
-              className={`relative rounded-xl p-4 text-left border transition-all min-h-[100px] ${
-                isActive
-                  ? 'bg-slate-800/80 border-purple-500/40 scale-[1.02] shadow-lg shadow-purple-500/10'
-                  : 'bg-slate-800/40 border-slate-700/30 hover:border-slate-600/50 hover:bg-slate-800/60'
-              }`}
+              onClick={() => setSelectedDim(dim.key)}
+              className="relative rounded-xl p-4 text-left border transition-all min-h-[100px] bg-slate-800/40 border-slate-700/30 hover:border-slate-600/50 hover:bg-slate-800/60"
             >
               <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${GRID_COLORS[dim.key]} flex items-center justify-center mb-2`}>
                 <span className="text-white"><Icon size={14} /></span>
               </div>
               <div className="text-xs font-medium text-slate-200">{dim.label}</div>
               <div className="text-[10px] text-slate-500 mt-0.5">{dim.type === 'cloze' ? '填空笔记' : '选择笔记'}</div>
-              {isActive && (
-                <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-400" />
-              )}
             </button>
           );
         })}
       </div>
-
-      {/* Detail panel — study note style */}
-      {activeDim && (() => {
-        const isCloze = (activeCard.dimensions.cloze as any)?.[activeDim];
-        const isChoice = (activeCard.dimensions.choice as any)?.[activeDim];
-        const dimData = (activeCard.dimensions as any)[isCloze ? 'cloze' : 'choice']?.[activeDim];
-        if (!dimData) return null;
-
-        return (
-          <div className="glass-card p-6 space-y-4">
-            {/* Header */}
-            <div className="flex items-center gap-2 pb-3 border-b border-slate-700/50">
-              <div className={`w-6 h-6 rounded bg-gradient-to-br ${GRID_COLORS[activeDim]} flex items-center justify-center`}>
-                {(() => { const Icon = GRID_ICONS[activeDim]; return <span className="text-white"><Icon size={12} /></span>; })()}
-              </div>
-              <span className="text-sm font-medium text-slate-200">{DIM_LABELS[activeDim]}</span>
-              <span className="text-xs text-slate-500 ml-auto">📖 学习笔记</span>
-            </div>
-
-            {/* Content */}
-            <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-              {isCloze && Array.isArray(dimData.answer)
-                ? renderClozeNote(dimData.question, dimData.answer)
-                : isChoice && dimData.options
-                  ? renderChoiceNote(dimData.question, dimData.options, dimData.answer as number)
-                  : renderLine(dimData.question)
-              }
-            </div>
-          </div>
-        );
-      })()}
     </div>
   );
 }
