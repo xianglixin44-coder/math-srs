@@ -1,5 +1,7 @@
 const BASE = `${window.location.origin}/api`;
 
+import type { Card } from '../types/card';
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
@@ -40,13 +42,22 @@ export interface BrowseCard {
   sections: BrowseSection[];
 }
 
+export interface SRSState {
+  card_id: string;
+  ease_factor: number;
+  interval: number;
+  due_date: string;
+  reps: number;
+  last_review: string | null;
+}
+
 export const api = {
   cards: {
     list: () => request<Card[]>('/cards'),
     get: (id: string) => request<Card>(`/cards/${id}`),
   },
   srs: {
-    state: () => request<{ card_id: string; ease_factor: number; interval: number; due_date: string; reps: number; last_review: string | null }[]>('/srs/state'),
+    state: () => request<SRSState[]>('/srs/state'),
     next: () => request<Card[]>('/srs/next'),
     review: (card_id: string, dimension: string, score: number) =>
       request('/srs/review', {

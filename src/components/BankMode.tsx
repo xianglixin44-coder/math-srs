@@ -1,19 +1,10 @@
 import { useState, useEffect } from 'react';
-import { api } from '../api/client';
+import { api, type SRSState } from '../api/client';
 import type { Card } from '../types/card';
-
-interface SRSItem {
-  card_id: string;
-  ease_factor: number;
-  interval: number;
-  due_date: string;
-  reps: number;
-  last_review: string | null;
-}
 
 export default function BankMode() {
   const [cards, setCards] = useState<Card[]>([]);
-  const [srsState, setSrsState] = useState<Record<string, SRSItem>>({});
+  const [srsState, setSrsState] = useState<Record<string, SRSState>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,7 +13,7 @@ export default function BankMode() {
       api.srs.state(),
     ]).then(([cardList, srsList]) => {
       setCards(cardList);
-      const stateMap: Record<string, SRSItem> = {};
+      const stateMap: Record<string, SRSState> = {};
       for (const s of srsList) {
         stateMap[s.card_id] = s;
       }
