@@ -69,14 +69,14 @@ function renderContent(text: string): React.ReactNode[] {
     // Section header ###
     if (line.startsWith('### ')) {
       result.push(
-        <h4 key={i} className="text-sm font-semibold text-purple-300 mt-4 mb-1">{line.slice(4)}</h4>
+        <h4 key={i} className="text-base font-semibold text-purple-300 mt-4 mb-1">{line.slice(4)}</h4>
       );
       continue;
     }
     // Sub header ##
     if (line.startsWith('## ')) {
       result.push(
-        <h3 key={i} className="text-base font-bold text-white mt-5 mb-2">{line.slice(3)}</h3>
+        <h3 key={i} className="text-lg font-bold text-white mt-5 mb-2">{line.slice(3)}</h3>
       );
       continue;
     }
@@ -97,7 +97,7 @@ function renderContent(text: string): React.ReactNode[] {
       }
       i--; // back one since for loop increments
       result.push(
-        <div key={i} className="overflow-x-auto my-2 text-xs">
+        <div key={i} className="overflow-x-auto my-2 text-sm">
           <table className="w-full border-collapse">
             <tbody>
               {tableLines.filter(l => !l.match(/^\|[\s\-:|]+$/)).map((tl, ti) => {
@@ -124,7 +124,7 @@ function renderContent(text: string): React.ReactNode[] {
     // Quote
     if (line.startsWith('> ')) {
       result.push(
-        <blockquote key={i} className="border-l-2 border-purple-500/40 pl-3 my-2 text-slate-400 italic text-xs">
+        <blockquote key={i} className="border-l-2 border-purple-500/40 pl-3 my-2 text-slate-400 italic text-sm">
           {renderLine(line.slice(2))}
         </blockquote>
       );
@@ -141,7 +141,7 @@ function renderContent(text: string): React.ReactNode[] {
     // Regular paragraph with inline bold
     const segments = line.split(/(\*\*.*?\*\*)/g);
     result.push(
-      <p key={i} className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+      <p key={i} className="text-base text-slate-300 leading-relaxed whitespace-pre-wrap">
         {segments.map((seg, si) => {
           if (seg.startsWith('**') && seg.endsWith('**')) {
             return <strong key={si} className="text-slate-100 font-semibold">{seg.slice(2, -2)}</strong>;
@@ -243,8 +243,8 @@ export default function BrowseMode({ activeCardId }: Props) {
             >
               <ChevronLeft size={16} />
               <div className="text-left">
-                <div className="text-[10px] text-slate-500">上一节</div>
-                <div className="text-xs">{prevSection.label}</div>
+                <div className="text-xs text-slate-500">上一节</div>
+                <div className="text-sm">{prevSection.label}</div>
               </div>
             </button>
           ) : <div />}
@@ -254,8 +254,8 @@ export default function BrowseMode({ activeCardId }: Props) {
               className="flex items-center gap-1 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/30 rounded-lg text-sm text-slate-300 transition-colors"
             >
               <div className="text-right">
-                <div className="text-[10px] text-slate-500">下一节</div>
-                <div className="text-xs">{nextSection.label}</div>
+                <div className="text-xs text-slate-500">下一节</div>
+                <div className="text-sm">{nextSection.label}</div>
               </div>
               <ChevronRight size={16} />
             </button>
