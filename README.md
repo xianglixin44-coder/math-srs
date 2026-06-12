@@ -1,73 +1,38 @@
-# React + TypeScript + Vite
+# 数学SRS — 高中数学间隔重复系统
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+基于 SM-2 算法的局域网学习工具。Mac 运行后端，iPad/手机浏览器访问。
 
-Currently, two official plugins are available:
+## 快速开始
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+# 安装依赖
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+npm install && npm run build
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 启动
+env PYTHONPATH=. .venv/bin/uvicorn server.main:app --host 0.0.0.0 --port 3000
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+浏览器打开 `http://localhost:3000`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 功能
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **浏览** — 7 维学习笔记（概念/方法/易错/原理/例题/关联/挑战）
+- **复习** — SM-2 间隔重复，40s 预览 + 填空/选择测试
+- **题库** — 全部卡片 SRS 状态表格
+- **导入导出** — JSON/CSV/ZIP 多格式
+- **手写草稿** — Canvas 画布，支持 Apple Pencil
+- **iPad 适配** — 局域网访问，SPA fallback 防白屏
+
+## 详细文档
+
+→ [操作手册](MANUAL.md)
+
+## 技术栈
+
+| 层 | 技术 |
+|---|---|
+| 前端 | React 19 + TypeScript + Vite + Tailwind CSS 4 |
+| 后端 | FastAPI (Python) + SQLite WAL |
+| 数学 | KaTeX |
+| 图标 | Lucide React |
