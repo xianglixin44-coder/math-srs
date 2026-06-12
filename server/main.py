@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from server.database import init_db
 from server.routers import cards, srs, import_export, browse
 
@@ -30,10 +31,21 @@ app.include_router(srs.router)
 app.include_router(import_export.router)
 app.include_router(browse.router)
 
-# Serve static frontend
+# Serve static frontend (with SPA fallback via html=True)
 static = Path("dist")
 if static.exists():
     app.mount("/", StaticFiles(directory="dist", html=True), name="static")
+
+
+# SPA fallback: catch-all for non-API 404s → serve index.html
+@app.exception_handler(404)
+async def spa_fallback(request: Request, _exc):
+    if not request.url.path.startswith("/api"):
+        index = Path("dist") / "index.html"
+        if index.exists():
+            return FileResponse(index)
+    from fastapi.responses import JSONResponse
+    return JSONResponse({"detail": "Not Found"}, status_code=404)
 
 
 if __name__ == "__main__":

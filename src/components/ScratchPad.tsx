@@ -1,0 +1,122 @@
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { Pen, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
+
+interface Props {
+  /** When this changes, the canvas auto-clears */
+  resetKey?: string;
+}
+
+export default function ScratchPad({ resetKey }: Props) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+
+  // Initialize canvas
+  const initCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.parentElement?.getBoundingClientRect();
+    if (rect) {
+      canvas.width = rect.width;
+      canvas.height = isOpen ? 300 : 0;
+    }
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctxRef.current = ctx;
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    initCanvas();
+    const onResize = () => initCanvas();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [initCanvas]);
+
+  // Auto-clear when resetKey changes
+  useEffect(() => {
+    clearCanvas();
+  }, [resetKey]);
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (canvas && ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  };
+
+  const getPos = (e: React.PointerEvent): { x: number; y: number } => {
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setIsDrawing(true);
+    const { x, y } = getPos(e);
+    ctxRef.current?.beginPath();
+    ctxRef.current?.moveTo(x, y);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDrawing) return;
+    // Prevent scrolling while drawing on iPad
+    e.preventDefault();
+    const { x, y } = getPos(e);
+    ctxRef.current?.lineTo(x, y);
+    ctxRef.current?.stroke();
+  };
+
+  const handlePointerUp = () => {
+    setIsDrawing(false);
+    ctxRef.current?.closePath();
+  };
+
+  return (
+    <div className="border border-slate-700/50 rounded-xl overflow-hidden">
+      {/* Toggle header */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-4 py-2 bg-slate-800/60 hover:bg-slate-700/50 transition-colors"
+      >
+        <span className="flex items-center gap-2 text-sm text-slate-300">
+          <Pen size={14} className="text-purple-400" />
+          手写草稿
+        </span>
+        <div className="flex items-center gap-2">
+          {isOpen && (
+            <span
+              onClick={(e) => { e.stopPropagation(); clearCanvas(); }}
+              className="flex items-center gap-1 text-xs text-slate-500 hover:text-red-400 transition-colors"
+              title="清除"
+            >
+              <Trash2 size={12} /> 清除
+            </span>
+          )}
+          {isOpen ? <ChevronUp size={14} className="text-slate-500" /> : <ChevronDown size={14} className="text-slate-500" />}
+        </div>
+      </button>
+
+      {/* Canvas area */}
+      {isOpen && (
+        <div className="bg-slate-950 border-t border-slate-700/50" style={{ touchAction: 'none' }}>
+          <canvas
+            ref={canvasRef}
+            className="w-full block cursor-crosshair"
+            style={{ height: 300 }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
