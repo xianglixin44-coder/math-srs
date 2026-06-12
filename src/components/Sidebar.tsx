@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, BookOpen, BookMarked } from 'lucide-react';
-import { api, type BrowseCardSummary } from '../api/client';
+import { api } from '../api/client';
 
 interface TextbookSection {
   id: string;
