@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft } from 'lucide-react';
+import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { api } from '../api/client';
 import { renderLine } from '../utils/katex';
 
@@ -194,8 +194,11 @@ export default function BrowseMode({ activeCardId }: Props) {
     const section = activeCard.sections.find(s => s.key === selectedSection);
     if (!section) { setSelectedSection(null); return null; }
 
-    const colorClass = SECTION_COLORS[section.key] ?? FALLBACK_COLORS[activeCard.sections.indexOf(section) % FALLBACK_COLORS.length];
-    const Icon = SECTION_ICONS[section.key] ?? FALLBACK_ICONS[activeCard.sections.indexOf(section) % Object.keys(FALLBACK_ICONS).length];
+    const sectionIdx = activeCard.sections.indexOf(section);
+    const colorClass = SECTION_COLORS[section.key] ?? FALLBACK_COLORS[sectionIdx % FALLBACK_COLORS.length];
+    const Icon = SECTION_ICONS[section.key] ?? FALLBACK_ICONS[sectionIdx % Object.keys(FALLBACK_ICONS).length];
+    const prevSection = sectionIdx > 0 ? activeCard.sections[sectionIdx - 1] : null;
+    const nextSection = sectionIdx < activeCard.sections.length - 1 ? activeCard.sections[sectionIdx + 1] : null;
 
     return (
       <div className="space-y-6" key={`detail-${activeCard.id}-${section.key}`}>
@@ -223,6 +226,34 @@ export default function BrowseMode({ activeCardId }: Props) {
           <div className="prose prose-invert prose-sm max-w-none">
             {renderContent(section.content)}
           </div>
+        </div>
+
+        {/* Prev / Next navigation */}
+        <div className="flex items-center justify-between gap-4">
+          {prevSection ? (
+            <button
+              onClick={() => setSelectedSection(prevSection.key)}
+              className="flex items-center gap-1 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/30 rounded-lg text-sm text-slate-300 transition-colors"
+            >
+              <ChevronLeft size={16} />
+              <div className="text-left">
+                <div className="text-[10px] text-slate-500">上一节</div>
+                <div className="text-xs">{prevSection.label}</div>
+              </div>
+            </button>
+          ) : <div />}
+          {nextSection ? (
+            <button
+              onClick={() => setSelectedSection(nextSection.key)}
+              className="flex items-center gap-1 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/30 rounded-lg text-sm text-slate-300 transition-colors"
+            >
+              <div className="text-right">
+                <div className="text-[10px] text-slate-500">下一节</div>
+                <div className="text-xs">{nextSection.label}</div>
+              </div>
+              <ChevronRight size={16} />
+            </button>
+          ) : <div />}
         </div>
       </div>
     );
