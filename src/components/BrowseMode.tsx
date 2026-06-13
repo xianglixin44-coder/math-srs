@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight, FlaskConical, ArrowRightLeft } from 'lucide-react';
 import { api, type BrowseCard } from '../api/client';
 import { renderLine } from '../utils/katex';
-import VennDiagram from './VennDiagram';
-import NumberLine from './NumberLine';
 
 const SECTION_ICONS: Record<string, React.FC<{ size?: number }>> = {
   concept: BookOpen,
@@ -80,43 +78,6 @@ function renderContent(text: string): React.ReactNode[] {
     // Horizontal rule / separator
     if (line === '---') {
       result.push(<hr key={i} className="border-slate-700/50 my-3" />);
-      continue;
-    }
-
-    // Custom block: :::venn
-    if (line === ':::venn') {
-      const props: Record<string, string> = {};
-      while (i + 1 < lines.length && lines[i + 1] !== ':::') {
-        i++;
-        const eq = lines[i].indexOf('=');
-        if (eq > 0) props[lines[i].slice(0, eq).trim()] = lines[i].slice(eq + 1).trim();
-      }
-      i++; // skip :::
-      result.push(
-        <VennDiagram key={i}
-          left={props.left || 'A'}
-          right={props.right || 'B'}
-          leftOnly={props.leftOnly}
-          rightOnly={props.rightOnly}
-          intersection={props.intersection}
-          highlight={props.highlight as 'left' | 'right' | 'intersection' | 'union' | undefined}
-        />
-      );
-      continue;
-    }
-
-    // Custom block: :::numberline
-    if (line === ':::numberline') {
-      const intervals: { notation: string; color?: string }[] = [];
-      while (i + 1 < lines.length && lines[i + 1] !== ':::') {
-        i++;
-        const l = lines[i].trim();
-        if (l.startsWith('- ')) {
-          intervals.push({ notation: l.slice(2).trim() });
-        }
-      }
-      i++; // skip :::
-      result.push(<NumberLine key={i} intervals={intervals} />);
       continue;
     }
 

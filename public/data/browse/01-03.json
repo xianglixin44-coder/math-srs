@@ -36,7 +36,7 @@
     {
       "key": "challenge",
       "label": "101星思维挑战",
-      "content": "## 七、思维挑战\n\n### 多集合容斥原理\n\n> 推导 $\\text{card}(A \\cup B \\cup C)$ 的公式。\n\n**公式**：\n\n$$\\text{card}(A \\cup B \\cup C) = \\text{card}(A) + \\text{card}(B) + \\text{card}(C)$$\n$$- \\text{card}(A \\cap B) - \\text{card}(B \\cap C) - \\text{card}(A \\cap C)$$\n$$+ \\text{card}(A \\cap B \\cap C)$$\n\n> 规律：加单元素 → 减两两交集 → 加三三交集（奇加偶减）。\n\n### 无限集比较\n\n> 自然数集 $\\mathbb{N}$ 和偶数集 $\\{2, 4, 6, \\dots\\}$，哪个元素更多？\n\n**解析**：可以建立**一一对应**：$n \\leftrightarrow 2n$。每个自然数对应唯一偶数，每个偶数对应唯一天然数。两个无限集能建立一一对应，则称它们「等势」——即元素个数一样多。\n\n> 这是康托尔集合论的核心思想：无限集的「大小」由能否建立一一对应来定义。"
+      "content": "## 七、101星思维挑战\n\n### 多集合容斥原理\n\n> 推导 $\\text{card}(A \\cup B \\cup C)$ 的公式。\n\n**公式**：\n\n$$\\text{card}(A \\cup B \\cup C) = \\text{card}(A) + \\text{card}(B) + \\text{card}(C)$$\n$$- \\text{card}(A \\cap B) - \\text{card}(B \\cap C) - \\text{card}(A \\cap C)$$\n$$+ \\text{card}(A \\cap B \\cap C)$$\n\n> 规律：加单元素 → 减两两交集 → 加三三交集（奇加偶减）。\n\n### 无限集比较\n\n> 自然数集 $\\mathbb{N}$ 和偶数集 $\\{2, 4, 6, \\dots\\}$，哪个元素更多？\n\n**解析**：可以建立**一一对应**：$n \\leftrightarrow 2n$。每个自然数对应唯一偶数，每个偶数对应唯一天然数。两个无限集能建立一一对应，则称它们「等势」——即元素个数一样多。\n\n> 这是康托尔集合论的核心思想：无限集的「大小」由能否建立一一对应来定义。"
     }
   ]
 }
