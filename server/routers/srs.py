@@ -24,7 +24,10 @@ VALID_DIMENSIONS = {'formula', 'derive', 'trigger', 'geometry', 'trap', 'challen
 def review(req: ReviewRequest):
     if req.dimension not in VALID_DIMENSIONS:
         raise HTTPException(400, f"Invalid dimension: {req.dimension}")
-    result = sm2_update(req.card_id, req.score)
+    try:
+        result = sm2_update(req.card_id, req.score)
+    except ValueError as e:
+        raise HTTPException(400, str(e))
 
     # Log
     with with_db() as conn:
