@@ -20,7 +20,6 @@ export default function App() {
 
   const handleSelectCard = (id: string) => {
     setActiveCardId(id);
-    setMode('browse');
   };
 
   return (
