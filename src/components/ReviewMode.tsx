@@ -55,15 +55,31 @@ function buildDims(card: Card): DimInfo[] {
 
 interface Props {
   onActiveCardChange: (id: string) => void;
+  preferCardId?: string | null;
 }
 
-export default function ReviewMode({ onActiveCardChange }: Props) {
+function chapterPrefix(id: string): string {
+  const parts = id.split('-');
+  return parts.slice(0, parts.length === 3 ? 2 : 1).join('-');
+}
+
+export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) {
   const [cards, setCards] = useState<Card[] | null>(null);
   const [view, setView] = useState<ViewState>({ stage: 'loading' });
 
   // Load due cards
   useEffect(() => {
     api.srs.next().then(list => {
+      // Sort: cards from the same chapter as preferCardId go first
+      if (preferCardId && list.length > 1) {
+        const prefCh = chapterPrefix(preferCardId);
+        list.sort((a, b) => {
+          const aMatch = chapterPrefix(a.id) === prefCh ? 0 : 1;
+          const bMatch = chapterPrefix(b.id) === prefCh ? 0 : 1;
+          if (aMatch !== bMatch) return aMatch - bMatch;
+          return a.id.localeCompare(b.id);
+        });
+      }
       setCards(list);
       if (list.length === 0) {
         setView({ stage: 'empty' });
@@ -75,7 +91,7 @@ export default function ReviewMode({ onActiveCardChange }: Props) {
       setCards([]);
       setView({ stage: 'empty' });
     });
-  }, []);
+  }, [preferCardId]);
 
   // Notify parent of current card
   const currentCardId =

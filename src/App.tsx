@@ -35,7 +35,7 @@ export default function App() {
           <BrowseMode activeCardId={activeCardId} />
         )}
         {mode === 'review' && (online !== false
-          ? <ReviewMode onActiveCardChange={setActiveCardId} />
+          ? <ReviewMode onActiveCardChange={setActiveCardId} preferCardId={activeCardId} />
           : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能复习</div>
         )}
         {mode === 'import' && (online !== false
