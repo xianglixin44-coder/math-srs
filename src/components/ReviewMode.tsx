@@ -3,6 +3,7 @@ import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft } from 'l
 import { api } from '../api/client';
 import type { Card } from '../types/card';
 import { DIM_ORDER, DIM_LABELS } from '../types/card';
+import type { CardDim } from '../types/card';
 import PreviewMode from './PreviewMode';
 import ClozeCard from './ClozeCard';
 import ChoiceCard from './ChoiceCard';
@@ -39,14 +40,14 @@ interface DimInfo {
   key: string;
   label: string;
   type: 'cloze' | 'choice';
-  data: any;
+  data: import("../types/card").CardDim;
 }
 
 function buildDims(card: Card): DimInfo[] {
   const dims: DimInfo[] = [];
   DIM_ORDER.forEach(dim => {
-    const clozeVal = (card.dimensions.cloze as any)?.[dim];
-    const choiceVal = (card.dimensions.choice as any)?.[dim];
+    const clozeVal = (card.dimensions.cloze as Record<string, CardDim | undefined>)?.[dim];
+    const choiceVal = (card.dimensions.choice as Record<string, CardDim | undefined>)?.[dim];
     if (clozeVal) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'cloze', data: clozeVal });
     if (choiceVal) dims.push({ key: dim, label: DIM_LABELS[dim], type: 'choice', data: choiceVal });
   });
@@ -305,13 +306,13 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
           title={`${card.id} ${card.title}`}
           dimensionLabel={dim.label}
           question={dim.data.question}
-          answer={dim.data.answer}
+          answer={dim.data.answer as (string[] | number)}
           onComplete={() => setView({ ...view, phase: 'test' })}
         />
       ) : isCloze ? (
         <ClozeCard
           question={dim.data.question}
-          answer={dim.data.answer}
+          answer={dim.data.answer as string[]}
           onScore={handleScore}
         />
       ) : (

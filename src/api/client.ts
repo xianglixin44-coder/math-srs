@@ -74,7 +74,7 @@ export const api = {
         body: JSON.stringify({ strokes }),
       }),
   },
-  import: (cards: any[]) =>
+  import: (cards: Record<string, unknown>[]) =>
     request<{ imported: number }>('/import', {
       method: 'POST',
       body: JSON.stringify(cards),

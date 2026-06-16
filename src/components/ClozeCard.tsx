@@ -14,13 +14,9 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
   const [inputs, setInputs] = useState<string[]>(Array(blanks).fill(''));
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState<boolean[]>([]);
-  const [focusedIdx, setFocusedIdx] = useState<number | null>(null);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  // Ensure array has enough slots
-  if (inputRefs.current.length < blanks) {
-    inputRefs.current = Array(blanks).fill(null);
-  }
+  const [focusedInput, setFocusedInput] = useState<HTMLInputElement | null>(null);
   const blurTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(blanks).fill(null));
 
   const handleSubmit = () => {
     const res = inputs.map((inp, i) => {
@@ -29,18 +25,18 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
     });
     setResults(res);
     setSubmitted(true);
-    setFocusedIdx(null);
+    setFocusedInput(null);
     onScore(res.every(Boolean) ? 3 : 0);
   };
 
   const handleFocus = (idx: number) => {
     if (blurTimeout.current) clearTimeout(blurTimeout.current);
-    setFocusedIdx(idx);
+    setFocusedInput(inputRefs.current[idx]);
   };
 
   const handleBlur = () => {
     // Delay hiding the pad so symbol button taps can register
-    blurTimeout.current = setTimeout(() => setFocusedIdx(null), 200);
+    blurTimeout.current = setTimeout(() => setFocusedInput(null), 200);
   };
 
   const renderQuestion = () => {
@@ -98,9 +94,9 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
           提交
         </button>
       )}
-      {!submitted && focusedIdx !== null && (
+      {!submitted && focusedInput && (
         <MathSymbolPad
-          targetRef={{ current: inputRefs.current[focusedIdx] }}
+          targetRef={{ current: focusedInput }}
           visible={true}
         />
       )}

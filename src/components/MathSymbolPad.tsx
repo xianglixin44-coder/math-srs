@@ -19,7 +19,7 @@ interface Props {
   visible: boolean;
 }
 
-export default function MathSymbolPad({ targetRef, visible }: Props) {
+export default function MathSymbolPad({ targetRef }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [strokes, setStrokes] = useState<number[][][]>([]);
@@ -29,7 +29,6 @@ export default function MathSymbolPad({ targetRef, visible }: Props) {
   const [recognizing, setRecognizing] = useState(false);
   const recognizeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (!visible) return null;
 
   // Resize canvas to match container on mount
   const initCanvasSize = () => {

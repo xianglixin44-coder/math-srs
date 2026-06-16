@@ -43,11 +43,6 @@ export default function ScratchPad({ resetKey }: Props) {
     return () => window.removeEventListener('resize', onResize);
   }, [initCanvas]);
 
-  // Auto-clear when resetKey changes
-  useEffect(() => {
-    clearCanvas();
-  }, [resetKey]);
-
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
@@ -56,6 +51,10 @@ export default function ScratchPad({ resetKey }: Props) {
     }
   };
 
+  // Auto-clear when resetKey changes
+  useEffect(() => {
+    clearCanvas();
+  }, [resetKey]);
   const getPos = (e: React.PointerEvent): { x: number; y: number } => {
     const canvas = canvasRef.current!;
     const rect = canvas.getBoundingClientRect();

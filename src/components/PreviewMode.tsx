@@ -13,7 +13,10 @@ interface Props {
 export default function PreviewMode({ title, dimensionLabel, question, answer, onComplete }: Props) {
   const [seconds, setSeconds] = useState(40);
   const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
     const timer = setInterval(() => {

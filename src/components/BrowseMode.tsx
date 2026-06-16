@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight, FlaskConical, ArrowRightLeft } from 'lucide-react';
 import { api, type BrowseCard } from '../api/client';
 import { renderLine } from '../utils/katex';
@@ -118,7 +118,6 @@ function renderContent(text: string): React.ReactNode[] {
     // Image — match ![alt](url) with optional surrounding text
     const imgMatch = line.match(/^!\[(.*)\]\((.+)\)\s*$/);
     if (imgMatch) {
-      console.log('IMG matched:', imgMatch[2]); // DEBUG
       result.push(
         <div key={i} className="my-4 flex justify-center">
           <img src={imgMatch[2].trim()} alt={imgMatch[1]} className="max-w-full rounded-xl" style={{maxHeight: '320px'}} />
@@ -160,8 +159,8 @@ function renderContent(text: string): React.ReactNode[] {
     }
 
     // List item
-    if (line.match(/^[\-\*]\s/)) {
-      const content = line.replace(/^[\-\*]\s/, '');
+    if (line.match(/^[-*]\s/)) {
+      const content = line.replace(/^[-*]\s/, '');
       const segments = content.split(/(\*\*.*?\*\*)/g);
       result.push(
         <li key={i} className="text-base text-slate-300 leading-relaxed ml-4 list-disc">
@@ -198,20 +197,25 @@ export default function BrowseMode({ activeCardId }: Props) {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch all browse cards for the sidebar context
+    let cancelled = false;
     api.browse.list().then(async (summaries) => {
+      if (cancelled) return;
       if (summaries.length === 0) { setCards([]); return; }
-      // Fetch full content for each card
       const fullCards = await Promise.all(
         summaries.map((s) => api.browse.get(s.id))
       );
-      setCards(fullCards);
-    }).catch(() => setCards([]));
+      if (!cancelled) setCards(fullCards);
+    }).catch(() => { if (!cancelled) setCards([]); });
+    return () => { cancelled = true; };
   }, []);
 
   // Reset selected section when card changes
+  const prevCardId = useRef(activeCardId);
   useEffect(() => {
-    setSelectedSection(null);
+    if (activeCardId !== prevCardId.current) {
+      prevCardId.current = activeCardId;
+      setSelectedSection(null);
+    }
   }, [activeCardId]);
 
   if (cards === null) {

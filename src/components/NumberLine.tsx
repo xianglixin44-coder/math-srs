@@ -7,7 +7,7 @@ interface IntervalProps {
 
 /** Parse interval notation and return {left, right, leftOpen, rightOpen} */
 function parseInterval(notation: string) {
-  const match = notation.match(/^([\[\(])([^,]+),\s*([^\]\)]+)([\]\)])$/);
+  const match = notation.match(/^([[(])([^,]+),\s*([^)\]]+)([)\]])$/);
   if (!match) return null;
   return {
     leftOpen: match[1] === '(',
