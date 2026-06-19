@@ -55,6 +55,13 @@ def init_db():
             score      INTEGER NOT NULL,
             timestamp  TEXT DEFAULT (datetime('now'))
         );
+
+        CREATE TABLE IF NOT EXISTS feynman_responses (
+            card_id    TEXT PRIMARY KEY,
+            answer     TEXT DEFAULT '',
+            rating     INTEGER,
+            saved_at   TEXT DEFAULT (datetime('now'))
+        );
     """)
         conn.commit()
 

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight, FlaskConical, ArrowRightLeft } from 'lucide-react';
+import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronLeft, ChevronRight, FlaskConical, ArrowRightLeft, MessageCircle } from 'lucide-react';
 import { api, type BrowseCard } from '../api/client';
 import { renderLine } from '../utils/katex';
+import FeynmanInput from './FeynmanInput';
 
 const SECTION_ICONS: Record<string, React.FC<{ size?: number }>> = {
   concept: BookOpen,
@@ -11,6 +12,7 @@ const SECTION_ICONS: Record<string, React.FC<{ size?: number }>> = {
   challenge: Network,
   example: FlaskConical,
   connect: ArrowRightLeft,
+  feynman: MessageCircle,
 };
 const FALLBACK_ICONS: Record<number, React.FC<{ size?: number }>> = {
   0: BookOpen,
@@ -20,6 +22,7 @@ const FALLBACK_ICONS: Record<number, React.FC<{ size?: number }>> = {
   4: Network,
   5: FlaskConical,
   6: ArrowRightLeft,
+  7: MessageCircle,
 };
 
 const SECTION_COLORS: Record<string, string> = {
@@ -30,6 +33,7 @@ const SECTION_COLORS: Record<string, string> = {
   challenge: 'from-amber-500 to-orange-500',
   example: 'from-emerald-500 to-teal-500',
   connect: 'from-cyan-500 to-blue-500',
+  feynman: 'from-teal-500 to-emerald-500',
 };
 const FALLBACK_COLORS = [
   'from-purple-500 to-pink-500',
@@ -39,6 +43,7 @@ const FALLBACK_COLORS = [
   'from-amber-500 to-orange-500',
   'from-emerald-500 to-teal-500',
   'from-cyan-500 to-blue-500',
+  'from-teal-500 to-emerald-500',
 ];
 
 interface Props {
@@ -275,6 +280,8 @@ export default function BrowseMode({ activeCardId }: Props) {
             {renderContent(section.content)}
           </div>
         </div>
+
+        {section.key === 'feynman' && <FeynmanInput cardId={activeCard.id} />}
 
         {/* Prev / Next navigation */}
         <div className="flex items-center justify-between gap-4">
