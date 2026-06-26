@@ -4,11 +4,14 @@ import BrowseMode from './components/BrowseMode';
 import ReviewMode from './components/ReviewMode';
 import ImportExportPanel from './components/ImportExportPanel';
 import BankMode from './components/BankMode';
+import BooksMode from './components/BooksMode';
 import ErrorBoundary from './components/ErrorBoundary';
 import { checkHealth } from './api/client';
 
+type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books';
+
 export default function App() {
-  const [mode, setMode] = useState<'browse' | 'review' | 'import' | 'bank'>('browse');
+  const [mode, setMode] = useState<Mode>('browse');
   const [online, setOnline] = useState<boolean | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
@@ -45,6 +48,9 @@ export default function App() {
         {mode === 'bank' && (online !== false
           ? <BankMode />
           : <div className="glass-card p-12 text-center text-gray-600">需要后端服务才能查看题库</div>
+        )}
+        {mode === 'books' && (
+          <BooksMode />
         )}
       </ErrorBoundary>
       </Layout>

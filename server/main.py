@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from server.database import init_db
-from server.routers import cards, srs, import_export, browse, symbols, feynman
+from server.routers import cards, srs, import_export, browse, symbols, feynman, books
 
 
 @asynccontextmanager
@@ -32,16 +32,12 @@ app.include_router(import_export.router)
 app.include_router(browse.router)
 app.include_router(symbols.router)
 app.include_router(feynman.router)
+app.include_router(books.router)
 
 # Serve static frontend (with SPA fallback via html=True)
 static = Path("dist")
 if static.exists():
     app.mount("/", StaticFiles(directory="dist", html=True), name="static")
-
-# Serve textbook PDFs
-tb = Path("textbooks")
-if tb.exists():
-    app.mount("/textbooks", StaticFiles(directory="textbooks"), name="textbooks")
 
 
 # SPA fallback: catch-all for non-API 404s → serve index.html
