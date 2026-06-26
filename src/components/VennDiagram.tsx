@@ -23,7 +23,7 @@ function splitItems(s?: string): string[] {
 const COLORS = {
   left:      { fill: 'rgba(147,51,234,0.12)', stroke: '#a855f7', item: '#7e22ce' },
   right:     { fill: 'rgba(59,130,246,0.12)', stroke: '#60a5fa', item: '#2563eb' },
-  intersect: { fill: 'rgba(239,68,68,0.18)',  stroke: '#f87171', item: '#ef4444' },
+  intersect: { fill: 'rgba(239,68,68,0.18)',  stroke: '#f87171', item: '#dc2626' },
 };
 
 export default function VennDiagram({ left, right, leftOnly, rightOnly, intersection, highlight, title }: Props) {
@@ -59,8 +59,8 @@ export default function VennDiagram({ left, right, leftOnly, rightOnly, intersec
         )}
 
         {/* Labels: collection notation style */}
-        <text x="80" y="30" textAnchor="middle" fill="#c084fc" style={{ fontSize: 12, fontWeight: 600 }}>{left}</text>
-        <text x="240" y="30" textAnchor="middle" fill="#93c5fd" style={{ fontSize: 12, fontWeight: 600 }}>{right}</text>
+        <text x="80" y="30" textAnchor="middle" fill="#7e22ce" style={{ fontSize: 12, fontWeight: 600 }}>{left}</text>
+        <text x="240" y="30" textAnchor="middle" fill="#2563eb" style={{ fontSize: 12, fontWeight: 600 }}>{right}</text>
 
         {/* Left-only items */}
         {leftItems.map((item, i) => (
@@ -85,7 +85,7 @@ export default function VennDiagram({ left, right, leftOnly, rightOnly, intersec
 
         {/* Bottom legend line */}
         {h && (
-          <text x="160" y="178" textAnchor="middle" fill="#64748b" style={{ fontSize: 9 }}>
+          <text x="160" y="178" textAnchor="middle" fill="#475569" style={{ fontSize: 9 }}>
             {h === 'intersection' ? `● 高亮区域 = ${left} ∩ ${right}` :
              h === 'left' ? `● 高亮区域 = ${left} ⊆ ${right}` :
              h === 'union' ? `● 高亮区域 = ${left} ∪ ${right}` : ''}

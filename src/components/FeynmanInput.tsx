@@ -101,7 +101,7 @@ export default function FeynmanInput({ cardId }: Props) {
           {[
             { v: 0, label: '完全跑偏', cls: 'border-gray-300 text-gray-500 hover:border-gray-400' },
             { v: 1, label: '部分覆盖', cls: 'border-amber-500/40 text-amber-700 hover:border-amber-400' },
-            { v: 2, label: '基本覆盖', cls: 'border-blue-500/40 text-blue-400 hover:border-blue-400' },
+            { v: 2, label: '基本覆盖', cls: 'border-blue-500/40 text-blue-700 hover:border-blue-400' },
             { v: 3, label: '完美表达', cls: 'border-green-500/40 text-green-700 hover:border-green-400' },
           ].map(({ v, label, cls }) => (
             <button key={v}

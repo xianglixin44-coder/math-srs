@@ -19,7 +19,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.error) {
       return (
         <div className="glass-card p-8 text-center space-y-4 m-6">
-          <p className="text-lg text-red-400">⚠️ 页面出错了</p>
+          <p className="text-lg text-red-700">⚠️ 页面出错了</p>
           <p className="text-sm text-gray-600">{this.state.error.message}</p>
           <button
             onClick={() => this.setState({ error: null })}

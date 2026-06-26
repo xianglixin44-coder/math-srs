@@ -106,7 +106,7 @@ function renderContent(text: string): React.ReactNode[] {
                 return (
                   <tr key={ti} className={isHeader ? 'border-b border-gray-300' : 'border-b border-gray-200'}>
                     {cells.map((cell, ci) => (
-                      <Cell key={ci} className={`px-2 py-1 ${isHeader ? 'text-gray-700 font-medium' : 'text-gray-600'}`}>
+                      <Cell key={ci} className={`px-2 py-1 ${isHeader ? 'text-gray-700 font-medium' : 'text-gray-700'}`}>
                         {renderLine(cell.trim())}
                       </Cell>
                     ))}
@@ -146,11 +146,18 @@ function renderContent(text: string): React.ReactNode[] {
       continue;
     }
 
-    // Bold marker **text** (handled below in paragraph)
+    // Blockquote with inline bold support
     if (line.startsWith('> ')) {
+      const content = line.slice(2);
+      const segments = content.split(/(\*\*.*?\*\*)/g);
       result.push(
-        <blockquote key={i} className="border-l-2 border-purple-500/40 pl-3 my-2 text-gray-600 italic text-sm">
-          {renderLine(line.slice(2))}
+        <blockquote key={i} className="border-l-2 border-purple-500/40 pl-3 my-2 text-gray-700 italic text-sm">
+          {segments.map((seg, si) => {
+            if (seg.startsWith('**') && seg.endsWith('**')) {
+              return <strong key={si} className="text-gray-900 font-semibold">{renderLine(seg.slice(2, -2))}</strong>;
+            }
+            return <span key={si}>{renderLine(seg)}</span>;
+          })}
         </blockquote>
       );
       continue;
