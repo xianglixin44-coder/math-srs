@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, BookOpen, BookMarked } from 'lucide-react';
+import { ChevronDown, ChevronRight, BookOpen, BookMarked, FileText } from 'lucide-react';
 import { api } from '../api/client';
+
+interface TextbookPdf {
+  title: string;
+  file: string;
+}
 
 interface TextbookSection {
   id: string;
   title: string;
   category?: string;
   sectionCount: number;
-}
-
-interface TextbookSection {
-  id: string;
-  title: string;
 }
 
 interface TextbookChapter {
@@ -39,6 +39,12 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
   const [textbook, setTextbook] = useState<TextbookData | null>(null);
   const [availableCards, setAvailableCards] = useState<Set<string>>(new Set());
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+
+  // Textbook PDF list — add entries here
+  const textbooks: TextbookPdf[] = [
+    { title: '必修 第一册', file: '必修一.pdf' },
+    { title: '必修 第二册', file: '必修二.pdf' },
+  ];
 
   useEffect(() => {
     // Load textbook structure via API
@@ -121,6 +127,25 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
           </div>
         );
       })}
+
+      {/* ── 教材 PDF ── */}
+      <div className="border-t border-gray-200 mt-3 pt-3">
+        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">
+          📖 教材
+        </h3>
+        {textbooks.map(tb => (
+          <a
+            key={tb.file}
+            href={`/textbooks/${tb.file}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+          >
+            <FileText size={12} className="text-red-500 shrink-0" />
+            <span className="truncate">{tb.title}</span>
+          </a>
+        ))}
+      </div>
     </div>
   );
 }
