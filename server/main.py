@@ -38,6 +38,11 @@ static = Path("dist")
 if static.exists():
     app.mount("/", StaticFiles(directory="dist", html=True), name="static")
 
+# Serve textbook PDFs
+tb = Path("textbooks")
+if tb.exists():
+    app.mount("/textbooks", StaticFiles(directory="textbooks"), name="textbooks")
+
 
 # SPA fallback: catch-all for non-API 404s → serve index.html
 @app.exception_handler(404)
