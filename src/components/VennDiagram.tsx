@@ -21,9 +21,9 @@ function splitItems(s?: string): string[] {
 }
 
 const COLORS = {
-  left:      { fill: 'rgba(147,51,234,0.12)', stroke: '#a855f7', item: '#c084fc' },
-  right:     { fill: 'rgba(59,130,246,0.12)', stroke: '#60a5fa', item: '#93c5fd' },
-  intersect: { fill: 'rgba(239,68,68,0.18)',  stroke: '#f87171', item: '#fca5a5' },
+  left:      { fill: 'rgba(147,51,234,0.12)', stroke: '#a855f7', item: '#7e22ce' },
+  right:     { fill: 'rgba(59,130,246,0.12)', stroke: '#60a5fa', item: '#2563eb' },
+  intersect: { fill: 'rgba(239,68,68,0.18)',  stroke: '#f87171', item: '#ef4444' },
 };
 
 export default function VennDiagram({ left, right, leftOnly, rightOnly, intersection, highlight, title }: Props) {
@@ -34,7 +34,7 @@ export default function VennDiagram({ left, right, leftOnly, rightOnly, intersec
 
   return (
     <div className="flex flex-col items-center my-5">
-      {title && <div className="text-xs text-purple-300/70 mb-3 font-medium">{title}</div>}
+      {title && <div className="text-xs text-blue-700/70 mb-3 font-medium">{title}</div>}
       <svg viewBox="0 0 320 190" className="w-full max-w-xs">
         {/* Circles */}
         <ellipse cx="120" cy="100" rx="78" ry="60"

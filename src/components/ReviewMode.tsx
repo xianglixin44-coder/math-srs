@@ -189,14 +189,14 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
   // ── Render ────────────────────────────────────────────────
 
   if (view.stage === 'loading') {
-    return <div className="glass-card p-12 text-center"><p className="text-slate-400">加载中...</p></div>;
+    return <div className="glass-card p-12 text-center"><p className="text-gray-600">加载中...</p></div>;
   }
 
   if (view.stage === 'empty') {
     return (
       <div className="glass-card p-12 text-center">
-        <p className="text-xl text-slate-400">🎉 今日复习完成！</p>
-        <p className="text-sm text-slate-500 mt-2">没有待复习的卡片</p>
+        <p className="text-xl text-gray-600">🎉 今日复习完成！</p>
+        <p className="text-sm text-gray-500 mt-2">没有待复习的卡片</p>
       </div>
     );
   }
@@ -205,8 +205,8 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
     return (
       <div className="glass-card p-8 text-center space-y-4">
         <p className="text-2xl">📊 本次复习统计</p>
-        <p className="text-4xl font-bold text-purple-300">{view.correct}/{view.total}</p>
-        <p className="text-sm text-slate-400">
+        <p className="text-4xl font-bold text-blue-700">{view.correct}/{view.total}</p>
+        <p className="text-sm text-gray-600">
           正确率 {view.total > 0 ? Math.round(view.correct / view.total * 100) : 0}%
         </p>
         <button onClick={view.onRestart}
@@ -225,12 +225,12 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
     return (
       <div className="space-y-6" key={`select-${cardIdx}`}>
         {/* Card header */}
-        <div className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-2xl p-5 border border-purple-500/20">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-5 border border-blue-200">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-xs text-purple-300/70">{card.category}</div>
-              <h2 className="text-xl font-bold text-white mt-1">{card.title}</h2>
-              <div className="text-xs text-slate-400 mt-1">{card.id} · 卡片 {cardIdx + 1}/{totalCards}</div>
+              <div className="text-xs text-blue-700/70">{card.category}</div>
+              <h2 className="text-xl font-bold text-gray-900 mt-1">{card.title}</h2>
+              <div className="text-xs text-gray-600 mt-1">{card.id} · 卡片 {cardIdx + 1}/{totalCards}</div>
             </div>
             {reviewed === dims.length && dims.length > 0 && (
               <button onClick={goNextCard}
@@ -240,7 +240,7 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
             )}
           </div>
           {reviewed > 0 && (
-            <div className="mt-3 text-xs text-slate-400">
+            <div className="mt-3 text-xs text-gray-600">
               已复习 {reviewed}/{dims.length} 维度
             </div>
           )}
@@ -263,14 +263,14 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
                     ? isPassed
                       ? 'bg-green-900/20 border-green-500/30'
                       : 'bg-red-900/20 border-red-500/30'
-                    : 'bg-slate-800/40 border-slate-700/30 hover:border-slate-600/50 hover:bg-slate-800/60'
+                    : 'bg-gray-50 border-gray-200 hover:border-gray-300 hover:bg-white'
                 }`}
               >
                 <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${GRID_COLORS[dim.key]} flex items-center justify-center mb-2`}>
-                  <span className="text-white"><Icon size={14} /></span>
+                  <span className="text-gray-900"><Icon size={14} /></span>
                 </div>
-                <div className="text-xs font-medium text-slate-200">{dim.label}</div>
-                <div className="text-[10px] text-slate-500 mt-0.5">{dim.type === 'cloze' ? '填空' : '选择'}</div>
+                <div className="text-xs font-medium text-gray-800">{dim.label}</div>
+                <div className="text-[10px] text-gray-500 mt-0.5">{dim.type === 'cloze' ? '填空' : '选择'}</div>
                 {isDone && (
                   <div className={`absolute top-2 right-2 w-2 h-2 rounded-full ${isPassed ? 'bg-green-400' : 'bg-red-400'}`} />
                 )}
@@ -293,10 +293,10 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
       {/* Top bar */}
       <div className="flex items-center justify-between">
         <button onClick={handleBackToSelect}
-          className="flex items-center gap-1 text-sm text-slate-400 hover:text-slate-200 transition-colors">
+          className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800 transition-colors">
           <ArrowLeft size={16} /> 返回选题
         </button>
-        <span className="text-xs text-purple-400">
+        <span className="text-xs text-blue-600">
           {card.id} · {dim.label} · 维度 {dimIdx + 1}/{totalDims}
         </span>
       </div>

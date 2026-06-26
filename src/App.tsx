@@ -25,7 +25,7 @@ export default function App() {
   return (
     <>
       {online === false && (
-        <div className="bg-amber-900/50 border-b border-amber-600/40 px-6 py-2 text-center text-sm text-amber-200">
+        <div className="bg-red-50 border-b border-red-200 px-6 py-2 text-center text-sm text-red-700">
           ⚠️ 无法连接到后端服务（{window.location.hostname}:3000）— 仅浏览模式可用
         </div>
       )}
@@ -36,15 +36,15 @@ export default function App() {
         )}
         {mode === 'review' && (online !== false
           ? <ReviewMode onActiveCardChange={setActiveCardId} preferCardId={activeCardId} />
-          : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能复习</div>
+          : <div className="glass-card p-12 text-center text-gray-600">需要后端服务才能复习</div>
         )}
         {mode === 'import' && (online !== false
           ? <ImportExportPanel />
-          : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能导入导出</div>
+          : <div className="glass-card p-12 text-center text-gray-600">需要后端服务才能导入导出</div>
         )}
         {mode === 'bank' && (online !== false
           ? <BankMode />
-          : <div className="glass-card p-12 text-center text-slate-400">需要后端服务才能查看题库</div>
+          : <div className="glass-card p-12 text-center text-gray-600">需要后端服务才能查看题库</div>
         )}
       </ErrorBoundary>
       </Layout>

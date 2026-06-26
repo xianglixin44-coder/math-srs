@@ -44,7 +44,7 @@ export default function PreviewMode({ title, dimensionLabel, question, answer, o
         if (m) {
           const idx = parseInt(m[1]) - 1;
           return (
-            <span key={i} className="inline px-1.5 py-0.5 bg-purple-600/20 text-purple-200 rounded font-medium text-sm">
+            <span key={i} className="inline px-1.5 py-0.5 bg-purple-600/20 text-blue-600 rounded font-medium text-sm">
               {answer[idx] || '___'}
             </span>
           );
@@ -60,25 +60,25 @@ export default function PreviewMode({ title, dimensionLabel, question, answer, o
     <div className="glass-card p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Timer size={16} className="text-purple-400" />
-          <span className="text-xs text-purple-400">{dimensionLabel}</span>
+          <Timer size={16} className="text-blue-600" />
+          <span className="text-xs text-blue-600">{dimensionLabel}</span>
         </div>
-        <span className="text-sm font-mono text-purple-300">{seconds}s</span>
+        <span className="text-sm font-mono text-blue-700">{seconds}s</span>
       </div>
 
-      <div className="w-full bg-slate-700 rounded-full h-1.5">
+      <div className="w-full bg-gray-100 rounded-full h-1.5">
         <div
           className="h-1.5 rounded-full bg-gradient-to-r from-purple-500 to-blue-400 transition-all duration-1000"
           style={{ width: `${pct}%` }}
         />
       </div>
 
-      <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-        <p className="text-xs text-purple-400/60 mb-2">{title}</p>
+      <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+        <p className="text-xs text-blue-600/60 mb-2">{title}</p>
         {renderPreview()}
       </div>
 
-      <p className="text-xs text-slate-500 text-center">记忆关键内容，倒计时结束自动进入测试</p>
+      <p className="text-xs text-gray-500 text-center">记忆关键内容，倒计时结束自动进入测试</p>
     </div>
   );
 }

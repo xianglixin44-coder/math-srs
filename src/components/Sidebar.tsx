@@ -60,8 +60,8 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
   };
 
   return (
-    <div className="w-56 shrink-0 h-full overflow-y-auto border-r border-slate-700/50 bg-slate-900/30 p-3 space-y-0.5">
-      <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-2 mb-3">
+    <div className="w-56 shrink-0 h-full overflow-y-auto border-r border-gray-200 bg-white/80 p-3 space-y-0.5">
+      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-3">
         📐 课本目录
       </h3>
 
@@ -72,10 +72,10 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
           <div key={volKey}>
             <button
               onClick={() => toggle(volKey)}
-              className="w-full flex items-center gap-1 px-2 py-1.5 text-xs text-slate-300 hover:text-white transition-colors rounded"
+              className="w-full flex items-center gap-1 px-2 py-1.5 text-xs text-gray-700 hover:text-gray-900 transition-colors rounded"
             >
               {isVolOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-              <BookMarked size={12} className="text-purple-400" />
+              <BookMarked size={12} className="text-blue-600" />
               <span className="font-medium">{vol.title}</span>
             </button>
 
@@ -86,11 +86,11 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
                 <div key={chKey}>
                   <button
                     onClick={() => toggle(chKey)}
-                    className="w-full flex items-center gap-1 pl-5 pr-2 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors rounded"
+                    className="w-full flex items-center gap-1 pl-5 pr-2 py-1.5 text-xs text-gray-600 hover:text-gray-800 transition-colors rounded"
                   >
                     {isChOpen ? <ChevronDown size={10} /> : <ChevronRight size={10} />}
                     <span>{ch.title}</span>
-                    <span className="text-slate-600 ml-auto text-[10px]">
+                    <span className="text-gray-400 ml-auto text-[10px]">
                       {ch.sections.filter(s => availableCards.has(s.id)).length}/{ch.sections.length}
                     </span>
                   </button>
@@ -104,10 +104,10 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
                         disabled={!hasCard}
                         className={`w-full text-left pl-8 pr-2 py-1 text-xs rounded transition-colors flex items-center gap-1.5 ${
                           activeCardId === sec.id
-                            ? 'bg-purple-600/20 text-purple-200 border border-purple-500/20'
+                            ? 'bg-gray-100 text-blue-600 border border-blue-200'
                             : hasCard
-                              ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                              : 'text-slate-600 cursor-default'
+                              ? 'text-gray-600 hover:text-gray-800 hover:bg-white'
+                              : 'text-gray-400 cursor-default'
                         }`}
                       >
                         <BookOpen size={9} className={`shrink-0 ${hasCard ? 'opacity-50' : 'opacity-25'}`} />

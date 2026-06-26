@@ -135,21 +135,21 @@ export default function MathSymbolPad({ targetRef }: Props) {
   };
 
   return (
-    <div className="border border-slate-700/50 rounded-xl overflow-hidden bg-slate-900/90">
+    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
       {/* Drawing area */}
-      <div className="p-3 border-b border-slate-700/50">
+      <div className="p-3 border-b border-gray-200">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-slate-500">✍️ 手写符号</span>
+          <span className="text-xs text-gray-500">✍️ 手写符号</span>
           <button
             onClick={clearCanvas}
-            className="text-xs text-slate-500 hover:text-red-400 transition-colors"
+            className="text-xs text-gray-500 hover:text-red-400 transition-colors"
           >
             清除
           </button>
         </div>
         <div
           ref={containerRef}
-          className="bg-slate-950 rounded-lg border border-slate-700/30 overflow-hidden"
+          className="bg-gray-100 rounded-lg border border-gray-200 overflow-hidden"
           style={{ touchAction: 'none', height: 80 }}
         >
           <canvas
@@ -164,11 +164,11 @@ export default function MathSymbolPad({ targetRef }: Props) {
 
         {/* Recognition results */}
         {recognizing && (
-          <div className="text-[10px] text-slate-500 mt-2">识别中...</div>
+          <div className="text-[10px] text-gray-500 mt-2">识别中...</div>
         )}
         {!recognizing && guesses.length > 0 && (
           <div className="flex items-center gap-1.5 mt-2">
-            <span className="text-[10px] text-slate-500 shrink-0">识别:</span>
+            <span className="text-[10px] text-gray-500 shrink-0">识别:</span>
             {guesses.map(g => (
               <button
                 key={g.symbol}
@@ -177,10 +177,10 @@ export default function MathSymbolPad({ targetRef }: Props) {
                   insertSymbol(g.symbol);
                   clearCanvas();
                 }}
-                className="px-2 py-1 text-sm bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/20 rounded text-purple-200 transition-colors"
+                className="px-2 py-1 text-sm bg-purple-600/20 hover:bg-purple-600/40 border border-blue-200 rounded text-blue-600 transition-colors"
               >
                 {g.symbol}
-                <span className="text-[10px] text-purple-400 ml-0.5">{Math.round(g.confidence * 100)}%</span>
+                <span className="text-[10px] text-blue-600 ml-0.5">{Math.round(g.confidence * 100)}%</span>
               </button>
             ))}
           </div>
@@ -188,15 +188,15 @@ export default function MathSymbolPad({ targetRef }: Props) {
       </div>
 
       {/* Symbol grid tabs */}
-      <div className="flex overflow-x-auto border-b border-slate-700/50">
+      <div className="flex overflow-x-auto border-b border-gray-200">
         {SYMBOL_GROUPS.map((group, i) => (
           <button
             key={group.label}
             onClick={() => setActiveGroup(i)}
             className={`shrink-0 px-3 py-1.5 text-xs transition-colors ${
               i === activeGroup
-                ? 'bg-purple-600/30 text-purple-200 border-b-2 border-purple-500'
-                : 'text-slate-500 hover:text-slate-300'
+                ? 'bg-blue-100 text-blue-600 border-b-2 border-purple-500'
+                : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             {group.label}
@@ -213,7 +213,7 @@ export default function MathSymbolPad({ targetRef }: Props) {
               e.preventDefault();
               insertSymbol(symbol);
             }}
-            className="py-2 text-lg text-slate-300 hover:bg-slate-700/50 hover:text-white rounded-lg transition-colors active:scale-90 select-none"
+            className="py-2 text-lg text-gray-700 hover:bg-gray-100/50 hover:text-gray-900 rounded-lg transition-colors active:scale-90 select-none"
           >
             {symbol}
           </button>

@@ -41,7 +41,7 @@ export default function ChoiceCard({ question, options, answer, onScore }: Props
       className="glass-card p-6 space-y-4"
       onContextMenu={(e) => e.preventDefault()}
     >
-      <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap select-none">
+      <div className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap select-none">
         {renderLine(question)}
       </div>
       <div className="space-y-2">
@@ -50,14 +50,14 @@ export default function ChoiceCard({ question, options, answer, onScore }: Props
           let cls = 'p-3 rounded-lg border transition-all cursor-pointer text-sm ';
           if (!submitted) {
             cls += selected === i
-              ? 'border-purple-400 bg-purple-600/20 text-purple-200'
-              : 'border-slate-700/50 text-slate-400 hover:border-slate-600 hover:text-slate-200';
+              ? 'border-purple-400 bg-purple-600/20 text-blue-600'
+              : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-800';
           } else if (i === correct) {
-            cls += 'border-green-400 bg-green-600/20 text-green-300';
+            cls += 'border-green-400 bg-green-600/20 text-green-700';
           } else if (i === selected) {
-            cls += 'border-red-400 bg-red-600/20 text-red-300';
+            cls += 'border-red-400 bg-red-600/20 text-red-700';
           } else {
-            cls += 'border-slate-700/30 text-slate-600';
+            cls += 'border-gray-200 text-gray-400';
           }
           return (
             <div key={i} onClick={() => handleSelect(i)} className={cls}>

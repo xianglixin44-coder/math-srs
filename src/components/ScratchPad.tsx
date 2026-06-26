@@ -28,7 +28,7 @@ export default function ScratchPad({ resetKey }: Props) {
     if (ctx) {
       const dpr = window.devicePixelRatio || 1;
       ctx.scale(dpr, dpr);
-      ctx.strokeStyle = '#e2e8f0';
+      ctx.strokeStyle = '#94a3b8';
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
@@ -83,33 +83,33 @@ export default function ScratchPad({ resetKey }: Props) {
   };
 
   return (
-    <div className="border border-slate-700/50 rounded-xl overflow-hidden">
+    <div className="border border-gray-200 rounded-xl overflow-hidden">
       {/* Toggle header */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-2 bg-slate-800/60 hover:bg-slate-700/50 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-2 bg-white hover:bg-gray-100/50 transition-colors"
       >
-        <span className="flex items-center gap-2 text-sm text-slate-300">
-          <Pen size={14} className="text-purple-400" />
+        <span className="flex items-center gap-2 text-sm text-gray-700">
+          <Pen size={14} className="text-blue-600" />
           手写草稿
         </span>
         <div className="flex items-center gap-2">
           {isOpen && (
             <span
               onClick={(e) => { e.stopPropagation(); clearCanvas(); }}
-              className="flex items-center gap-1 text-xs text-slate-500 hover:text-red-400 transition-colors"
+              className="flex items-center gap-1 text-xs text-gray-500 hover:text-red-400 transition-colors"
               title="清除"
             >
               <Trash2 size={12} /> 清除
             </span>
           )}
-          {isOpen ? <ChevronUp size={14} className="text-slate-500" /> : <ChevronDown size={14} className="text-slate-500" />}
+          {isOpen ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
         </div>
       </button>
 
       {/* Canvas area */}
       {isOpen && (
-        <div className="bg-slate-950 border-t border-slate-700/50" style={{ touchAction: 'none' }}>
+        <div className="bg-gray-100 border-t border-gray-200" style={{ touchAction: 'none' }}>
           <canvas
             ref={canvasRef}
             className="w-full block cursor-crosshair"

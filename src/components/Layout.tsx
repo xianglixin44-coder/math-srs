@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Play, Upload, Menu, X, Database } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Sidebar from './Sidebar';
 
 interface Props {
@@ -14,49 +14,79 @@ export default function Layout({ mode, setMode, online, activeCardId, onSelectCa
   const offline = online === false;
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const navItems = [
+    { key: 'browse', label: '📖 浏览', needsBackend: false },
+    { key: 'review', label: '🎯 复习', needsBackend: true },
+    { key: 'bank',   label: '📚 题库', needsBackend: true },
+    { key: 'import', label: '📥 导入', needsBackend: true },
+  ] as const;
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <nav className="glass px-4 py-2 flex items-center gap-3 sticky top-0 z-50">
+    <div className="min-h-screen flex flex-col" style={{background:'#f5f3ef'}}>
+      {/* ── 顶部导航栏 ── */}
+      <header
+        className="sticky top-0 z-50 flex items-center gap-3 px-4 py-2.5 shadow-sm"
+        style={{background:'linear-gradient(135deg, #1a1a2e 0%, #2c3e50 100%)'}}
+      >
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 transition-colors"
-          title={sidebarOpen ? '关闭侧边栏' : '打开侧边栏'}
+          className="md:hidden p-1 rounded hover:bg-white/10 transition-colors"
         >
-          {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          {sidebarOpen ? <X size={20} color="white" /> : <Menu size={20} color="white" />}
         </button>
-        <h1 className="text-lg font-bold bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
-          数学SRS
-        </h1>
-        <div className="flex gap-1.5 ml-auto">
-          {([
-            ['browse', BookOpen, '浏览', false],
-            ['review', Play, '复习', true],
-            ['import', Upload, '导入', true],
-            ['bank', Database, '题库', true],
-          ] as const).map(([m, Icon, label, needsBackend]) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              disabled={offline && needsBackend}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all
-                ${mode === m
-                  ? 'bg-purple-600/30 text-purple-200 border border-purple-500/30'
-                  : offline && needsBackend
-                    ? 'text-slate-600 cursor-not-allowed'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
-                }`}
-            >
-              <Icon size={16} /> {label}
-            </button>
-          ))}
-        </div>
-      </nav>
+        <h1 className="text-base font-bold text-white">📐 数学SRS</h1>
+        <span className="text-[10px] px-2 py-0.5 rounded-full text-white/70 bg-white/15">
+          {online === null ? '🔗 检测中' : online ? '🟢 已连接' : '🔴 离线'}
+        </span>
+      </header>
+
       <div className="flex-1 flex">
-        {/* Sidebar — fixed on desktop, overlay on mobile via toggle */}
-        <div className={`${sidebarOpen ? 'block' : 'hidden'} md:block shrink-0`}>
-          <Sidebar activeCardId={activeCardId} onSelectCard={onSelectCard} />
-        </div>
-        <main className="flex-1 p-6 max-w-4xl mx-auto w-full">
+        {/* ── 侧边栏 ── */}
+        <aside
+          className={`${sidebarOpen ? 'block' : 'hidden'} md:block shrink-0 overflow-y-auto`}
+          style={{
+            width: 210, minWidth: 210,
+            background: '#fff',
+            borderRight: '1px solid #ddd',
+            height: 'calc(100vh - 48px)', position: 'sticky', top: 48,
+          }}
+        >
+          {navItems.map(item => {
+            const disabled = offline && item.needsBackend;
+            return (
+              <div
+                key={item.key}
+                onClick={() => { if (!disabled) { setMode(item.key as any); setSidebarOpen(false); }}}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '10px 18px', cursor: disabled ? 'not-allowed' : 'pointer',
+                  fontSize: 13, borderLeft: '3px solid transparent',
+                  color: disabled ? '#bbb' : mode === item.key ? '#1a1a2e' : '#5a5a7a',
+                  background: mode === item.key ? '#e8e4de' : 'transparent',
+                  fontWeight: mode === item.key ? 600 : 400,
+                  borderLeftColor: mode === item.key ? '#c0392b' : 'transparent',
+                }}
+              >
+                {item.label}
+              </div>
+            );
+          })}
+
+          <div style={{borderTop:'1px solid #ddd', marginTop:8, paddingTop:4}}>
+            <div style={{fontSize:12, color:'#5a5a7a', padding:'10px 18px 6px', fontWeight:600}}>
+              📐 课本目录
+            </div>
+            <Sidebar activeCardId={activeCardId} onSelectCard={(id) => { onSelectCard(id); setSidebarOpen(false); }} />
+          </div>
+        </aside>
+
+        {/* 遮罩层（移动端） */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setSidebarOpen(false)} />
+        )}
+
+        {/* ── 主内容区 ── */}
+        <main className="flex-1 p-6" style={{maxWidth:1000, margin:'0 auto', width:'100%'}}>
           {children}
         </main>
       </div>

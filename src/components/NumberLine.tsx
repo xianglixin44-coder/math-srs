@@ -59,7 +59,7 @@ export default function NumberLine({ intervals }: { intervals: IntervalProps[] }
           return (
             <g key={t}>
               <line x1={x} y1={30} x2={x} y2={40} stroke="#475569" strokeWidth="0.5" />
-              <text x={x} y={52} textAnchor="middle" fill="#94a3b8" style={{ fontSize: 10 }}>{t}</text>
+              <text x={x} y={52} textAnchor="middle" fill="#475569" style={{ fontSize: 10 }}>{t}</text>
             </g>
           );
         })}

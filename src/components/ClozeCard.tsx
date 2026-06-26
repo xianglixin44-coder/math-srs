@@ -48,8 +48,8 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
         return submitted ? (
           <span key={i} className={`inline px-1.5 py-0.5 rounded font-mono text-sm ${
             results[idx]
-              ? 'bg-green-600/30 text-green-300'
-              : 'bg-red-600/30 text-red-300'
+              ? 'bg-green-600/30 text-green-700'
+              : 'bg-red-600/30 text-red-700'
           }`}>
             {inputs[idx] || '___'}
             {results[idx] ? <Check size={12} className="inline ml-1" /> : <X size={12} className="inline ml-1" />}
@@ -66,7 +66,7 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
             }}
             onFocus={() => handleFocus(idx)}
             onBlur={handleBlur}
-            className="w-24 px-1.5 py-0.5 bg-slate-700 border border-purple-500/30 rounded text-sm text-purple-200 font-mono focus:outline-none focus:border-purple-400"
+            className="w-24 px-1.5 py-0.5 bg-gray-100 border border-blue-200 rounded text-sm text-blue-600 font-mono focus:outline-none focus:border-blue-400"
             placeholder={`填${idx + 1}`}
             onPaste={(e) => e.preventDefault()}
             onCopy={(e) => e.preventDefault()}
@@ -83,7 +83,7 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
       className="glass-card p-6 space-y-4"
       onContextMenu={(e) => e.preventDefault()}
     >
-      <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap select-none">
+      <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap select-none">
         {renderQuestion()}
       </div>
       {!submitted && (
@@ -101,7 +101,7 @@ export default function ClozeCard({ question, answer: answers, onScore }: Props)
         />
       )}
       {submitted && !results.every(Boolean) && (
-        <div className="text-xs text-green-400 mt-2">
+        <div className="text-xs text-green-700 mt-2">
           正确答案：{answers.join(' · ')}
         </div>
       )}

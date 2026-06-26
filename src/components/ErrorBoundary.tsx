@@ -20,10 +20,10 @@ export default class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="glass-card p-8 text-center space-y-4 m-6">
           <p className="text-lg text-red-400">⚠️ 页面出错了</p>
-          <p className="text-sm text-slate-400">{this.state.error.message}</p>
+          <p className="text-sm text-gray-600">{this.state.error.message}</p>
           <button
             onClick={() => this.setState({ error: null })}
-            className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition-colors"
+            className="px-4 py-2 bg-gray-100 hover:bg-gray-400 rounded-lg text-sm transition-colors"
           >
             重试
           </button>
