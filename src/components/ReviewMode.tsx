@@ -196,7 +196,7 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
     return (
       <div className="glass-card p-12 text-center">
         <p className="text-xl text-gray-600">🎉 今日复习完成！</p>
-        <p className="text-sm text-gray-500 mt-2">没有待复习的卡片</p>
+        <p className="text-base text-gray-500 mt-2">没有待复习的卡片</p>
       </div>
     );
   }
@@ -206,11 +206,11 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
       <div className="glass-card p-8 text-center space-y-4">
         <p className="text-2xl">📊 本次复习统计</p>
         <p className="text-4xl font-bold text-blue-700">{view.correct}/{view.total}</p>
-        <p className="text-sm text-gray-600">
+        <p className="text-base text-gray-600">
           正确率 {view.total > 0 ? Math.round(view.correct / view.total * 100) : 0}%
         </p>
         <button onClick={view.onRestart}
-          className="px-4 py-2 bg-purple-600/40 rounded-lg text-sm">
+          className="px-4 py-2 bg-purple-600/40 rounded-lg text-base">
           重新开始
         </button>
       </div>
@@ -228,19 +228,19 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-5 border border-blue-200">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-xs text-blue-700/70">{card.category}</div>
+              <div className="text-sm text-blue-700/70">{card.category}</div>
               <h2 className="text-xl font-bold text-gray-900 mt-1">{card.title}</h2>
-              <div className="text-xs text-gray-600 mt-1">{card.id} · 卡片 {cardIdx + 1}/{totalCards}</div>
+              <div className="text-sm text-gray-600 mt-1">{card.id} · 卡片 {cardIdx + 1}/{totalCards}</div>
             </div>
             {reviewed === dims.length && dims.length > 0 && (
               <button onClick={goNextCard}
-                className="px-4 py-2 bg-purple-600/40 hover:bg-purple-600/60 rounded-lg text-sm transition-colors">
+                className="px-4 py-2 bg-purple-600/40 hover:bg-purple-600/60 rounded-lg text-base transition-colors">
                 下一张 →
               </button>
             )}
           </div>
           {reviewed > 0 && (
-            <div className="mt-3 text-xs text-gray-600">
+            <div className="mt-3 text-sm text-gray-600">
               已复习 {reviewed}/{dims.length} 维度
             </div>
           )}
@@ -269,8 +269,8 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
                 <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${GRID_COLORS[dim.key]} flex items-center justify-center mb-2`}>
                   <span className="text-gray-900"><Icon size={14} /></span>
                 </div>
-                <div className="text-xs font-medium text-gray-800">{dim.label}</div>
-                <div className="text-[10px] text-gray-500 mt-0.5">{dim.type === 'cloze' ? '填空' : '选择'}</div>
+                <div className="text-sm font-medium text-gray-800">{dim.label}</div>
+                <div className="text-xs text-gray-500 mt-0.5">{dim.type === 'cloze' ? '填空' : '选择'}</div>
                 {isDone && (
                   <div className={`absolute top-2 right-2 w-2 h-2 rounded-full ${isPassed ? 'bg-green-400' : 'bg-red-400'}`} />
                 )}
@@ -293,10 +293,10 @@ export default function ReviewMode({ onActiveCardChange, preferCardId }: Props) 
       {/* Top bar */}
       <div className="flex items-center justify-between">
         <button onClick={handleBackToSelect}
-          className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800 transition-colors">
+          className="flex items-center gap-1 text-base text-gray-600 hover:text-gray-800 transition-colors">
           <ArrowLeft size={16} /> 返回选题
         </button>
-        <span className="text-xs text-blue-600">
+        <span className="text-sm text-blue-600">
           {card.id} · {dim.label} · 维度 {dimIdx + 1}/{totalDims}
         </span>
       </div>

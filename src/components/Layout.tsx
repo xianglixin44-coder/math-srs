@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Sidebar from './Sidebar';
 
@@ -12,9 +12,21 @@ interface Props {
   onSelectCard: (id: string) => void;
 }
 
+function useDateTime() {
+  const [dt, setDt] = useState(new Date());
+  useEffect(() => {
+    const t = setInterval(() => setDt(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const date = dt.toLocaleDateString('zh-CN', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' });
+  const time = dt.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' });
+  return `${date} ${time}`;
+}
+
 export default function Layout({ mode, setMode, online, activeCardId, onSelectCard, children }: Props & { children: React.ReactNode }) {
   const offline = online === false;
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const dateTime = useDateTime();
 
   const mainNav = [
     { key: 'browse', label: '📖 浏览', needsBackend: false },
@@ -37,7 +49,7 @@ export default function Layout({ mode, setMode, online, activeCardId, onSelectCa
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '10px 18px', cursor: disabled ? 'not-allowed' : 'pointer',
-            fontSize: 13, borderLeft: '3px solid transparent',
+            fontSize: 16, borderLeft: '3px solid transparent',
             color: disabled ? '#bbb' : mode === item.key ? '#1a1a2e' : '#5a5a7a',
             background: mode === item.key ? '#e8e4de' : 'transparent',
             fontWeight: mode === item.key ? 600 : 400,
@@ -62,9 +74,13 @@ export default function Layout({ mode, setMode, online, activeCardId, onSelectCa
           {sidebarOpen ? <X size={20} color="white" /> : <Menu size={20} color="white" />}
         </button>
         <h1 className="text-base font-bold text-white">📐 数学SRS</h1>
-        <span className="text-[10px] px-2 py-0.5 rounded-full text-white/70 bg-white/15">
+        <span className="text-xs px-2 py-0.5 rounded-full text-white/70 bg-white/15">
           {online === null ? '🔗 检测中' : online ? '🟢 已连接' : '🔴 离线'}
         </span>
+
+        <div className="ml-auto text-white/60 text-xs">
+          {dateTime}
+        </div>
       </header>
 
       <div className="flex-1 flex">
@@ -80,16 +96,13 @@ export default function Layout({ mode, setMode, online, activeCardId, onSelectCa
           {renderNav(mainNav)}
 
           <div style={{marginTop:8}}>
-            <div style={{fontSize:12, color:'#5a5a7a', padding:'10px 18px 6px', fontWeight:600}}>
+            <div style={{fontSize:14, color:'#5a5a7a', padding:'10px 18px 6px', fontWeight:600}}>
               🔧 工具
             </div>
             {renderNav(toolNav)}
           </div>
 
           <div style={{borderTop:'1px solid #ddd', marginTop:8, paddingTop:4}}>
-            <div style={{fontSize:12, color:'#5a5a7a', padding:'10px 18px 6px', fontWeight:600}}>
-              📐 课本目录
-            </div>
             <Sidebar activeCardId={activeCardId} onSelectCard={(id) => { onSelectCard(id); setSidebarOpen(false); }} />
           </div>
         </aside>

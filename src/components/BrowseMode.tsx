@@ -243,7 +243,7 @@ export default function BrowseMode({ activeCardId }: Props) {
     return (
       <div className="glass-card p-12 text-center space-y-3">
         <p className="text-gray-600">从左侧目录选择一张卡片查看</p>
-        <p className="text-xs text-gray-500">点击内容方格进入学习笔记</p>
+        <p className="text-sm text-gray-500">点击内容方格进入学习笔记</p>
       </div>
     );
   }
@@ -263,7 +263,7 @@ export default function BrowseMode({ activeCardId }: Props) {
       <div className="space-y-6" key={`detail-${activeCard.id}-${section.key}`}>
         <button
           onClick={() => setSelectedSection(null)}
-          className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+          className="flex items-center gap-1.5 text-base text-gray-600 hover:text-gray-800 transition-colors"
         >
           <ArrowLeft size={16} />
           <span className="text-gray-500">{activeCard.id} {activeCard.title}</span>
@@ -276,7 +276,7 @@ export default function BrowseMode({ activeCardId }: Props) {
             </div>
             <div>
               <div className="text-lg font-bold text-gray-900">{section.label}</div>
-              <div className="text-xs text-gray-600 mt-0.5">{activeCard.title}</div>
+              <div className="text-sm text-gray-600 mt-0.5">{activeCard.title}</div>
             </div>
           </div>
         </div>
@@ -294,23 +294,23 @@ export default function BrowseMode({ activeCardId }: Props) {
           {prevSection ? (
             <button
               onClick={() => setSelectedSection(prevSection.key)}
-              className="flex items-center gap-1 px-4 py-2 bg-white hover:bg-gray-100/50 border border-gray-200 rounded-lg text-sm text-gray-700 transition-colors"
+              className="flex items-center gap-1 px-4 py-2 bg-white hover:bg-gray-100/50 border border-gray-200 rounded-lg text-base text-gray-700 transition-colors"
             >
               <ChevronLeft size={16} />
               <div className="text-left">
                 <div className="text-xs text-gray-500">上一节</div>
-                <div className="text-sm">{prevSection.label}</div>
+                <div className="text-base">{prevSection.label}</div>
               </div>
             </button>
           ) : <div />}
           {nextSection ? (
             <button
               onClick={() => setSelectedSection(nextSection.key)}
-              className="flex items-center gap-1 px-4 py-2 bg-white hover:bg-gray-100/50 border border-gray-200 rounded-lg text-sm text-gray-700 transition-colors"
+              className="flex items-center gap-1 px-4 py-2 bg-white hover:bg-gray-100/50 border border-gray-200 rounded-lg text-base text-gray-700 transition-colors"
             >
               <div className="text-right">
                 <div className="text-xs text-gray-500">下一节</div>
-                <div className="text-sm">{nextSection.label}</div>
+                <div className="text-base">{nextSection.label}</div>
               </div>
               <ChevronRight size={16} />
             </button>
@@ -324,9 +324,9 @@ export default function BrowseMode({ activeCardId }: Props) {
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-5 border border-blue-200">
-        <div className="text-xs text-blue-700/70">{activeCard.category}</div>
+        <div className="text-sm text-blue-700/70">{activeCard.category}</div>
         <h2 className="text-xl font-bold text-gray-900 mt-1">{activeCard.title}</h2>
-        <div className="text-xs text-gray-600 mt-1">{activeCard.id} · {activeCard.sections.length} 个内容块</div>
+        <div className="text-sm text-gray-600 mt-1">{activeCard.id} · {activeCard.sections.length} 个内容块</div>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
@@ -342,7 +342,7 @@ export default function BrowseMode({ activeCardId }: Props) {
               <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${colorClass} flex items-center justify-center mb-2`}>
                 <span className="text-gray-900"><Icon size={14} /></span>
               </div>
-              <div className="text-xs font-medium text-gray-800">{section.label}</div>
+              <div className="text-sm font-medium text-gray-800">{section.label}</div>
             </button>
           );
         })}

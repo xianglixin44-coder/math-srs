@@ -61,9 +61,9 @@ export default function PreviewMode({ title, dimensionLabel, question, answer, o
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Timer size={16} className="text-blue-600" />
-          <span className="text-xs text-blue-600">{dimensionLabel}</span>
+          <span className="text-sm text-blue-600">{dimensionLabel}</span>
         </div>
-        <span className="text-sm font-mono text-blue-700">{seconds}s</span>
+        <span className="text-base font-mono text-blue-700">{seconds}s</span>
       </div>
 
       <div className="w-full bg-gray-100 rounded-full h-1.5">
@@ -73,12 +73,12 @@ export default function PreviewMode({ title, dimensionLabel, question, answer, o
         />
       </div>
 
-      <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-        <p className="text-xs text-blue-600/60 mb-2">{title}</p>
+      <div className="text-base text-gray-700 leading-relaxed whitespace-pre-wrap">
+        <p className="text-sm text-blue-600/60 mb-2">{title}</p>
         {renderPreview()}
       </div>
 
-      <p className="text-xs text-gray-500 text-center">记忆关键内容，倒计时结束自动进入测试</p>
+      <p className="text-sm text-gray-500 text-center">记忆关键内容，倒计时结束自动进入测试</p>
     </div>
   );
 }

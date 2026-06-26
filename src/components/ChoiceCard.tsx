@@ -41,13 +41,13 @@ export default function ChoiceCard({ question, options, answer, onScore }: Props
       className="glass-card p-6 space-y-4"
       onContextMenu={(e) => e.preventDefault()}
     >
-      <div className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap select-none">
+      <div className="text-base text-gray-800 leading-relaxed whitespace-pre-wrap select-none">
         {renderLine(question)}
       </div>
       <div className="space-y-2">
         {shuffled.map((opt, i) => {
           const letter = String.fromCharCode(65 + i);
-          let cls = 'p-3 rounded-lg border transition-all cursor-pointer text-sm ';
+          let cls = 'p-3 rounded-lg border transition-all cursor-pointer text-base ';
           if (!submitted) {
             cls += selected === i
               ? 'border-purple-400 bg-purple-600/20 text-blue-600'
