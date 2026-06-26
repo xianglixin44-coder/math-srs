@@ -56,7 +56,7 @@ export default function Layout({ mode, setMode, online, activeCardId, onSelectCa
             return (
               <div
                 key={item.key}
-                onClick={() => { if (!disabled) { setMode(item.key as any); setSidebarOpen(false); }}}
+                onClick={() => { if (!disabled) { setMode(item.key); setSidebarOpen(false); }}}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '10px 18px', cursor: disabled ? 'not-allowed' : 'pointer',

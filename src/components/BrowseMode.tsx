@@ -58,7 +58,7 @@ function renderContent(text: string): React.ReactNode[] {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // Section header ###
+    // Section header ####
     if (line.startsWith('#### ')) {
       result.push(
         <h5 key={i} className="text-sm font-semibold text-blue-600 mt-3 mb-1">{line.slice(5)}</h5>
@@ -163,7 +163,6 @@ function renderContent(text: string): React.ReactNode[] {
       continue;
     }
 
-    // Bold marker **text**
     // Empty line
     if (line.trim() === '') {
       result.push(<div key={i} className="h-2" />);

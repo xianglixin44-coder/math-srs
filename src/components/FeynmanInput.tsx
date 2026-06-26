@@ -11,8 +11,8 @@ export default function FeynmanInput({ cardId }: Props) {
 
   const answerRef = useRef(answer);
   const ratingRef = useRef(rating);
-  answerRef.current = answer;
-  ratingRef.current = rating;
+  useEffect(() => { answerRef.current = answer; }, [answer]);
+  useEffect(() => { ratingRef.current = rating; }, [rating]);
 
   // Load from SQLite on mount / card change
   useEffect(() => {
@@ -25,26 +25,26 @@ export default function FeynmanInput({ cardId }: Props) {
       .catch(() => {});
   }, [cardId]);
 
-  const persist = useCallback(() => {
+  const persist = useCallback((overrides?: { answer?: string; rating?: number | null }) => {
     fetch('/api/feynman/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         card_id: cardId,
-        answer: answerRef.current,
-        rating: ratingRef.current,
+        answer: overrides?.answer ?? answerRef.current,
+        rating: overrides?.rating ?? ratingRef.current,
       }),
     }).then(() => {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-    });
+    }).catch(() => {});
   }, [cardId]);
 
   const handleClear = () => {
     setAnswer('');
     setRating(null);
     setShowRef(false);
-    persist();
+    persist({ answer: '', rating: null });
   };
 
   return (
@@ -70,7 +70,7 @@ export default function FeynmanInput({ cardId }: Props) {
       />
 
       <div className="flex gap-2">
-        <button onClick={persist}
+        <button onClick={() => persist()}
           className="px-4 py-2 bg-purple-600/50 hover:bg-purple-600/70 border border-blue-200 rounded-lg text-sm text-blue-600 transition-colors"
         >{saved ? '✓ 已保存' : '保存'}</button>
         <button onClick={() => setShowRef(!showRef)}
@@ -105,7 +105,7 @@ export default function FeynmanInput({ cardId }: Props) {
             { v: 3, label: '完美表达', cls: 'border-green-500/40 text-green-700 hover:border-green-400' },
           ].map(({ v, label, cls }) => (
             <button key={v}
-              onClick={() => { setRating(v); ratingRef.current = v; persist(); }}
+              onClick={() => { setRating(v); persist({ rating: v }); }}
               className={`flex-1 py-2 border rounded-lg text-xs transition-colors ${
                 rating === v
                   ? v === 3 ? 'bg-green-500/20 border-green-400 text-green-700' :
