@@ -33,3 +33,4 @@ data/books/
 
 dist/
 outputs/
+public/data/symbols.json
