@@ -30,3 +30,6 @@ __pycache__/
 *.sw?
 data/books/
 data/books/
+
+dist/
+outputs/
