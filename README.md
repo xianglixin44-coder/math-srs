@@ -1,38 +1,52 @@
-# 数学SRS — 高中数学间隔重复系统
+# 数学SRS系统
 
-基于 SM-2 算法的局域网学习工具。Mac 运行后端，iPad/手机浏览器访问。
+高中数学间隔重复记忆系统 — FastAPI + React + SQLite
 
-## 快速开始
+## 启动命令
 
 ```bash
-# 安装依赖
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-npm install && npm run build
+# 1. 安装依赖
+cd ~/Documents/math-srs
+npm install
 
-# 启动
-env PYTHONPATH=. .venv/bin/uvicorn server.main:app --host 0.0.0.0 --port 3000
+# 2. 构建前端
+npm run build
+
+# 3. 启动后端 (端口 3000)
+python3 -m uvicorn server.main:app --host 0.0.0.0 --port 3000
+
+# 4. 浏览器访问
+open http://localhost:3000
 ```
 
-浏览器打开 `http://localhost:3000`
+## 一键启动
 
-## 功能
+```bash
+cd ~/Documents/math-srs && npm run build && python3 -m uvicorn server.main:app --host 0.0.0.0 --port 3000
+```
 
-- **浏览** — 7 维学习笔记（概念/方法/易错/原理/例题/关联/挑战）
-- **复习** — SM-2 间隔重复，40s 预览 + 填空/选择测试
-- **题库** — 全部卡片 SRS 状态表格
-- **导入导出** — JSON/CSV/ZIP 多格式
-- **手写草稿** — Canvas 画布，支持 Apple Pencil
-- **iPad 适配** — 局域网访问，SPA fallback 防白屏
+## 局域网共享 (Mac + iPad)
 
-## 详细文档
+```
+Mac:  http://localhost:3000
+iPad: http://192.168.x.x:3000  (替换为 Mac 实际 IP)
+```
 
-→ [操作手册](MANUAL.md)
+查看 Mac IP: `ipconfig getifaddr en0`
 
-## 技术栈
+## 开发模式
 
-| 层 | 技术 |
-|---|---|
-| 前端 | React 19 + TypeScript + Vite + Tailwind CSS 4 |
-| 后端 | FastAPI (Python) + SQLite WAL |
-| 数学 | KaTeX |
-| 图标 | Lucide React |
+```bash
+# 前端热更新 (端口 5173)
+npm run dev
+
+# 后端开发
+python3 -m uvicorn server.main:app --host 0.0.0.0 --port 3000 --reload
+```
+
+## 测试
+
+```bash
+npm test        # 前端测试 (vitest)
+npm run lint    # ESLint
+```
