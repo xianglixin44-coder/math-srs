@@ -6,7 +6,7 @@
     {
       "key": "concept",
       "label": "核心概念界定",
-      "content": "## 一、核心概念界定\n\n### 1. 三角形式乘法法则\n$$z_1z_2 = r_1r_2[\\cos(\\theta_1+\\theta_2)+i\\sin(\\theta_1+\\theta_2)]$$\n积的模=模的积，积的辐角=辐角的和．\n\n### 2. 三角形式除法法则\n$$\\frac{z_1}{z_2} = \\frac{r_1}{r_2}[\\cos(\\theta_1-\\theta_2)+i\\sin(\\theta_1-\\theta_2)]$$\n商的模=模的商，商的辐角=辐角的差．\n\n![](/images/07-03-02-trig-mult.png)"
+      "content": "## 一、核心概念界定\n\n### 1. 三角形式乘法法则\n$$z_1z_2 = r_1r_2[\\cos(\\theta_1+\\theta_2)+i\\sin(\\theta_1+\\theta_2)]$$\n积的模=模的积，积的辐角=辐角的和．\n\n### 2. 三角形式除法法则\n$$\\frac{z_1}{z_2} = \\frac{r_1}{r_2}[\\cos(\\theta_1-\\theta_2)+i\\sin(\\theta_1-\\theta_2)]$$\n商的模=模的商，商的辐角=辐角的差．\n\n![三角形式乘除几何意义](/images/07-03-02-trig-mult.png)"
     },
     {
       "key": "method",

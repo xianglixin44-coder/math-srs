@@ -6,7 +6,7 @@
     {
       "key": "concept",
       "label": "核心概念界定",
-      "content": "## 一、核心概念界定\n\n### 1. 物理矢量的数学锚定\n*   **力 $\\vec{F}$**：力的合成遵循向量加法（平行四边形法则），平衡状态对应合向量为零．\n*   **速度 $\\vec{v}$ 与位移 $\\vec{s}$**：实际运动速度是自身速度与环境速度的向量和．\n\n### 2. 功的向量内积定义\n$$W = \\vec{F} \\cdot \\vec{s} = |\\vec{F}||\\vec{s}|\\cos\\theta$$\n功是标量．$0 \\le \\theta < 90^\\circ$ 正功，$90^\\circ < \\theta \\le 180^\\circ$ 负功，$\\theta = 90^\\circ$ 不做功．\n\n![](/images/06-04-02-work-force.png)"
+      "content": "## 一、核心概念界定\n\n### 1. 物理矢量的数学锚定\n*   **力 $\\vec{F}$**：力的合成遵循向量加法（平行四边形法则），平衡状态对应合向量为零．\n*   **速度 $\\vec{v}$ 与位移 $\\vec{s}$**：实际运动速度是自身速度与环境速度的向量和．\n\n### 2. 功的向量内积定义\n$$W = \\vec{F} \\cdot \\vec{s} = |\\vec{F}||\\vec{s}|\\cos\\theta$$\n功是标量．$0 \\le \\theta < 90^\\circ$ 正功，$90^\\circ < \\theta \\le 180^\\circ$ 负功，$\\theta = 90^\\circ$ 不做功．\n\n![力做功向量模型](/images/06-04-02-work-force.png)"
     },
     {
       "key": "method",
@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1] 航程最短问题的定量分析\n**题目**：河宽 $d=500\\text{m}$，船速 $|\\vec{v}_1|=10\\text{km/h}$，水流速 $|\\vec{v}_2|=2\\text{km/h}$．求航程最短时全程时间．\n\n**深度分析**：航程最短意味着合速度 $\\vec{v}$ 垂直于河岸．$\\vec{v}_1$ 为斜边，$\\vec{v}_2$ 和 $\\vec{v}$ 为直角边．\n\n**规范解答**：\n1.  $|\\vec{v}| = \\sqrt{10^2 - 2^2} = \\sqrt{96} \\approx 9.8 \\text{ km/h}$．\n2.  $t = \\frac{0.5}{\\sqrt{96}} \\times 60 \\approx 3.1 \\text{ min}$．\n\n**方法提炼**：利用向量几何关系锁定变量，将运动合成降维为初等算术．\n\n![](/images/06-04-02-boat.png)"
+      "content": "## 五、经典例题精讲\n\n### [例题 1] 航程最短问题的定量分析\n**题目**：河宽 $d=500\\text{m}$，船速 $|\\vec{v}_1|=10\\text{km/h}$，水流速 $|\\vec{v}_2|=2\\text{km/h}$．求航程最短时全程时间．\n\n**深度分析**：航程最短意味着合速度 $\\vec{v}$ 垂直于河岸．$\\vec{v}_1$ 为斜边，$\\vec{v}_2$ 和 $\\vec{v}$ 为直角边．\n\n**规范解答**：\n1.  $|\\vec{v}| = \\sqrt{10^2 - 2^2} = \\sqrt{96} \\approx 9.8 \\text{ km/h}$．\n2.  $t = \\frac{0.5}{\\sqrt{96}} \\times 60 \\approx 3.1 \\text{ min}$．\n\n**方法提炼**：利用向量几何关系锁定变量，将运动合成降维为初等算术．\n\n![小船航行速度分解](/images/06-04-02-boat.png)"
     },
     {
       "key": "connect",

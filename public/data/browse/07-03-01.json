@@ -6,7 +6,7 @@
     {
       "key": "concept",
       "label": "核心概念界定",
-      "content": "## 一、核心概念界定\n\n### 1. 复数的三角表示式\n任意非零复数 $z=a+bi$ 可表示为：\n$$z = r(\\cos\\theta + i\\sin\\theta)$$\n$r = \\sqrt{a^2+b^2}$ 为模，$\\theta$ 为辐角，满足 $\\cos\\theta=a/r, \\sin\\theta=b/r$．\n\n### 2. 辐角与辐角主值\n辐角 $\\theta+2k\\pi$ 有无穷多个值．辐角主值 $\\arg z \\in [0, 2\\pi)$．复数 $0$ 模为 $0$，辐角任意．\n\n### 3. 复数相等的三角判据\n$r_1=r_2$ 且 $\\arg z_1 = \\arg z_2$．\n\n![](/images/07-03-01-trig-form.png)"
+      "content": "## 一、核心概念界定\n\n### 1. 复数的三角表示式\n任意非零复数 $z=a+bi$ 可表示为：\n$$z = r(\\cos\\theta + i\\sin\\theta)$$\n$r = \\sqrt{a^2+b^2}$ 为模，$\\theta$ 为辐角，满足 $\\cos\\theta=a/r, \\sin\\theta=b/r$．\n\n### 2. 辐角与辐角主值\n辐角 $\\theta+2k\\pi$ 有无穷多个值．辐角主值 $\\arg z \\in [0, 2\\pi)$．复数 $0$ 模为 $0$，辐角任意．\n\n### 3. 复数相等的三角判据\n$r_1=r_2$ 且 $\\arg z_1 = \\arg z_2$．\n\n![复数三角形式图示](/images/07-03-01-trig-form.png)"
     },
     {
       "key": "method",

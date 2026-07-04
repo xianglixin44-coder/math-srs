@@ -6,7 +6,7 @@
     {
       "key": "concept",
       "label": "核心概念界定",
-      "content": "## 一、核心概念界定\n\n### 1. 虚数单位 $i$\n为解决方程 $x^2+1=0$ 在实数系内无解的矛盾，引入虚数单位 $i$，规定 $i^2=-1$．\n\n### 2. 复数及其代数形式\n$z = a + bi$（$a, b \\in \\mathbb{R}$）．$a$ 为实部，$b$ 为虚部（是实数，不带 $i$）．\n\n### 3. 复数集 $\\mathbb{C}$\n$\\mathbb{C} = \\{a+bi \\mid a,b \\in \\mathbb{R}\\}$．$\\mathbb{R} \\subsetneq \\mathbb{C}$（当 $b=0$ 时即为实数）．\n\n![](/images/07-01-01-number-systems.png)\n\n![](/images/07-01-01-complex-plane.png)"
+      "content": "## 一、核心概念界定\n\n### 1. 虚数单位 $i$\n为解决方程 $x^2+1=0$ 在实数系内无解的矛盾，引入虚数单位 $i$，规定 $i^2=-1$．\n\n### 2. 复数及其代数形式\n$z = a + bi$（$a, b \\in \\mathbb{R}$）．$a$ 为实部，$b$ 为虚部（是实数，不带 $i$）．\n\n### 3. 复数集 $\\mathbb{C}$\n$\\mathbb{C} = \\{a+bi \\mid a,b \\in \\mathbb{R}\\}$．$\\mathbb{R} \\subsetneq \\mathbb{C}$（当 $b=0$ 时即为实数）．\n\n![数系扩充脉络图](/images/07-01-01-number-systems.png)\n\n![复平面与复数表示](/images/07-01-01-complex-plane.png)"
     },
     {
       "key": "method",

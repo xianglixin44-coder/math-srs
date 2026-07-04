@@ -6,7 +6,7 @@
     {
       "key": "concept",
       "label": "核心概念界定",
-      "content": "## 一、核心概念界定\n\n### 1. 余弦定理\n在 $\\triangle ABC$ 中：\n$$a^2 = b^2 + c^2 - 2bc \\cos A$$\n$$b^2 = a^2 + c^2 - 2ac \\cos B$$\n$$c^2 = a^2 + b^2 - 2ab \\cos C$$\n余弦定理是勾股定理在非直角三角形中的普适化推广．\n\n### 2. 正弦定理\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R$$\n其中 $R$ 为三角形外接圆半径．反映了三角形边长与其外接圆的对称比例关系．\n\n![](/images/06-04-03-cosine-law.png)\n\n![](/images/06-04-03-sine-law.png)"
+      "content": "## 一、核心概念界定\n\n### 1. 余弦定理\n在 $\\triangle ABC$ 中：\n$$a^2 = b^2 + c^2 - 2bc \\cos A$$\n$$b^2 = a^2 + c^2 - 2ac \\cos B$$\n$$c^2 = a^2 + b^2 - 2ab \\cos C$$\n余弦定理是勾股定理在非直角三角形中的普适化推广．\n\n### 2. 正弦定理\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R$$\n其中 $R$ 为三角形外接圆半径．反映了三角形边长与其外接圆的对称比例关系．\n\n![余弦定理推导图](/images/06-04-03-cosine-law.png)\n\n![正弦定理推导图](/images/06-04-03-sine-law.png)"
     },
     {
       "key": "method",

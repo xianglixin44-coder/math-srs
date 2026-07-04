@@ -6,7 +6,7 @@
     {
       "key": "concept",
       "label": "核心概念界定",
-      "content": "## 一、核心概念界定\n\n### 1. 棣莫弗定理\n$$[r(\\cos\\theta + i\\sin\\theta)]^n = r^n(\\cos n\\theta + i\\sin n\\theta)$$\n复数的 $n$ 次幂的模 = 模的 $n$ 次幂，辐角 = 辐角的 $n$ 倍．\n\n### 2. 复数的 $n$ 次方根\n若 $z^n = w$，则 $z$ 为 $w$ 的一个 $n$ 次方根．$1$ 的 $n$ 次方根对应单位圆内接正 $n$ 边形的顶点．\n\n![](/images/07-03-03-demoivre.png)"
+      "content": "## 一、核心概念界定\n\n### 1. 棣莫弗定理\n$$[r(\\cos\\theta + i\\sin\\theta)]^n = r^n(\\cos n\\theta + i\\sin n\\theta)$$\n复数的 $n$ 次幂的模 = 模的 $n$ 次幂，辐角 = 辐角的 $n$ 倍．\n\n### 2. 复数的 $n$ 次方根\n若 $z^n = w$，则 $z$ 为 $w$ 的一个 $n$ 次方根．$1$ 的 $n$ 次方根对应单位圆内接正 $n$ 边形的顶点．\n\n![棣莫弗定理几何解释](/images/07-03-03-demoivre.png)"
     },
     {
       "key": "method",

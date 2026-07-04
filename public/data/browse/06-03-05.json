@@ -6,7 +6,7 @@
     {
       "key": "concept",
       "label": "核心概念界定",
-      "content": "## 一、核心概念界定\n\n### 1. 数量积的坐标公式\n$$\\vec{a} \\cdot \\vec{b} = x_1x_2 + y_1y_2$$\n两个向量的数量积等于它们对应坐标的乘积之和．结果是实数（标量）．\n\n### 2. 向量的模与距离公式\n$$|\\vec{a}| = \\sqrt{x^2 + y^2}$$\n两点间距离：$\\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$．\n\n### 3. 垂直关系的坐标判定\n$$x_1x_2 + y_1y_2 = 0 \\iff \\vec{a} \\perp \\vec{b}$$\n\n![](/images/06-03-05-dot-product.png)"
+      "content": "## 一、核心概念界定\n\n### 1. 数量积的坐标公式\n$$\\vec{a} \\cdot \\vec{b} = x_1x_2 + y_1y_2$$\n两个向量的数量积等于它们对应坐标的乘积之和．结果是实数（标量）．\n\n### 2. 向量的模与距离公式\n$$|\\vec{a}| = \\sqrt{x^2 + y^2}$$\n两点间距离：$\\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$．\n\n### 3. 垂直关系的坐标判定\n$$x_1x_2 + y_1y_2 = 0 \\iff \\vec{a} \\perp \\vec{b}$$\n\n![数量积定义与投影](/images/06-03-05-dot-product.png)"
     },
     {
       "key": "method",
@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1] 利用向量坐标判定三角形形状\n**题目**：已知 $A(1,2), B(2,3), C(-2,5)$，判断 $\\triangle ABC$ 的形状．\n\n**规范解答**：\n1.  $\\vec{AB} = (1,1)$，$\\vec{AC} = (-3,3)$．\n2.  $\\vec{AB} \\cdot \\vec{AC} = 1\\times(-3) + 1\\times3 = 0$．\n3.  $\\therefore \\vec{AB} \\perp \\vec{AC}$，$\\triangle ABC$ 为直角三角形．\n\n**方法提炼**：无需计算三边长度即可判定垂直，数量积是高效的「垂直探测器」．\n\n![](/images/06-03-05-right-triangle.png)"
+      "content": "## 五、经典例题精讲\n\n### [例题 1] 利用向量坐标判定三角形形状\n**题目**：已知 $A(1,2), B(2,3), C(-2,5)$，判断 $\\triangle ABC$ 的形状．\n\n**规范解答**：\n1.  $\\vec{AB} = (1,1)$，$\\vec{AC} = (-3,3)$．\n2.  $\\vec{AB} \\cdot \\vec{AC} = 1\\times(-3) + 1\\times3 = 0$．\n3.  $\\therefore \\vec{AB} \\perp \\vec{AC}$，$\\triangle ABC$ 为直角三角形．\n\n**方法提炼**：无需计算三边长度即可判定垂直，数量积是高效的「垂直探测器」．\n\n![直角三角形向量法](/images/06-03-05-right-triangle.png)"
     },
     {
       "key": "connect",
