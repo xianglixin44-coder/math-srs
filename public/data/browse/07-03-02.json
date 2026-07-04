@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1] 向量旋转\n**题目**：$\\vec{OZ}=1+i$，逆时针旋转 $120^\\circ$ 得到 $\\vec{OZ'}$，求 $z'$．\n\n**规范解答**：\n1.  $z_0 = \\cos120^\\circ+i\\sin120^\\circ = -\\frac12+\\frac{\\sqrt3}{2}i$\n2.  $z'=(1+i)(-\\frac12+\\frac{\\sqrt3}{2}i)$\n3.  展开：$z' = (-\\frac12-\\frac{\\sqrt3}{2})+(\\frac{\\sqrt3}{2}-\\frac12)i$\n\n**方法提炼**：$z'=z\\cdot(\\cos\\theta+i\\sin\\theta)$ 可避开复杂的几何坐标旋转公式．"
+      "content": "## 五、经典例题精讲\n\n### [例题 1] 向量旋转\n**题目**：$\\vec{OZ}=1+i$，逆时针旋转 $120^\\circ$ 得到 $\\vec{OZ'}$，求 $z'$．\n\n**规范解答**：\n1.  $z_0 = \\cos120^\\circ+i\\sin120^\\circ = -\\frac12+\\frac{\\sqrt3}{2}i$\n2.  $z'=(1+i)(-\\frac12+\\frac{\\sqrt3}{2}i)$\n3.  展开：$z' = (-\\frac12-\\frac{\\sqrt3}{2})+(\\frac{\\sqrt3}{2}-\\frac12)i$\n\n**方法提炼**：$z'=z\\cdot(\\cos\\theta+i\\sin\\theta)$ 可避开复杂的几何坐标旋转公式．\n\n### [例题 2] 三角形式乘法\n**题目**：已知 $z_1 = 2(\\cos\\frac{\\pi}{3} + i\\sin\\frac{\\pi}{3}), z_2 = 3(\\cos\\frac{\\pi}{6} + i\\sin\\frac{\\pi}{6})$，求 $z_1z_2$ 的三角形式和代数形式．\n\n**规范解答**：\n三角形式：$z_1z_2 = 2\\cdot3[\\cos(\\frac{\\pi}{3}+\\frac{\\pi}{6}) + i\\sin(\\frac{\\pi}{3}+\\frac{\\pi}{6})] = 6(\\cos\\frac{\\pi}{2} + i\\sin\\frac{\\pi}{2})$\n代数形式：$= 6(0 + i\\cdot1) = 6i$\n\n**方法提炼**：三角形式乘法：模相乘，辐角相加．这比代数形式展开 $(a+bi)(c+di)$ 简便得多！"
     },
     {
       "key": "connect",

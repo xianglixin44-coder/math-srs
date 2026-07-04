@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1] 证明三角形重心性质\n**题目**：证明三角形的三条中线交于一点（重心），且重心到顶点的距离是到对边中点距离的 2 倍．\n\n**深度分析**：采用基底法．利用两条中线的交点 $O$ 作为基准，通过向量共线充要条件列出待定系数方程．\n\n**规范解答**：\n1.  取 $\\vec{OB}, \\vec{OC}$ 为基底，设中线 $BE, CF$ 交于点 $O$．\n2.  设 $\\vec{EO} = t_1 \\vec{OB}, \\vec{FO} = t_2 \\vec{OC}$．\n3.  由 $\\vec{BC} = \\vec{OC} - \\vec{OB}$ 及中点关系推导得 $t_1 = t_2 = \\frac{1}{2}$．\n4.  计算得 $\\vec{AO} = 2\\vec{OD}$，有公共点 $O$ 且向量共线，故第三条中线过点 $O$．\n\n**方法提炼**：通过向量线性表示的**唯一性**来锁定交点位置．"
+      "content": "## 五、经典例题精讲\n\n### [例题 1] 证明三角形重心性质\n**题目**：证明三角形的三条中线交于一点（重心），且重心到顶点的距离是到对边中点距离的 2 倍．\n\n**深度分析**：采用基底法．利用两条中线的交点 $O$ 作为基准，通过向量共线充要条件列出待定系数方程．\n\n**规范解答**：\n1.  取 $\\vec{OB}, \\vec{OC}$ 为基底，设中线 $BE, CF$ 交于点 $O$．\n2.  设 $\\vec{EO} = t_1 \\vec{OB}, \\vec{FO} = t_2 \\vec{OC}$．\n3.  由 $\\vec{BC} = \\vec{OC} - \\vec{OB}$ 及中点关系推导得 $t_1 = t_2 = \\frac{1}{2}$．\n4.  计算得 $\\vec{AO} = 2\\vec{OD}$，有公共点 $O$ 且向量共线，故第三条中线过点 $O$．\n\n**方法提炼**：通过向量线性表示的**唯一性**来锁定交点位置．\n\n### [例题 2] 向量法证垂直\n**题目**：在 $\\triangle ABC$ 中，用向量法证明：若 $\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = 0$，则 $\\angle A = 90^\\circ$．\n\n**规范解答**：\n$\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = |\\overrightarrow{AB}| \\cdot |\\overrightarrow{AC}| \\cdot \\cos A = 0$\n$\\because |\\overrightarrow{AB}| > 0, |\\overrightarrow{AC}| > 0$，$\\therefore \\cos A = 0 \\implies A = 90^\\circ$．\n\n**方法提炼**：向量法证垂直 → 只需验证数量积为零．这是解析几何最优雅的工具：无需画辅助线，用代数运算代替几何推理．"
     },
     {
       "key": "connect",

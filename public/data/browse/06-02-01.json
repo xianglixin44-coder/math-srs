@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1] 船只跨河的实际速度计算\n**题目**：一艘船从南岸出发，垂直于对岸航行，航行速度 $v_1 = 15 \\text{ km/h}$，江水向东流速 $v_2 = 6 \\text{ km/h}$．求船实际航行速度的大小与方向．\n\n**深度分析**：船速与水速相互垂直，构成直角三角形的两条直角边．合速度为斜边向量，符合平行四边形法则．\n\n**规范解答**：\n1.  设 $\\vec{AB}$ 表示水速，$\\vec{AD}$ 表示船速．\n2.  以 $AB, AD$ 为邻边作矩形 $ABCD$，则对角线 $\\vec{AC}$ 为合速度．\n3.  在 $Rt\\triangle ABC$ 中：\n    $$ |\\vec{AC}| = \\sqrt{6^2 + 15^2} = \\sqrt{261} \\approx 16.2 \\text{ km/h} $$\n4.  设合速度与水流方向夹角为 $\\theta$，$\\tan \\theta = \\frac{15}{6} = 2.5$，$\\theta \\approx 68^\\circ$．\n\n**方法提炼**：将物理运动分解为正交向量，利用几何运算还原整体．\n\n![小船渡河速度合成](/images/06-02-01-boat-river.png)"
+      "content": "## 五、经典例题精讲\n\n### [例题 1] 船只跨河的实际速度计算\n**题目**：一艘船从南岸出发，垂直于对岸航行，航行速度 $v_1 = 15 \\text{ km/h}$，江水向东流速 $v_2 = 6 \\text{ km/h}$．求船实际航行速度的大小与方向．\n\n**深度分析**：船速与水速相互垂直，构成直角三角形的两条直角边．合速度为斜边向量，符合平行四边形法则．\n\n**规范解答**：\n1.  设 $\\vec{AB}$ 表示水速，$\\vec{AD}$ 表示船速．\n2.  以 $AB, AD$ 为邻边作矩形 $ABCD$，则对角线 $\\vec{AC}$ 为合速度．\n3.  在 $Rt\\triangle ABC$ 中：\n    $$ |\\vec{AC}| = \\sqrt{6^2 + 15^2} = \\sqrt{261} \\approx 16.2 \\text{ km/h} $$\n4.  设合速度与水流方向夹角为 $\\theta$，$\\tan \\theta = \\frac{15}{6} = 2.5$，$\\theta \\approx 68^\\circ$．\n\n**方法提炼**：将物理运动分解为正交向量，利用几何运算还原整体．\n\n![小船渡河速度合成](/images/06-02-01-boat-river.png)\n\n### [例题 2] 向量减法\n**题目**：已知 $\\overrightarrow{OA} = \\vec{a}, \\overrightarrow{OB} = \\vec{b}$，用 $\\vec{a}, \\vec{b}$ 表示 $\\overrightarrow{BA}$．\n\n**规范解答**：\n$$\\overrightarrow{BA} = \\overrightarrow{OA} - \\overrightarrow{OB} = \\vec{a} - \\vec{b}$$\n\n**方法提炼**：向量减法口诀——「终点减起点」：$\\overrightarrow{MN} = \\overrightarrow{ON} - \\overrightarrow{OM}$．减去的向量指向被减向量的起点．"
     },
     {
       "key": "connect",

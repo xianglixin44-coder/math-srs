@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1]\n**题目**：把 $z=1-i$ 表示成三角形式．\n\n**规范解答**：\n1.  $r = \\sqrt{1^2+(-1)^2} = \\sqrt{2}$．\n2.  $\\cos\\theta=1/\\sqrt{2}$，$\\sin\\theta=-1/\\sqrt{2}$，点在第四象限．\n3.  $\\arg z = 7\\pi/4$（或 $-\\pi/4$）．\n4.  $z = \\sqrt{2}(\\cos\\frac{7\\pi}{4}+i\\sin\\frac{7\\pi}{4})$．"
+      "content": "## 五、经典例题精讲\n\n### [例题 1]\n**题目**：把 $z=1-i$ 表示成三角形式．\n\n**规范解答**：\n1.  $r = \\sqrt{1^2+(-1)^2} = \\sqrt{2}$．\n2.  $\\cos\\theta=1/\\sqrt{2}$，$\\sin\\theta=-1/\\sqrt{2}$，点在第四象限．\n3.  $\\arg z = 7\\pi/4$（或 $-\\pi/4$）．\n4.  $z = \\sqrt{2}(\\cos\\frac{7\\pi}{4}+i\\sin\\frac{7\\pi}{4})$．\n\n### [例题 2] 代数式转三角式\n**题目**：将 $z = \\sqrt{3} + i$ 化为三角形式 $r(\\cos\\theta + i\\sin\\theta)$．\n\n**规范解答**：\n$r = \\sqrt{(\\sqrt{3})^2 + 1^2} = 2$\n$\\cos\\theta = \\frac{\\sqrt{3}}{2}, \\sin\\theta = \\frac{1}{2} \\implies \\theta = \\frac{\\pi}{6}$\n$\\therefore z = 2(\\cos\\frac{\\pi}{6} + i\\sin\\frac{\\pi}{6})$\n\n**方法提炼**：$a+bi$ → $r(\\cos\\theta+i\\sin\\theta)$：$r = \\sqrt{a^2+b^2}$，$\\cos\\theta = \\frac{a}{r}, \\sin\\theta = \\frac{b}{r}$．注意 $\\theta$ 的象限由 $a,b$ 的符号确定．"
     },
     {
       "key": "connect",

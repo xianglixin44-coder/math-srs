@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1] 定比分点的向量表示\n**题目**：$\\vec{OA}, \\vec{OB}$ 是不共线的向量，点 $P$ 在直线 $AB$ 上，且 $\\vec{AP} = t \\vec{AB}$．用基底 $\\{\\vec{OA}, \\vec{OB}\\}$ 表示 $\\vec{OP}$．\n\n**规范解答**：\n1.  $\\vec{OP} = \\vec{OA} + \\vec{AP}$．\n2.  $\\vec{AP} = t \\vec{AB} = t(\\vec{OB} - \\vec{OA})$．\n3.  $\\vec{OP} = \\vec{OA} + t(\\vec{OB} - \\vec{OA}) = (1-t)\\vec{OA} + t\\vec{OB}$．\n\n**方法提炼**：共线三点 $A, P, B$ 的向量系数和始终为 1，这是判定三点共线的重要代数特征．\n\n![定比分点向量表示](/images/06-03-01-ratio-point.png)"
+      "content": "## 五、经典例题精讲\n\n### [例题 1] 定比分点的向量表示\n**题目**：$\\vec{OA}, \\vec{OB}$ 是不共线的向量，点 $P$ 在直线 $AB$ 上，且 $\\vec{AP} = t \\vec{AB}$．用基底 $\\{\\vec{OA}, \\vec{OB}\\}$ 表示 $\\vec{OP}$．\n\n**规范解答**：\n1.  $\\vec{OP} = \\vec{OA} + \\vec{AP}$．\n2.  $\\vec{AP} = t \\vec{AB} = t(\\vec{OB} - \\vec{OA})$．\n3.  $\\vec{OP} = \\vec{OA} + t(\\vec{OB} - \\vec{OA}) = (1-t)\\vec{OA} + t\\vec{OB}$．\n\n**方法提炼**：共线三点 $A, P, B$ 的向量系数和始终为 1，这是判定三点共线的重要代数特征．\n\n![定比分点向量表示](/images/06-03-01-ratio-point.png)\n\n### [例题 2] 基底表示向量\n**题目**：在 $\\triangle ABC$ 中，$D$ 为 $BC$ 中点，以 $\\overrightarrow{AB}, \\overrightarrow{AC}$ 为基底表示 $\\overrightarrow{AD}$．\n\n**规范解答**：\n$$\\overrightarrow{AD} = \\overrightarrow{AB} + \\overrightarrow{BD} = \\overrightarrow{AB} + \\frac{1}{2}\\overrightarrow{BC} = \\overrightarrow{AB} + \\frac{1}{2}(\\overrightarrow{AC} - \\overrightarrow{AB}) = \\frac{1}{2}\\overrightarrow{AB} + \\frac{1}{2}\\overrightarrow{AC}$$\n\n**方法提炼**：基底表示 = 从已知点出发 → 用向量加减法逐步转化 → 最终只用基底向量表达．中线向量公式 $\\overrightarrow{AD} = \\frac{1}{2}(\\overrightarrow{AB} + \\overrightarrow{AC})$ 是常用结论．"
     },
     {
       "key": "connect",

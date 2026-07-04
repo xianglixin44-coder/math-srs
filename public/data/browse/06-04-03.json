@@ -26,7 +26,7 @@
     {
       "key": "example",
       "label": "经典例题精讲",
-      "content": "## 五、经典例题精讲\n\n### [例题 1] 已知三边求角\n**题目**：在 $\\triangle ABC$ 中，$a=2, b=\\sqrt{2}, c=\\sqrt{3}+1$，解三角形．\n\n**深度分析**：已知三边 (SSS)，触发余弦定理推论，优先求最长边 $c$ 所对的角．\n\n**规范解答**：\n1.  $\\cos C = \\frac{a^2+b^2-c^2}{2ab} = \\frac{4+2-(3+2\\sqrt{3}+1)}{4\\sqrt{2}} = \\frac{2-2\\sqrt{3}}{4\\sqrt{2}}$\n2.  计算得 $C = 105^\\circ$．\n3.  利用正弦定理求 $B=30^\\circ$，$A=45^\\circ$．\n\n**方法提炼**：SSS 场景下，余弦定理是锁定角度的刚性工具．"
+      "content": "## 五、经典例题精讲\n\n### [例题 1] 已知三边求角\n**题目**：在 $\\triangle ABC$ 中，$a=2, b=\\sqrt{2}, c=\\sqrt{3}+1$，解三角形．\n\n**深度分析**：已知三边 (SSS)，触发余弦定理推论，优先求最长边 $c$ 所对的角．\n\n**规范解答**：\n1.  $\\cos C = \\frac{a^2+b^2-c^2}{2ab} = \\frac{4+2-(3+2\\sqrt{3}+1)}{4\\sqrt{2}} = \\frac{2-2\\sqrt{3}}{4\\sqrt{2}}$\n2.  计算得 $C = 105^\\circ$．\n3.  利用正弦定理求 $B=30^\\circ$，$A=45^\\circ$．\n\n**方法提炼**：SSS 场景下，余弦定理是锁定角度的刚性工具．\n\n### [例题 2] 正弦定理求边\n**题目**：在 $\\triangle ABC$ 中，已知 $A = 45^\\circ, B = 60^\\circ, a = 2$，求边 $b$．\n\n**规范解答**：\n由正弦定理 $\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$：\n$$b = \\frac{a \\cdot \\sin B}{\\sin A} = \\frac{2 \\cdot \\sin 60^\\circ}{\\sin 45^\\circ} = \\frac{2 \\cdot \\frac{\\sqrt{3}}{2}}{\\frac{\\sqrt{2}}{2}} = \\frac{\\sqrt{3}}{\\frac{\\sqrt{2}}{2}} = \\sqrt{6}$$\n\n**方法提炼**：正弦定理 $\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = 2R$ — 已知两角一边求其他，首选正弦定理．"
     },
     {
       "key": "connect",
