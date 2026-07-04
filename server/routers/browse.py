@@ -27,11 +27,18 @@ def list_browse_cards():
         for f in sorted(BROWSE_DIR.glob("*.json")):
             try:
                 data = json.loads(f.read_text())
+                # Check if challenge section has 3-layer scaffold
+                has_scaffold = False
+                for s in data.get("sections", []):
+                    if s.get("key") == "challenge" and "思维脚手架" in s.get("content", ""):
+                        has_scaffold = True
+                        break
                 cards.append({
                     "id": data["id"],
                     "title": data["title"],
                     "category": data.get("category"),
                     "sectionCount": len(data.get("sections", [])),
+                    "hasScaffold": has_scaffold,
                 })
             except (json.JSONDecodeError, KeyError):
                 continue

@@ -7,6 +7,7 @@ interface TextbookSection {
   title: string;
   category?: string;
   sectionCount: number;
+  hasScaffold?: boolean;
 }
 
 interface TextbookChapter {
@@ -32,7 +33,7 @@ interface Props {
 
 export default function Sidebar({ activeCardId, onSelectCard }: Props) {
   const [textbook, setTextbook] = useState<TextbookData | null>(null);
-  const [availableCards, setAvailableCards] = useState<Set<string>>(new Set());
+  const [availableCards, setAvailableCards] = useState<Map<string, boolean>>(new Map());
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -41,8 +42,10 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
       .then(setTextbook)
       .catch(() => setTextbook(null));
 
-    api.browse.list().then((cards) => {
-      setAvailableCards(new Set(cards.map(c => c.id)));
+    api.browse.list().then((cards: any[]) => {
+      const m = new Map<string, boolean>();
+      cards.forEach(c => m.set(c.id, c.hasScaffold ?? false));
+      setAvailableCards(m);
     }).catch(() => {});
   }, []);
 
@@ -90,6 +93,7 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
 
                   {isChOpen && ch.sections.map(sec => {
                     const hasCard = availableCards.has(sec.id);
+                    const hasScaffold = availableCards.get(sec.id) ?? false;
                     return (
                       <button
                         key={sec.id}
@@ -105,6 +109,7 @@ export default function Sidebar({ activeCardId, onSelectCard }: Props) {
                       >
                         <BookOpen size={9} className={`shrink-0 ${hasCard ? 'opacity-50' : 'opacity-25'}`} />
                         <span className="truncate">{sec.id} {sec.title}</span>
+                        {hasScaffold && <span className="shrink-0 text-amber-500 text-xs ml-0.5" title="含压轴题思维脚手架">⭐</span>}
                       </button>
                     );
                   })}
