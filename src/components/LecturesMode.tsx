@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, BookOpen } from 'lucide-react';
-import { renderLine } from '../utils/katex';
+import { renderMarkdown } from '../utils/markdown';
 
 interface LectureSummary {
   id: string;
@@ -71,9 +71,7 @@ export default function LecturesMode() {
                   {sec.label}
                 </h3>
                 <div className="text-sm" style={{lineHeight:1.8, color:'#333'}}>
-                  {sec.content.split('\n').map((line, i) => (
-                    <div key={i}>{renderLine(line)}</div>
-                  ))}
+                  {renderMarkdown(sec.content)}
                 </div>
               </div>
             ))}
