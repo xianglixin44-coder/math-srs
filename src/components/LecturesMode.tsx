@@ -7,134 +7,108 @@ interface LectureSection { key: string; label: string; content: string; }
 interface LecturePart { label: string; sections: LectureSection[]; }
 interface Lecture { id: string; title: string; textbook: string; parts: LecturePart[]; }
 
-/** Cornell Header */
+const CUE_WIDTH = 220;
+const STYLES = {
+  body: { background: '#F6F5F2', minHeight:'100vh', padding:'40px 20px', display:'flex', justifyContent:'center' },
+  paper: { background:'#FFFFFF', width:'100%', maxWidth:900, boxShadow:'0 4px 20px rgba(0,0,0,0.05)', borderRadius:8, padding:40, boxSizing:'border-box' as const },
+  header: { borderBottom:'2px dashed #BDC3C7', paddingBottom:20, marginBottom:30 },
+  headerTitle: { fontSize:28, margin:0, marginBottom:10, color:'#2C3E50' },
+  headerMeta: { fontSize:14, color:'#7F8C8D' },
+  row: { display:'grid', gridTemplateColumns:`${CUE_WIDTH}px 1fr`, gap:30, position:'relative' as const },
+  cue: { padding:'15px 20px 15px 0', textAlign:'right' as const, fontWeight:'bold', color:'#7F8C8D', fontSize:14, borderRight:'2px solid #E74C3C', boxSizing:'border-box' as const },
+  note: { padding:'15px 0 15px 10px', fontSize:15, lineHeight:1.8, color:'#2C3E50', minWidth:0, wordBreak:'normal' as const, whiteSpace:'normal' },
+  ol: { width:'100%', paddingLeft:20, margin:0 },
+  ul: { width:'100%', paddingLeft:20, margin:0 },
+  li: { display:'list-item', width:'100%', wordBreak:'normal', whiteSpace:'normal' },
+  sectionTitle: { fontSize:18, fontWeight:'bold', color:'#2C3E50', marginTop:0, marginBottom:15, borderLeft:'4px solid #2C3E50', paddingLeft:10 },
+  practiceCard: { background:'#F8FAFC', borderLeft:'4px solid #3498DB', borderRadius:6, padding:20, margin:'20px 0' },
+  exercise: { background:'#FAFAFA', border:'1px solid #E2E8F0', borderRadius:6, padding:20, marginTop:30 },
+  summary: { background:'#FCF8E3', borderTop:'2px solid #F0AD4E', borderRadius:4, padding:25, marginTop:40 },
+};
+
 function CornellHeader({ title, textbook }: { title: string; textbook: string }) {
   const today = new Date().toLocaleDateString('zh-CN', { year:'numeric', month:'2-digit', day:'2-digit' });
   return (
-    <header className="mb-6" style={{borderBottom:'3px double #d1d5db', paddingBottom:12}}>
-      <h1 className="text-2xl font-bold mb-1" style={{color:'#1a1a2e'}}>{title}</h1>
-      <div className="flex items-center gap-4 text-xs" style={{color:'#9ca3af'}}>
-        <span>{textbook}</span>
-        <span>生成日期: {today}</span>
-      </div>
-    </header>
-  );
-}
-
-/** Left column - Cue Column (25%) */
-function CueColumn({ cues }: { cues: { label: string; key: string }[] }) {
-  return (
-    <div className="pr-4 text-right" style={{width:'25%', minWidth:120, flexShrink:0}}>
-      {cues.map((cue, i) => (
-        <div key={cue.key} className="mb-2" style={{
-          fontSize:13, color:'#6b7280', lineHeight:1.5,
-          paddingTop: i === 0 ? 0 : 8,
-        }}>
-          {cue.label}
-        </div>
-      ))}
+    <div style={STYLES.header}>
+      <h1 style={STYLES.headerTitle}>{title}</h1>
+      <div style={STYLES.headerMeta}>{textbook} | 生成日期: {today}</div>
     </div>
   );
 }
 
-/** Right column - Notes Column (75%) */
-function NotesColumn({ children }: { children: React.ReactNode }) {
+function CornellRow({ cue, children }: { cue: string; children: React.ReactNode }) {
   return (
-    <div style={{width:'75%', flexShrink:0, paddingLeft:20,
-      borderLeft:'2px solid #f87171'}}>
-      {children}
+    <div style={STYLES.row}>
+      <div style={STYLES.cue}>{cue}</div>
+      <div className="cornell-note" style={STYLES.note}>{children}</div>
     </div>
   );
 }
 
-/** Bottom Summary */
-function CornellFooter({ sections }: { sections: LectureSection[] }) {
-  if (!sections.length) return null;
-  return (
-    <footer className="mt-8 p-5 rounded-lg" style={{background:'#fefce8', border:'1px solid #fde68a'}}>
-      {sections.map(sec => (
-        <div key={sec.key} className="mb-3 last:mb-0">
-          <h4 className="text-sm font-bold mb-1" style={{color:'#c0392b'}}>{sec.label}</h4>
-          <div className="text-sm" style={{lineHeight:1.8, color:'#333'}}>
-            {renderMarkdown(sec.content)}
-          </div>
-        </div>
-      ))}
-    </footer>
-  );
-}
-
-/** Main Cornell layout for a lecture */
 function CornellView({ lecture }: { lecture: Lecture }) {
-  // Part 0: cue/notes sections (Q&A or knowledge notes)
-  // Part 1: examples + exercises
-  // Part 2 (if exists): bottom summary (essence + connection)
+  const p0 = lecture.parts[0] || { sections: [] };
+  const p1 = lecture.parts[1] || { sections: [] };
+  const p2 = lecture.parts.length > 2 ? lecture.parts[2] : null;
 
-  const part0 = lecture.parts[0] || { sections: [] };
-  const part1 = lecture.parts[1] || { sections: [] };
-  const part2 = lecture.parts.length > 2 ? lecture.parts[2] : null;
-
-  // Separate method from other sections in part0
-  const methodSec = part0.sections.find(s => s.key === 'method');
-  const cueSections = part0.sections.filter(s => s.key !== 'method');
-
-  // Example/exercise sections from part 1
-  const examplesSec = part1.sections.find(s => s.key === 'examples');
-  const exercisesSec = part1.sections.find(s => s.key === 'exercises');
+  const methodSec = p0.sections.find(s => s.key === 'method');
+  const cueSections = p0.sections.filter(s => s.key !== 'method');
+  const examplesSec = p1.sections.find(s => s.key === 'examples');
+  const exercisesSec = p1.sections.find(s => s.key === 'exercises');
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <CornellHeader title={lecture.title} textbook={lecture.textbook} />
+    <div style={STYLES.body}>
+      <style>{`
+        .cornell-note ol, .cornell-note ul { width:100%!important; padding-left:20px; margin:0; }
+        .cornell-note li { display:list-item!important; width:100%!important; word-break:normal!important; white-space:normal!important; }
+      `}</style>
+      <div style={STYLES.paper}>
+        <CornellHeader title={lecture.title} textbook={lecture.textbook} />
 
-      {/* Main area: left cues + right notes */}
-      <div className="flex" style={{marginBottom:24}}>
-        <CueColumn cues={cueSections.map(s => ({ label: s.label, key: s.key }))} />
-        <NotesColumn>
-          {cueSections.map(sec => (
-            <div key={sec.key} className="mb-5">
-              <div className="text-sm" style={{lineHeight:1.8, color:'#333'}}>
+        {/* Q&A rows */}
+        {cueSections.map(sec => (
+          <CornellRow key={sec.key} cue={sec.label}>
+            <div style={STYLES.sectionTitle}>{sec.label.replace(/^Q\d+:\s*/, '')}</div>
+            {renderMarkdown(sec.content)}
+          </CornellRow>
+        ))}
+
+        {/* Method + Examples in same row */}
+        {methodSec && (
+          <CornellRow cue={methodSec.label}>
+            <div style={STYLES.sectionTitle}>{methodSec.label.replace(/^Q\d+:\s*/, '')}</div>
+            {renderMarkdown(methodSec.content)}
+            {examplesSec && (
+              <div style={STYLES.practiceCard}>
+                {renderMarkdown(examplesSec.content)}
+              </div>
+            )}
+          </CornellRow>
+        )}
+
+        {/* Exercises full-width */}
+        {exercisesSec && (
+          <div style={STYLES.exercise}>
+            <h3 style={{margin:0, marginBottom:15, color:'#2C3E50'}}>巩固习题</h3>
+            {renderMarkdown(exercisesSec.content)}
+          </div>
+        )}
+
+        {/* Summary */}
+        {p2 && (
+          <div style={STYLES.summary}>
+            {p2.sections.map(sec => (
+              <div key={sec.key} className="mb-3 last:mb-0">
+                <h4 style={{fontSize:16, fontWeight:'bold', margin:0, marginBottom:8, color:'#2C3E50'}}>{sec.label}</h4>
                 {renderMarkdown(sec.content)}
               </div>
-            </div>
-          ))}
-        </NotesColumn>
-      </div>
-
-      {/* Method section + Examples + Exercises in card background */}
-      <div className="rounded-lg p-5 mb-6" style={{background:'#f8fafc', border:'1px solid #e2e8f0'}}>
-        {methodSec && (
-          <div className="mb-4">
-            <h3 className="text-base font-bold mb-2" style={{color:'#c0392b'}}>{methodSec.label}</h3>
-            <div className="text-sm" style={{lineHeight:1.8, color:'#333'}}>
-              {renderMarkdown(methodSec.content)}
-            </div>
-          </div>
-        )}
-        {examplesSec && (
-          <div className="mb-4">
-            <h3 className="text-base font-bold mb-2" style={{color:'#c0392b'}}>{examplesSec.label}</h3>
-            <div className="text-sm" style={{lineHeight:1.8, color:'#333'}}>
-              {renderMarkdown(examplesSec.content)}
-            </div>
-          </div>
-        )}
-        {exercisesSec && (
-          <div>
-            <h3 className="text-base font-bold mb-2" style={{color:'#c0392b'}}>{exercisesSec.label}</h3>
-            <div className="text-sm" style={{lineHeight:1.8, color:'#333'}}>
-              {renderMarkdown(exercisesSec.content)}
-            </div>
+            ))}
           </div>
         )}
       </div>
-
-      {/* Bottom Summary */}
-      {part2 && <CornellFooter sections={part2.sections} />}
     </div>
   );
 }
 
-/** Main LecturesMode component */
 export default function LecturesMode() {
   const [lectures, setLectures] = useState<LectureSummary[]>([]);
   const [selected, setSelected] = useState<Lecture | null>(null);
@@ -153,7 +127,7 @@ export default function LecturesMode() {
   if (selected) {
     return (
       <div>
-        <button onClick={() => setSelected(null)} className="flex items-center gap-1 text-sm mb-4 hover:opacity-70" style={{color:'#5a5a7a'}}>
+        <button onClick={() => setSelected(null)} className="flex items-center gap-1 text-sm mb-4" style={{color:'#5a5a7a', background:'none', border:'none', cursor:'pointer', padding:'4px 0'}}>
           <ChevronLeft size={16} /> 返回列表
         </button>
         <CornellView lecture={selected} />
