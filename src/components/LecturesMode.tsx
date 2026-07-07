@@ -50,7 +50,7 @@ function CornellView({ lecture }: { lecture: Lecture }) {
   const p1 = lecture.parts[1] || { sections: [] };
   const p2 = lecture.parts.length > 2 ? lecture.parts[2] : null;
 
-  const methodSec = p0.sections.find(s => s.key === 'method');
+  const methodSec = p1.sections.find(s => s.key === 'method') || p0.sections.find(s => s.key === 'method');
   const cueSections = p0.sections.filter(s => s.key !== 'method');
   const examplesSec = p1.sections.find(s => s.key === 'examples');
   const exercisesSec = p1.sections.find(s => s.key === 'exercises');
