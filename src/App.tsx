@@ -6,10 +6,11 @@ import ImportExportPanel from './components/ImportExportPanel';
 import BankMode from './components/BankMode';
 import BooksMode from './components/BooksMode';
 import LecturesMode from './components/LecturesMode';
+import ExercisesMode from './components/ExercisesMode';
 import ErrorBoundary from './components/ErrorBoundary';
 import { checkHealth } from './api/client';
 
-type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures';
+type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures' | 'exercises';
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('browse');
@@ -55,6 +56,9 @@ export default function App() {
         )}
         {mode === 'lectures' && (
           <LecturesMode />
+        )}
+        {mode === 'exercises' && (
+          <ExercisesMode />
         )}
       </ErrorBoundary>
       </Layout>

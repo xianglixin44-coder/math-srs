@@ -38,6 +38,7 @@ export default function Layout({ mode, setMode, online, activeCardId, onSelectCa
     { key: 'import', label: '📥 导入', needsBackend: true },
     { key: 'books',  label: '📖 教材', needsBackend: true },
     { key: 'lectures', label: '🎓 讲解', needsBackend: false },
+    { key: 'exercises', label: '✏️ 习题', needsBackend: true },
   ] as const;
 
   const renderNav = (items: ReadonlyArray<{ key: Mode; label: string; needsBackend: boolean }>) =>
