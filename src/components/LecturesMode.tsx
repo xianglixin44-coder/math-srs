@@ -51,7 +51,10 @@ function CornellView({ lecture }: { lecture: Lecture }) {
   const p2 = lecture.parts.length > 2 ? lecture.parts[2] : null;
 
   const methodSec = p1.sections.find(s => s.key === 'method') || p0.sections.find(s => s.key === 'method');
-  const cueSections = p0.sections.filter(s => s.key !== 'method');
+  const essenceSec = p0.sections.find(s => s.key === 'essence');
+  const connectionSec = p0.sections.find(s => s.key === 'connection');
+  const summarySections = p2 ? p2.sections : [essenceSec, connectionSec].filter(Boolean);
+  const cueSections = p0.sections.filter(s => !['method', 'essence', 'connection'].includes(s.key));
   const examplesSec = p1.sections.find(s => s.key === 'examples');
   const exercisesSec = p1.sections.find(s => s.key === 'exercises');
 
@@ -94,9 +97,9 @@ function CornellView({ lecture }: { lecture: Lecture }) {
         )}
 
         {/* Summary */}
-        {p2 && (
+        {summarySections.length > 0 && (
           <div style={STYLES.summary}>
-            {p2.sections.map(sec => (
+            {summarySections.map(sec => (
               <div key={sec.key} className="mb-3 last:mb-0">
                 <h4 style={{fontSize:16, fontWeight:'bold', margin:0, marginBottom:8, color:'#2C3E50'}}>{sec.label}</h4>
                 {renderMarkdown(sec.content)}
