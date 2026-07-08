@@ -8,6 +8,7 @@ interface Props {
   mode: Mode;
   setMode: (m: Mode) => void;
   onLectureClick: () => void;
+  onBrowseClick: () => void;
   online: boolean | null;
   activeCardId: string | null;
   onSelectCard: (id: string) => void;
@@ -24,7 +25,7 @@ function useDateTime() {
   return `${date} ${time}`;
 }
 
-export default function Layout({ mode, setMode, onLectureClick, online, activeCardId, onSelectCard, children }: Props & { children: React.ReactNode }) {
+export default function Layout({ mode, setMode, onLectureClick, onBrowseClick, online, activeCardId, onSelectCard, children }: Props & { children: React.ReactNode }) {
   const offline = online === false;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const dateTime = useDateTime();
@@ -48,7 +49,7 @@ export default function Layout({ mode, setMode, onLectureClick, online, activeCa
       return (
         <div
           key={item.key}
-          onClick={() => { if (!disabled) { (item.key === 'lectures' ? onLectureClick : () => setMode(item.key))(); setSidebarOpen(false); }}}
+          onClick={() => { if (!disabled) { (item.key === 'lectures' ? onLectureClick : item.key === 'browse' ? onBrowseClick : () => setMode(item.key))(); setSidebarOpen(false); }}}
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '10px 18px', cursor: disabled ? 'not-allowed' : 'pointer',
