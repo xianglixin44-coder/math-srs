@@ -16,12 +16,17 @@ export default function App() {
   const [mode, setMode] = useState<Mode>('browse');
   const [online, setOnline] = useState<boolean | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const [lectureKey, setLectureKey] = useState(0);
 
   useEffect(() => {
     checkHealth().then(setOnline);
     const timer = setInterval(() => checkHealth().then(setOnline), 15000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (mode === 'lectures') setLectureKey(k => k + 1);
+  }, [mode]);
 
   const handleSelectCard = (id: string) => {
     setActiveCardId(id);
@@ -55,7 +60,7 @@ export default function App() {
           <BooksMode />
         )}
         {mode === 'lectures' && (
-          <LecturesMode key={mode + (activeCardId || '')} />
+          <LecturesMode key={lectureKey} />
         )}
         {mode === 'exercises' && (
           <ExercisesMode />
