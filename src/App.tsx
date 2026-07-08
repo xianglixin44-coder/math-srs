@@ -38,7 +38,7 @@ export default function App() {
   };
 
   const handleBrowseClick = () => {
-    setMode('browse');
+    if (mode !== 'browse') setMode('browse');
     setActiveCardId(null);
   };
 
