@@ -52,7 +52,7 @@ export default function App() {
       <Layout mode={mode} setMode={setMode} onLectureClick={handleLectureClick} onBrowseClick={handleBrowseClick} online={online} activeCardId={activeCardId} onSelectCard={handleSelectCard}>
         <ErrorBoundary>
         {mode === 'browse' && (
-          <BrowseMode activeCardId={activeCardId} onSelectCard={handleSelectCard} />
+          <BrowseMode activeCardId={activeCardId} />
         )}
         {mode === 'review' && (online !== false
           ? <ReviewMode onActiveCardChange={setActiveCardId} preferCardId={activeCardId} />

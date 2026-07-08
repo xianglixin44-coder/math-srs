@@ -3,7 +3,6 @@ import { BookOpen, Brain, Lightbulb, AlertTriangle, Network, ArrowLeft, ChevronL
 import { api, type BrowseCard } from '../api/client';
 import { renderLine } from '../utils/katex';
 import FeynmanInput from './FeynmanInput';
-import Sidebar from './Sidebar';
 
 const SECTION_ICONS: Record<string, React.FC<{ size?: number }>> = {
   concept: BookOpen,
@@ -49,7 +48,6 @@ const FALLBACK_COLORS = [
 
 interface Props {
   activeCardId: string | null;
-  onSelectCard: (id: string) => void;
 }
 
 /** Simple markdown-like rendering: split on ## headers, render bold etc. */
@@ -205,7 +203,7 @@ function renderContent(text: string): React.ReactNode[] {
   return result;
 }
 
-export default function BrowseMode({ activeCardId, onSelectCard }: Props) {
+export default function BrowseMode({ activeCardId }: Props) {
   const [cards, setCards] = useState<BrowseCard[] | null>(null);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
@@ -243,8 +241,9 @@ export default function BrowseMode({ activeCardId, onSelectCard }: Props) {
 
   if (!activeCard) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <Sidebar activeCardId={activeCardId} onSelectCard={onSelectCard} />
+      <div className="glass-card p-12 text-center space-y-3">
+        <p className="text-gray-600">从左侧目录选择一张卡片查看</p>
+        <p className="text-sm text-gray-500">点击内容方格进入学习笔记</p>
       </div>
     );
   }
