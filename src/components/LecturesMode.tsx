@@ -127,12 +127,30 @@ export default function LecturesMode() {
     setLoading(false);
   };
 
+  const currentIdx = selected ? lectures.findIndex(l => l.id === selected.id) : -1;
+  const hasPrev = currentIdx > 0;
+  const hasNext = currentIdx < lectures.length - 1;
+
   if (selected) {
     return (
       <div>
-        <button onClick={() => setSelected(null)} className="flex items-center gap-1 text-sm mb-4" style={{color:'#5a5a7a', background:'none', border:'none', cursor:'pointer', padding:'4px 0'}}>
-          <ChevronLeft size={16} /> 返回列表
-        </button>
+        <div className="flex items-center justify-between mb-4">
+          <button onClick={() => setSelected(null)} className="flex items-center gap-1 text-sm" style={{color:'#5a5a7a', background:'none', border:'none', cursor:'pointer', padding:'4px 0'}}>
+            <ChevronLeft size={16} /> 返回列表
+          </button>
+          <div className="flex gap-2">
+            <button disabled={!hasPrev} onClick={() => hasPrev && openLecture(lectures[currentIdx-1].id)}
+              className="text-xs px-3 py-1.5 rounded border disabled:opacity-30 hover:bg-gray-50"
+              style={{borderColor:'#e2e8f0', color:'#5a5a7a', background:'white'}}>
+              ← 上一节
+            </button>
+            <button disabled={!hasNext} onClick={() => hasNext && openLecture(lectures[currentIdx+1].id)}
+              className="text-xs px-3 py-1.5 rounded border disabled:opacity-30 hover:bg-gray-50"
+              style={{borderColor:'#e2e8f0', color:'#5a5a7a', background:'white'}}>
+              下一节 →
+            </button>
+          </div>
+        </div>
         <CornellView lecture={selected} />
       </div>
     );

@@ -55,7 +55,7 @@ export default function App() {
           <BooksMode />
         )}
         {mode === 'lectures' && (
-          <LecturesMode />
+          <LecturesMode key={mode + (activeCardId || '')} />
         )}
         {mode === 'exercises' && (
           <ExercisesMode />
