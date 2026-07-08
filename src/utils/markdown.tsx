@@ -88,6 +88,18 @@ export function renderMarkdown(text: string): React.ReactNode[] {
     if (t.startsWith('## ')) { flushBuf(); result.push(<h3 key={result.length} className="text-base font-bold mt-4 mb-1.5" style={{color:'#1a1a2e'}}><InlineLine line={t.slice(3)} /></h3>); continue; }
     if (t.startsWith('# ')) { flushBuf(); result.push(<h2 key={result.length} className="text-lg font-bold mt-4 mb-2" style={{color:'#1a1a2e'}}><InlineLine line={t.slice(2)} /></h2>); continue; }
 
+    // Image: ![alt](path)
+    const imgMatch = t.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (imgMatch) {
+      flushBuf();
+      result.push(
+        <div key={result.length} className="my-3 flex justify-center">
+          <img src={imgMatch[2]} alt={imgMatch[1]} className="max-w-full rounded-lg shadow-sm" style={{maxHeight:400}} />
+        </div>
+      );
+      continue;
+    }
+
     // Unordered list
     if (/^[-*]\s/.test(t)) {
       flushBuf();
