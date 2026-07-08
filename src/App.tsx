@@ -32,6 +32,11 @@ export default function App() {
     setActiveCardId(id);
   };
 
+  const handleLectureClick = () => {
+    setMode('lectures');
+    setLectureKey(k => k + 1);
+  };
+
   return (
     <>
       {online === false && (
@@ -39,7 +44,7 @@ export default function App() {
           ⚠️ 无法连接到后端服务（{window.location.hostname}:3000）— 仅浏览模式可用
         </div>
       )}
-      <Layout mode={mode} setMode={setMode} online={online} activeCardId={activeCardId} onSelectCard={handleSelectCard}>
+      <Layout mode={mode} setMode={setMode} onLectureClick={handleLectureClick} online={online} activeCardId={activeCardId} onSelectCard={handleSelectCard}>
         <ErrorBoundary>
         {mode === 'browse' && (
           <BrowseMode activeCardId={activeCardId} />
