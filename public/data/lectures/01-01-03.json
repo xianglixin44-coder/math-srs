@@ -19,7 +19,7 @@
         {
           "key": "effect",
           "label": "结果",
-          "content": "*   **【核心公式提取（Formulas）】**：\n    1.  *并集 (Union)**：$A \\cup B = \\{x | x \\in A \\text{ 或 } x \\in B\\}$。\n    2.  *交集 (Intersection)**：$A \\cap B = \\{x | x \\in A \\text{ 且 } x \\in B\\}$。\n    3.  *补集 (Complement)**：$\\complement_U A = \\{x | x \\in U \\text{ 且 } x \\notin A\\}$。\n\n*   **【重要性质归纳（Properties）】**：\n    *   *容斥原理**：$card(A \\cup B) = card(A) + card(B) - card(A \\cap B)$。\n    *   *德·摩根定律**：$\\complement_U(A \\cup B) = (\\complement_U A) \\cap (\\complement_U B)$；$\\complement_U(A \\cap B) = (\\complement_U A) \\cup (\\complement_U B)$。\n\n*   **【核心特点剖析（Characteristics）】**：\n    *   *代数结构特点**：交集运算使集合\"变小或不变\"，并集运算使集合\"变大或不变\"。\n    *   *几何图形特点**：Venn 图中的\"重叠部分\"是交，\"总覆盖面积\"是并，\"阴影以外\"是补。\n\n*   **【要素拆解（Elements Disassembly）】**：\n    *   【适用前提】：参与运算的对象必须是集合。\n    *   【适用边界】：若 $A \\cap B = \\emptyset$，则称 $A$ 与 $B$ 互斥。"
+          "content": "*   **【核心公式提取（Formulas）】**：\n    1.  *并集 (Union)**：$A \\cup B = \\{x | x \\in A \\text{ 或 } x \\in B\\}$。\n    2.  *交集 (Inter$\\sec $tion)**：$A \\cap B = \\{x | x \\in A \\text{ 且 } x \\in B\\}$。\n    3.  *补集 (Complement)**：$\\complement_U A = \\{x | x \\in U \\text{ 且 } x \\notin A\\}$。\n\n*   **【重要性质归纳（Properties）】**：\n    *   *容斥原理**：$card(A \\cup B) = card(A) + card(B) - card(A \\cap B)$。\n    *   *德·摩根定律**：$\\complement_U(A \\cup B) = (\\complement_U A) \\cap (\\complement_U B)$；$\\complement_U(A \\cap B) = (\\complement_U A) \\cup (\\complement_U B)$。\n\n*   **【核心特点剖析（Characteristics）】**：\n    *   *代数结构特点**：交集运算使集合\"变小或不变\"，并集运算使集合\"变大或不变\"。\n    *   *几何图形特点**：Venn 图中的\"重叠部分\"是交，\"总覆盖面积\"是并，\"阴影以外\"是补。\n\n*   **【要素拆解（Elements Disassembly）】**：\n    *   【适用前提】：参与运算的对象必须是集合。\n    *   【适用边界】：若 $A \\cap B = \\emptyset$，则称 $A$ 与 $B$ 互斥。"
         },
         {
           "key": "application",
@@ -49,7 +49,7 @@
         {
           "key": "examples",
           "label": "典型例题",
-          "content": "*例题 1（基础示范题）**：设 $A = \\{x | -2 \\le x \\le 5\\}$，$B = \\{x | x^2 - x - 6 > 0\\}$，求 $A \\cap B$。\n\n*   *解析（对照 SOP）**：\n    1.  *步骤 1**：解析 $B$。解 $x^2 - x - 6 > 0 \\implies (x-3)(x+2) > 0$，得 $B = (-\\infty, -2) \\cup (3, +\\infty)$。\n    2.  *步骤 2**：数轴定位。标出 $A = [-2, 5]$ 和 $B$ 的两个区间。\n    3.  *步骤 3**：寻找重叠。$-2$ 在 $A$ 中但在 $B$ 外，不属于交集；$3$ 亦然。重叠区域为 $(3, 5]$。\n*   *结论**：$A \\cap B = \\{x | 3 < x \\le 5\\}$。\n\n*例题 2（综合变式题）**：某班 50 人，答对 A 题 30 人，答对 B 题 28 人，两题都错的 7 人，求两题都对的人数。\n\n*   *解析**：\n    1.  两题都错即 $\\complement_U (A \\cup B)$。\n    2.  答对至少一题：$card(A \\cup B) = 50 - 7 = 43$。\n    3.  容斥原理：$43 = 30 + 28 - card(A \\cap B)$，解得 $card(A \\cap B) = 15$。\n*   *结论**：15 人。"
+          "content": "*例题 1（基础示范题）**：设 $A = \\{x | -2 \\le x \\le 5\\}$，$B = \\{x | x^2 - x - 6 > 0\\}$，求 $A \\cap B$。\n\n*   *解析（对照 SOP）**：\n    1.  *步骤 1**：解析 $B$。解 $x^2 - x - 6 > 0 \\implies (x-3)(x+2) > 0$，得 $B = (-\\infty, -2) \\cup (3, +\\infty)$。\n    2.  *步骤 2**：数轴定位。标出 $A = [-2, 5]$ 和 $B$ 的两个区间。\n    3.  *步骤 3**：寻找重叠。$-2$ 在 $A$ 中但在 $B$ 外，不属于交集；$3$ 亦然。重叠区域为 $(3, 5]$。\n*   *结论**：$A \\cap B = \\{x | 3 < x \\le 5\\}$。\n\n*例题 2（综合变式题）**：某班 50 人，答对 $A$ 题 30 人，答对 $B$ 题 28 人，两题都错的 7 人，求两题都对的人数。\n\n*   *解析**：\n    1.  两题都错即 $\\complement_U (A \\cup B)$。\n    2.  答对至少一题：$card(A \\cup B) = 50 - 7 = 43$。\n    3.  容斥原理：$43 = 30 + 28 - card(A \\cap B)$，解得 $card(A \\cap B) = 15$。\n*   *结论**：15 人。"
         },
         {
           "key": "exercises",

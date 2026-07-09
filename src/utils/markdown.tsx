@@ -9,29 +9,16 @@ function renderLatex(formula: string, display: boolean): string {
   }
 }
 
-function InlineFormat({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
-  return (
-    <>
-      {parts.map((p, i) => {
-        if (p.startsWith('**') && p.endsWith('**')) return <strong key={i}>{p.slice(2, -2)}</strong>;
-        if (p.startsWith('*') && p.endsWith('*') && p.length > 2) return <em key={i}>{p.slice(1, -1)}</em>;
-        return <span key={i}>{p}</span>;
-      })}
-    </>
-  );
-}
-
-function InlineLine({ line }: { line: string }) {
-  const segments: { type: 'text' | 'latex'; content: string; display?: boolean }[] = [];
-  let remaining = line;
+function LatexText({ text }: { text: string }) {
+  const parts: { type: 'text' | 'latex'; content: string; display?: boolean }[] = [];
+  let remaining = text;
 
   while (remaining) {
     const dm = remaining.match(/\$\$(.+?)\$\$/);
     const im = remaining.match(/(?<!\$)\$(.+?)\$(?!\$)/);
 
     if (!dm && !im) {
-      segments.push({ type: 'text', content: remaining });
+      parts.push({ type: 'text', content: remaining });
       break;
     }
 
@@ -39,21 +26,41 @@ function InlineLine({ line }: { line: string }) {
     const display = match === dm;
 
     if (match.index! > 0) {
-      segments.push({ type: 'text', content: remaining.slice(0, match.index) });
+      parts.push({ type: 'text', content: remaining.slice(0, match.index) });
     }
-    segments.push({ type: 'latex', content: match[1], display });
+    parts.push({ type: 'latex', content: match[1], display });
     remaining = remaining.slice(match.index! + match[0].length);
   }
 
   return (
     <>
-      {segments.map((seg, i) =>
-        seg.type === 'latex' ? (
-          <span key={i} dangerouslySetInnerHTML={{ __html: renderLatex(seg.content, !!seg.display) }} />
+      {parts.map((p, i) =>
+        p.type === 'latex' ? (
+          <span key={i} dangerouslySetInnerHTML={{ __html: renderLatex(p.content, !!p.display) }} />
         ) : (
-          <InlineFormat key={i} text={seg.content} />
+          <span key={i}>{p.content}</span>
         )
       )}
+    </>
+  );
+}
+
+function InlineLine({ line }: { line: string }) {
+  // First split by bold/italic markers, then render LaTeX inside each segment
+  // This ensures **...$...$...** renders correctly
+  const formatParts = line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+
+  return (
+    <>
+      {formatParts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={i}><LatexText text={part.slice(2, -2)} /></strong>;
+        }
+        if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+          return <em key={i}><LatexText text={part.slice(1, -1)} /></em>;
+        }
+        return <LatexText key={i} text={part} />;
+      })}
     </>
   );
 }
