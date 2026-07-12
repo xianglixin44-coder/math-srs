@@ -121,7 +121,7 @@ function renderContent(text: string): React.ReactNode[] {
     }
 
     // Image — match ![alt](url) with optional surrounding text
-    const imgMatch = line.match(/^!\[(.*)\]\((.+)\)\s*$/);
+    const imgMatch = line.match(/^!\[([^\]]*)\]\((.+)\)\s*$/);
     if (imgMatch) {
       result.push(
         <div key={i} className="my-4 flex justify-center">
@@ -137,7 +137,7 @@ function renderContent(text: string): React.ReactNode[] {
       result.push(
         <div key={i} className="my-4 flex justify-center">
           {parts.map((part, pi) => {
-            const im = part.match(/!\[(.*)\]\((.+)\)/);
+            const im = part.match(/!\[([^\]]*)\]\((.+)\)/);
             if (im) return <img key={pi} src={im[2].trim()} alt={im[1]} className="max-w-full rounded-xl" style={{maxHeight: '320px'}} />;
             return null;
           })}

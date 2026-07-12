@@ -66,7 +66,7 @@ def init_db():
         conn.commit()
 
         # Seed from cards.json if cards table is empty
-        count = conn.execute("SELECT COUNT(*) FROM cards").fetchone()[0]
+        count = (conn.execute("SELECT COUNT(*) FROM cards").fetchone() or [0])[0]
         if count == 0:
             seed_file = Path(__file__).parent.parent / "public" / "data" / "cards.json"
             if seed_file.exists():

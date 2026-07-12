@@ -54,7 +54,7 @@ class TestSRSReviewAPI:
         assert data["interval"] == 1
         assert data["ease_factor"] == 2.6
         assert data["dimensions_passed"] == ["formula"]
-        assert data["all_dimensions_pass"] is True  # formula is the only dimension, passed
+        assert data["all_dimensions_pass"] is False  # only 1 of 2 dimensions passed
 
     def test_review_wrong(self, client, seed_card):
         resp = client.post("/api/srs/review", json={

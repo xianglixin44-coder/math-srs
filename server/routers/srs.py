@@ -42,13 +42,23 @@ def review(req: ReviewRequest):
             (req.card_id,)
         ).fetchall()
 
-        # Get latest score per dimension
+        # Get latest score per dimension, and total dimension count from card
         dim_scores = {}
         for s in scores:
             if s["dimension"] not in dim_scores:
                 dim_scores[s["dimension"]] = s["score"]
 
-        all_pass = all(v == 3 for v in dim_scores.values())
+        # Count actual dimensions in the card (flatten cloze + choice)
+        card_row = conn.execute("SELECT dimensions FROM cards WHERE id=?", (req.card_id,)).fetchone()
+        total_dims = 0
+        if card_row:
+            dims = json.loads(card_row["dimensions"])
+            if "cloze" in dims:
+                total_dims += len(dims["cloze"])
+            if "choice" in dims:
+                total_dims += len(dims["choice"])
+
+        all_pass = len(dim_scores) == total_dims and all(v == 3 for v in dim_scores.values())
         card_dims = set(dim_scores.keys())
 
     return {**result, "dimensions_passed": sorted(card_dims), "all_dimensions_pass": all_pass}

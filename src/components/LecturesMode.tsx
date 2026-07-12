@@ -112,7 +112,12 @@ function CornellView({ lecture }: { lecture: Lecture }) {
   );
 }
 
-export default function LecturesMode() {
+interface LecturesModeProps {
+  initialLectureId?: string | null;
+  onLectureOpened?: () => void;
+}
+
+export default function LecturesMode({ initialLectureId, onLectureOpened }: LecturesModeProps = {}) {
   const [lectures, setLectures] = useState<LectureSummary[]>([]);
   const [selected, setSelected] = useState<Lecture | null>(null);
   const [loading, setLoading] = useState(false);
@@ -121,11 +126,18 @@ export default function LecturesMode() {
     fetch('/api/lectures').then(r => r.json()).then(setLectures).catch(() => {});
   }, []);
 
-  const openLecture = async (id: string) => {
+  async function openLecture(id: string) {
     setLoading(true);
     try { const r = await fetch(`/api/lectures/${id}`); if (r.ok) setSelected(await r.json()); } catch {}
     setLoading(false);
-  };
+  }
+
+  useEffect(() => {
+    if (initialLectureId) {
+      openLecture(initialLectureId);
+      onLectureOpened?.();
+    }
+  }, [initialLectureId]);
 
   const currentIdx = selected ? lectures.findIndex(l => l.id === selected.id) : -1;
   const hasPrev = currentIdx > 0;

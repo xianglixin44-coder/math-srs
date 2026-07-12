@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Sidebar from './Sidebar';
 
-type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures' | 'exercises';
+type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures' | 'exercises' | 'system';
 
 interface Props {
   mode: Mode;
@@ -41,6 +41,7 @@ export default function Layout({ mode, setMode, onLectureClick, onBrowseClick, o
     { key: 'books',  label: '📖 教材', needsBackend: true },
     { key: 'lectures', label: '🎓 讲解', needsBackend: false },
     { key: 'exercises', label: '✏️ 习题', needsBackend: true },
+    { key: 'system', label: '🗺️ 体系', needsBackend: false },
   ] as const;
 
   const renderNav = (items: ReadonlyArray<{ key: Mode; label: string; needsBackend: boolean }>) =>

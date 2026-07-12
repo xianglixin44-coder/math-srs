@@ -8,15 +8,17 @@ import BooksMode from './components/BooksMode';
 import LecturesMode from './components/LecturesMode';
 import ExercisesMode from './components/ExercisesMode';
 import ErrorBoundary from './components/ErrorBoundary';
+import SystemMap from './components/SystemMap';
 import { checkHealth } from './api/client';
 
-type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures' | 'exercises';
+type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures' | 'exercises' | 'system';
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('browse');
   const [online, setOnline] = useState<boolean | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [lectureKey, setLectureKey] = useState(0);
+  const [systemLectureId, setSystemLectureId] = useState<string | null>(null);
 
   useEffect(() => {
     checkHealth().then(setOnline);
@@ -34,7 +36,11 @@ export default function App() {
 
   const handleLectureClick = () => {
     setMode('lectures');
-    setLectureKey(k => k + 1);
+  };
+
+  const handleSystemNavigate = (lectureId: string) => {
+    setSystemLectureId(lectureId);
+    setMode('lectures');
   };
 
   const handleBrowseClick = () => {
@@ -70,10 +76,13 @@ export default function App() {
           <BooksMode />
         )}
         {mode === 'lectures' && (
-          <LecturesMode key={lectureKey} />
+          <LecturesMode key={lectureKey} initialLectureId={systemLectureId} onLectureOpened={() => setSystemLectureId(null)} />
         )}
         {mode === 'exercises' && (
           <ExercisesMode />
+        )}
+        {mode === 'system' && (
+          <SystemMap onNavigate={handleSystemNavigate} />
         )}
       </ErrorBoundary>
       </Layout>
