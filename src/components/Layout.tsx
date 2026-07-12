@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Sidebar from './Sidebar';
 
-type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures';
+type Mode = 'browse' | 'review' | 'import' | 'bank' | 'books' | 'lectures' | 'exercises';
 
 interface Props {
   mode: Mode;
