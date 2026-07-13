@@ -35,7 +35,11 @@ export default function App() {
   };
 
   const handleLectureClick = () => {
-    setMode('lectures');
+    if (mode === 'lectures') {
+      setLectureKey(k => k + 1);
+    } else {
+      setMode('lectures');
+    }
   };
 
   const handleSystemNavigate = (lectureId: string) => {
